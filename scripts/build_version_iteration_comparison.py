@@ -62,32 +62,17 @@ def _registry_summary(relative: str) -> dict[str, Any]:
     }
 
 
-def _atomic_metrics() -> dict[str, dict[str, float]]:
-    sources = {
-        "Legacy v0.2": (
-            "benchmarks/development_runs/"
-            "emseek_wse2_legacy_atomic_v0_2_score_v2/"
-            "development_metrics.json"
-        ),
-        "Periodic v1": (
-            "benchmarks/development_runs/"
-            "emseek_wse2_periodic_v1_score_v2/"
-            "development_metrics.json"
-        ),
-        "Consensus v2": (
-            "benchmarks/development_runs/"
-            "emseek_wse2_two_teacher_consensus_v2_score/"
-            "development_metrics.json"
-        ),
-    }
+def _atomic_metrics(
+    frozen_evidence: dict[str, Any],
+) -> dict[str, dict[str, float]]:
     output = {}
-    for name, relative in sources.items():
-        payload = _load_json(relative)
-        metrics = payload["micro_site_metrics"]
+    for name, metrics in frozen_evidence[
+        "atomic_wse2_train_domain"
+    ]["metrics"].items():
         output[name] = {
-            "precision": float(metrics["site_precision"]),
-            "recall": float(metrics["site_recall"]),
-            "f1": float(metrics["site_f1"]),
+            "precision": float(metrics["precision"]),
+            "recall": float(metrics["recall"]),
+            "f1": float(metrics["f1"]),
             "predicted_sites": int(metrics["predicted_sites"]),
             "matched_sites": int(metrics["matched_sites"]),
             "truth_sites": int(metrics["truth_sites"]),
@@ -104,20 +89,20 @@ def collect_comparison() -> dict[str, Any]:
         for suffix in ("", "_v2", "_v3", "_v4")
     ]
     baseline = _load_json("benchmarks/baseline_v0_2_manifest.json")
-    locked = _load_json(
-        "benchmarks/locked_runs/dennler_v1_score/locked_metrics.json"
+    frozen_evidence = _load_json(
+        "benchmarks/version_iteration_evidence_v1.json"
     )
     student = _load_json("benchmarks/latest_student_ablation.json")
     locked_targets = {
         name: {
             "role": values["role"],
-            "iou": float(values["micro_pixel_metrics"]["iou"]),
-            "precision": float(
-                values["micro_pixel_metrics"]["precision"]
-            ),
-            "recall": float(values["micro_pixel_metrics"]["recall"]),
+            "iou": float(values["iou"]),
+            "precision": float(values["precision"]),
+            "recall": float(values["recall"]),
         }
-        for name, values in locked["targets"].items()
+        for name, values in frozen_evidence[
+            "dennler_locked_external"
+        ]["targets"].items()
         if values["role"] == "primary"
     }
     capabilities = {
@@ -150,17 +135,15 @@ def collect_comparison() -> dict[str, Any]:
             "synthetic_multitask_benchmark"
         ],
         "atomic_wse2_train_domain": {
-            "scope": (
-                "107 images in one conservative train group; "
-                "not independent generalization"
-            ),
-            "metrics": _atomic_metrics(),
+            "scope": frozen_evidence[
+                "atomic_wse2_train_domain"
+            ]["scope"],
+            "metrics": _atomic_metrics(frozen_evidence),
         },
         "dennler_locked_external": {
-            "scope": (
-                "61 images; consumed locked zero-shot evaluation; "
-                "broad transfer not supported"
-            ),
+            "scope": frozen_evidence[
+                "dennler_locked_external"
+            ]["scope"],
             "targets": locked_targets,
         },
         "student_synthetic_ablation": {

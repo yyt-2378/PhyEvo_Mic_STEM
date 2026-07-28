@@ -1,0 +1,77 @@
+{
+  "evidence_format": "phyevo-mic-version-iteration-evidence-v1",
+  "purpose": "Compact tracked metrics for documentation and CI; full run directories remain ignored.",
+  "atomic_wse2_train_domain": {
+    "scope": "107 images in one conservative train group; not independent generalization",
+    "metrics": {
+      "Legacy v0.2": {
+        "precision": 0.48949127858868696,
+        "recall": 0.9225826575171553,
+        "f1": 0.6396211318469821,
+        "predicted_sites": 30213,
+        "matched_sites": 14789,
+        "truth_sites": 16030,
+        "mean_localization_error_pixels": 0.6906491247068857
+      },
+      "Periodic v1": {
+        "precision": 0.7366626554352186,
+        "recall": 0.6873986275733001,
+        "f1": 0.7111785207176972,
+        "predicted_sites": 14958,
+        "matched_sites": 11019,
+        "truth_sites": 16030,
+        "mean_localization_error_pixels": 1.1500575320244983
+      },
+      "Consensus v2": {
+        "precision": 0.8914257145237897,
+        "recall": 0.6673736743605739,
+        "f1": 0.7632977774606685,
+        "predicted_sites": 12001,
+        "matched_sites": 10698,
+        "truth_sites": 16030,
+        "mean_localization_error_pixels": 0.8347968535616925
+      }
+    },
+    "source_artifacts": {
+      "Legacy v0.2": {
+        "relative_path": "benchmarks/development_runs/emseek_wse2_legacy_atomic_v0_2_score_v2/development_metrics.json",
+        "sha256": "8acb75bff1d76e2bc75bb53470a338ead6f841900b893b45faa464d821ffb408"
+      },
+      "Periodic v1": {
+        "relative_path": "benchmarks/development_runs/emseek_wse2_periodic_v1_score_v2/development_metrics.json",
+        "sha256": "35bd26440a0e3103a64ba8363c97f6c676b5c9e58f179fc9a0a4321584771cc6"
+      },
+      "Consensus v2": {
+        "relative_path": "benchmarks/development_runs/emseek_wse2_two_teacher_consensus_v2_score/development_metrics.json",
+        "sha256": "74f50a1a4b913fa8796b4aeefd1c7f790afc8a078c445551f89f074b0d959329"
+      }
+    }
+  },
+  "dennler_locked_external": {
+    "scope": "61 images; consumed locked zero-shot evaluation; broad transfer not supported",
+    "targets": {
+      "blurred_amorphous_or_beam_composite": {
+        "role": "primary",
+        "iou": 0.011798277952528495,
+        "precision": 0.9318629434776744,
+        "recall": 0.011808464884180326
+      },
+      "secondary_crystal_symmetry_composite": {
+        "role": "primary",
+        "iou": 0.12513784696482733,
+        "precision": 0.2290818692507065,
+        "recall": 0.21617247243343948
+      },
+      "any_expert_marked_defect": {
+        "role": "primary",
+        "iou": 0.1395962754010481,
+        "precision": 0.45218940068056085,
+        "recall": 0.1680092794217568
+      }
+    },
+    "source_artifact": {
+      "relative_path": "benchmarks/locked_runs/dennler_v1_score/locked_metrics.json",
+      "sha256": "a5edacb42a5bfa943c69c3d2d329bac8dfbe11b7f9900c6a27116abdb145c238"
+    }
+  }
+}

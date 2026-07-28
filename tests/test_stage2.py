@@ -1,3 +1,4 @@
+import importlib.util
 from pathlib import Path
 
 import numpy as np
@@ -16,6 +17,10 @@ DINO_CHECKPOINT = (
     / "models"
     / "dino-vits8"
     / "dino_deitsmall8_pretrain.pth"
+)
+DINO_RUNTIME_AVAILABLE = (
+    importlib.util.find_spec("torch") is not None
+    and importlib.util.find_spec("transformers") is not None
 )
 
 
@@ -70,7 +75,8 @@ def test_phase_stage_produces_deformation_contract() -> None:
 
 
 @pytest.mark.skipif(
-    not DINO_CHECKPOINT.is_file(), reason="optional DINO checkpoint is absent"
+    not DINO_CHECKPOINT.is_file() or not DINO_RUNTIME_AVAILABLE,
+    reason="optional DINO checkpoint or stage2 runtime is absent",
 )
 def test_frozen_dino_verifier_runs_without_training() -> None:
     image, mask = make_crystal_with_amorphous_region(size=160, seed=3)

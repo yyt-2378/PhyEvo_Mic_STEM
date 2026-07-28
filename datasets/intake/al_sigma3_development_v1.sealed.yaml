@@ -1,0 +1,122 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: al-sigma3-development-v1
+dataset_id: al_sigma3_twin_boundaries
+source_uri: https://zenodo.org/records/6414955
+source_revision: 10.5281/zenodo.6414955:2024-09-30
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-27T07:42:24.486636+00:00'
+groups:
+- group_id: sigma3-orientation-i
+  partition: development_test
+  acquisition_id: sigma3-orientation-i
+  sample_id: al-sigma3-experimental-sample
+  lab_id: sigma3_2022_archive
+  microscope_id: unresolved_public_metadata
+  material: Al
+  tasks:
+  - twin_boundary
+  - interface_defect
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: sigma3-orientation-i-file
+    relative_path: datasets/public/al_sigma3_twin_boundaries/Sigma3_ORI.emd
+    role: image
+    sha256: 39c6b2ac21ef1e3eb2f7d120bb49d0ee5639cc9a80a26eeb33813759965bba67
+    bytes: 28883920
+    pair_id: null
+- group_id: sigma3-orientation-ii
+  partition: development_test
+  acquisition_id: sigma3-orientation-ii
+  sample_id: al-sigma3-experimental-sample
+  lab_id: sigma3_2022_archive
+  microscope_id: unresolved_public_metadata
+  material: Al
+  tasks:
+  - twin_boundary
+  - interface_defect
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: sigma3-orientation-ii-file
+    relative_path: datasets/public/al_sigma3_twin_boundaries/Sigma3_ORII.emd
+    role: image
+    sha256: ca85b5e3256ceafacd461a82cc3b66f6258c6a54172b6609d5cbf0156eae734d
+    bytes: 58721072
+    pair_id: null
+- group_id: sigma3-ebsd
+  partition: development_test
+  acquisition_id: sigma3-ebsd
+  sample_id: al-sigma3-experimental-sample
+  lab_id: sigma3_2022_archive
+  microscope_id: not_applicable_or_metadata
+  material: Al
+  tasks:
+  - twin_boundary
+  - grain_boundary
+  - orientation_evidence
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: sigma3-ebsd-file
+    relative_path: datasets/public/al_sigma3_twin_boundaries/EBSD_data.osc
+    role: metadata
+    sha256: 6fd1bd73e95c7bf508fee41c57285878249db68324f025d8b75941d2b163b85c
+    bytes: 68773183
+    pair_id: null
+- group_id: sigma3-simulation
+  partition: development_test
+  acquisition_id: sigma3-simulation
+  sample_id: al-sigma3-digital-twin
+  lab_id: sigma3_2022_archive
+  microscope_id: not_applicable_or_metadata
+  material: Al
+  tasks:
+  - twin_boundary
+  - digital_twin
+  grouping_evidence: repository_metadata
+  annotation_qualification: simulation_truth
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: sigma3-simulation-file
+    relative_path: datasets/public/al_sigma3_twin_boundaries/simulation.zip
+    role: metadata
+    sha256: 3f94a0eda2cec8957f7ce21915f4b213017ed421ebe7c1a835a584a0ed070eab
+    bytes: 122054770
+    pair_id: null
+- group_id: sigma3-readme
+  partition: development_test
+  acquisition_id: sigma3-readme
+  sample_id: al-sigma3-experimental-sample
+  lab_id: sigma3_2022_archive
+  microscope_id: not_applicable_or_metadata
+  material: Al
+  tasks:
+  - provenance
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: sigma3-readme-file
+    relative_path: datasets/public/al_sigma3_twin_boundaries/README.md
+    role: metadata
+    sha256: c21cef79a26e5ca9aa5c8c966fb8c1aebcfe939472fda4987fe0b759962cb908
+    bytes: 5897
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: b35496c32c6c0ba830bf0eb26d7b6e3de6c601ac6b9c1b23d3083232d2912031

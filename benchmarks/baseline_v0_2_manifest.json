@@ -1,0 +1,56 @@
+{
+  "baseline_id": "v0.2-training-free-baseline",
+  "frozen_at": "2026-07-26",
+  "package_version": "0.2.0",
+  "status": "immutable_reference",
+  "numerical_scope": "task-specific training-free detectors before the unified evidence protocol",
+  "minimum_retained_performance_fraction": 0.95,
+  "checksums": {
+    "pyproject.toml": "d1a33b8877a34bd1969dbadea83ecb54bddf2134f6a2d5178bc0df0df3af53fa",
+    "src/tfree_detection/models.py": "8ca1e89d85640bc936b9aacd866e8ddd353a01cc6ea4d6c5518a86246faa797e",
+    "src/tfree_detection/framework.py": "78bf102edc7b0590571d03e34742a491adb74faf46b834c1cb12627a48d9e8a2",
+    "benchmarks/run_multitask_benchmark.py": "6fbc789f8e0e3b9c1767ca206badd5b6f1284b86ebcf493b2e6c3233e8555fe2",
+    "benchmarks/run_public_benchmark.py": "f92b08dba7d23f76e8fdd56d252c0b1bf0e2e33275b30a22c0af595affb77a79",
+    "benchmarks/run_synthetic_benchmark.py": "cdc1635752444597e45071a78f0955041a4f256b9ebad99399cd09f34dee1b44",
+    "benchmarks/latest_multitask_results.json": "7d6117574e9b0d6e27c4b0b87cb51a4ea5372f00c33938064dcaccddcb686109",
+    "benchmarks/latest_public_results.json": "024381b64735ada70ef064d51654cf355ef77a936e10948899ae12c7136ef04e",
+    "datasets/manifest.yaml": "e1ed81d95fe8716c185233f0d4f4161c56679f8ece249a38e0ebf292fbdd2a3f",
+    "configs/amorphous.yaml": "73788bb6667b5570b30a847726d99285bbedfe468db531128e63a07f1afa6b4b",
+    "configs/amorphous_stage2.yaml": "de5a5c1aa0adf89ae276ea24fed3df702721e3e6fbaf97c57638463ebeca160a",
+    "configs/atomic_point_defect.yaml": "79decd53f66baea9d3d5ce1a419ca1df5824b62017ae1641e28f1965a1f62de5",
+    "configs/stacking_fault.yaml": "88b7e2aa52b7e9af2dca7660b18db765b4decdce2740589c55b1f00d09a3fe4c",
+    "configs/phase_boundary.yaml": "894e1e42b62dd0e7cdef6381297f7992268a20095a490480d2d42886727b7d18"
+  },
+  "synthetic_multitask_benchmark": {
+    "ground_truth": "deterministic_synthetic_masks",
+    "mean_iou": 0.6500140449467402,
+    "tasks": {
+      "amorphous_region": {
+        "iou": 0.8609493954321541,
+        "precision": 0.8832988743395359,
+        "recall": 0.9714502273875695
+      },
+      "atomic_point_defect": {
+        "iou": 0.6739130434782609,
+        "precision": 1.0,
+        "recall": 0.6739130434782609,
+        "detected_sites": 4
+      },
+      "stacking_fault": {
+        "iou": 0.5909694555112882,
+        "precision": 0.7974910394265233,
+        "recall": 0.6953125
+      },
+      "phase_boundary": {
+        "iou": 0.47422428536525774,
+        "precision": 0.7954918032786885,
+        "recall": 0.5400667779632721
+      }
+    }
+  },
+  "public_data_scope": {
+    "dataset_doi": "10.5281/zenodo.5520169",
+    "pixel_ground_truth_available": false,
+    "claim": "reproducibility and qualitative sanity only"
+  }
+}

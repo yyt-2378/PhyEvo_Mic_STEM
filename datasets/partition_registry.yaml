@@ -1,0 +1,102 @@
+registry_version: "1.0.0"
+split_unit: explicit_group
+policy:
+  random_patch_split_allowed: false
+  gold_overwrite_allowed: false
+  locked_external_test_active_learning_allowed: false
+  active_learning_allowed_partitions:
+    - train
+partition_status:
+  train:
+    asset_count: 0
+    note: No versioned training asset has been admitted yet.
+  calibration:
+    asset_count: 0
+    note: Independent Gold positives and normal controls are still required.
+  development_test:
+    asset_count: 4
+    note: Existing prototype and public data have already influenced development.
+  locked_external_test:
+    asset_count: 1
+    note: >-
+      Dennler 2021 HRSTEM archive was checksum-frozen before detector
+      evaluation and must never be queried by active learning.
+assets:
+  - asset_id: local_reference_amorphous_v1
+    dataset_id: local_zeolite_reference
+    relative_path: reference_scale_radial_wiener.png
+    partition: development_test
+    split_group_id: local_zeolite_reference_stretch_series
+    acquisition_id: reference_scale_radial_wiener
+    sample_id: local_zeolite_stretched_sample
+    lab_id: local_collaborator_unresolved
+    microscope_id: unresolved
+    material: zeolite
+    tasks:
+      - amorphous_region
+    checksum_algorithm: sha256
+    checksum: 55641336a61336c29f8a621021a0dfb3b6f86dec53ef9e9209b1b02886d543bb
+    eligible_for_active_learning: false
+  - asset_id: guo_2021_mowte2_large_fov
+    dataset_id: guo_2021_atomic_defects
+    relative_path: datasets/public/guo_2021_atomic_defects/2H_MoWTe2_large_field_of_view_acquisition.ndata1
+    partition: development_test
+    split_group_id: guo_2021_mowte2_acquisition
+    acquisition_id: guo_2021_mowte2_large_fov
+    sample_id: guo_2021_mowte2
+    lab_id: guo_2021_archive
+    microscope_id: unresolved_public_metadata
+    material: 2H_MoWTe2
+    tasks:
+      - atomic_point_defect
+      - stacking_fault
+    checksum_algorithm: sha256
+    checksum: a7aaaef7f84df2b36a0d616588b7a765315242e6214d06152d255cd3e425bfb0
+    eligible_for_active_learning: false
+  - asset_id: guo_2021_al_partial_dislocations
+    dataset_id: guo_2021_atomic_defects
+    relative_path: datasets/public/guo_2021_atomic_defects/relaxed_single_Al_partial_dislocations_verified.tif
+    partition: development_test
+    split_group_id: guo_2021_al_partial_dislocations_acquisition
+    acquisition_id: guo_2021_al_partial_dislocations
+    sample_id: guo_2021_relaxed_single_al
+    lab_id: guo_2021_archive
+    microscope_id: unresolved_public_metadata
+    material: Al
+    tasks:
+      - stacking_fault
+    checksum_algorithm: sha256
+    checksum: 508c164a2563801d33fb883d2f427a2f6be216743c0b34b62882353fd4bc5830
+    eligible_for_active_learning: false
+  - asset_id: guo_2021_zro2_twin_boundary
+    dataset_id: guo_2021_atomic_defects
+    relative_path: datasets/public/guo_2021_atomic_defects/ZrO2_monoclinic_twin_boundary.tif
+    partition: development_test
+    split_group_id: guo_2021_zro2_twin_acquisition
+    acquisition_id: guo_2021_zro2_twin_boundary
+    sample_id: guo_2021_zro2_monoclinic
+    lab_id: guo_2021_archive
+    microscope_id: unresolved_public_metadata
+    material: ZrO2
+    tasks:
+      - phase_boundary
+    checksum_algorithm: sha256
+    checksum: 85a3f7d485ba412f9ba8c374ef6b552dce8f951c6157062c171e56e9f4da945a
+    eligible_for_active_learning: false
+  - asset_id: dennler_2021_hrstem_locked_archive
+    dataset_id: dennler_2021_hrstem_defects
+    relative_path: datasets/public/dennler_2021_hrstem_defects/hrstem_defects_dataset.zip
+    partition: locked_external_test
+    split_group_id: dennler_2021_iii_v_jeol_arm200f_archive
+    acquisition_id: dennler_2021_complete_archive
+    sample_id: dennler_2021_iii_v_films
+    lab_id: dennler_2021_ibm_empa_collaboration
+    microscope_id: JEOL_ARM200F
+    material: InP_GaAs_InGaAs_InAlGaAs
+    tasks:
+      - amorphous_region
+      - stacking_fault
+      - phase_boundary
+    checksum_algorithm: sha256
+    checksum: abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec
+    eligible_for_active_learning: false

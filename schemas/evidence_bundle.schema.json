@@ -1,0 +1,224 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/evidence_bundle.schema.json",
+  "title": "PhyEvo-Mic EvidenceBundle protocol manifest",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "task",
+    "image_shape",
+    "scientific_representation",
+    "fields",
+    "fields_by_scale",
+    "reliability",
+    "hypotheses",
+    "provenance"
+  ],
+  "properties": {
+    "protocol_version": {
+      "const": "2.0"
+    },
+    "task": {
+      "enum": [
+        "amorphous_region",
+        "atomic_point_defect",
+        "stacking_fault",
+        "phase_boundary"
+      ]
+    },
+    "image_shape": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 1
+        },
+        {
+          "type": "integer",
+          "minimum": 1
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "scientific_representation": {
+      "const": "structural_evidence_graph"
+    },
+    "fields": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/evidenceField"
+      }
+    },
+    "fields_by_scale": {
+      "type": "object",
+      "required": [
+        "node",
+        "edge",
+        "region",
+        "field"
+      ],
+      "properties": {
+        "node": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "edge": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "region": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "field": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "reliability": {
+      "$ref": "#/$defs/reliability"
+    },
+    "hypotheses": {
+      "type": "object"
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "source_kind",
+        "detector_version",
+        "teacher_independent_of_student",
+        "gold_label_created"
+      ],
+      "properties": {
+        "source_kind": {
+          "enum": [
+            "physics_pseudo",
+            "digital_twin",
+            "human_gold"
+          ]
+        },
+        "detector_version": {
+          "type": "string"
+        },
+        "teacher_independent_of_student": {
+          "type": "boolean"
+        },
+        "gold_label_created": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "evidenceField": {
+      "type": "object",
+      "required": [
+        "name",
+        "scale",
+        "violation_type",
+        "role",
+        "direction",
+        "source_key",
+        "shape",
+        "valid_fraction",
+        "mean_reliability_in_valid_area"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "scale": {
+          "enum": [
+            "node",
+            "edge",
+            "region",
+            "field"
+          ]
+        },
+        "violation_type": {
+          "type": "string"
+        },
+        "role": {
+          "enum": [
+            "anomaly",
+            "structure",
+            "context",
+            "quality_control"
+          ]
+        },
+        "direction": {
+          "type": "string"
+        },
+        "source_key": {
+          "type": "string"
+        },
+        "shape": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "valid_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mean_reliability_in_valid_area": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "reliability": {
+      "type": "object",
+      "required": [
+        "reliable_threshold",
+        "invalid_threshold",
+        "mean_reliability",
+        "valid_fraction",
+        "ood_fraction",
+        "state_counts",
+        "sources"
+      ],
+      "properties": {
+        "reliable_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "invalid_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "mean_reliability": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "valid_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "ood_fraction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    }
+  }
+}

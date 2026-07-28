@@ -1,0 +1,148 @@
+protocol_format: phyevo-mic-locked-protocol-v1
+protocol_version: "1.0.0"
+protocol_id: dennler-2021-hrstem-zero-shot-v1
+created_date: "2026-07-26"
+status: pre_registered_before_label_access
+asset_id: dennler_2021_hrstem_locked_archive
+registry_path: datasets/partition_registry.yaml
+archive_sha256: abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec
+scientific_question: >-
+  How well do the frozen v0.3 physics-evidence detectors transfer without
+  labels or threshold adaptation to expert-labeled III-V HRSTEM images from
+  an external archive?
+
+dataset_layout:
+  defective_images: hrstem_defects_dataset/defective/images
+  defective_labels: hrstem_defects_dataset/defective/labels
+  normal_images: hrstem_defects_dataset/non_defective/images
+  expected_defective_images: 31
+  expected_normal_images: 30
+  image_extension: .tif
+  pairing_rule: exact_filename
+  label_decoder: global_sorted_black_gray_white
+  label_classes:
+    0: main_crystal_symmetry_non_defective
+    1: secondary_crystal_symmetry_defect
+    2: blurred_amorphous_or_beam_defect
+
+detectors:
+  - id: amorphous_region
+    config_path: configs/amorphous.yaml
+    adaptation: none
+    stage2: disabled
+  - id: stacking_fault
+    config_path: configs/stacking_fault.yaml
+    adaptation: none
+    stage2: disabled
+  - id: phase_boundary
+    config_path: configs/phase_boundary.yaml
+    adaptation: none
+    stage2: disabled
+
+targets:
+  - id: blurred_amorphous_or_beam_composite
+    role: primary
+    truth_classes: [2]
+    prediction:
+      operation: single
+      members: [amorphous_region]
+  - id: secondary_crystal_symmetry_composite
+    role: primary
+    truth_classes: [1]
+    prediction:
+      operation: union
+      members: [stacking_fault, phase_boundary]
+  - id: any_expert_marked_defect
+    role: primary
+    truth_classes: [1, 2]
+    prediction:
+      operation: union
+      members: [amorphous_region, stacking_fault, phase_boundary]
+  - id: stacking_detector_vs_secondary_symmetry
+    role: diagnostic_not_for_model_selection
+    truth_classes: [1]
+    prediction:
+      operation: single
+      members: [stacking_fault]
+  - id: phase_detector_vs_secondary_symmetry
+    role: diagnostic_not_for_model_selection
+    truth_classes: [1]
+    prediction:
+      operation: single
+      members: [phase_boundary]
+
+metrics:
+  primary_unit: image
+  micro_pixel_metrics: [iou, dice, precision, recall, f1, specificity]
+  defective_image_macro_metrics: [iou, boundary_f1, assd_pixels]
+  normal_control_metrics:
+    - mean_false_positive_area_fraction
+    - p95_false_positive_area_fraction
+    - maximum_false_positive_area_fraction
+  boundary_tolerance_pixels: 2.0
+  confidence_intervals: none_single_archive
+  detector_failure_policy: count_failure_and_score_all_zero
+  empty_truth_policy: >-
+    Report normal controls separately; an empty-truth/empty-prediction image
+    has image IoU 1 but is excluded from truth-positive boundary summaries.
+
+frozen_files:
+  - pyproject.toml
+  - configs/amorphous.yaml
+  - configs/stacking_fault.yaml
+  - configs/phase_boundary.yaml
+  - src/tfree_detection/__init__.py
+  - src/tfree_detection/config.py
+  - src/tfree_detection/context.py
+  - src/tfree_detection/evaluation.py
+  - src/tfree_detection/evidence.py
+  - src/tfree_detection/framework.py
+  - src/tfree_detection/fusion.py
+  - src/tfree_detection/governance.py
+  - src/tfree_detection/locked_evaluation.py
+  - src/tfree_detection/models.py
+  - src/tfree_detection/postprocessing.py
+  - src/tfree_detection/preprocessing.py
+  - src/tfree_detection/features/__init__.py
+  - src/tfree_detection/features/lattice.py
+  - src/tfree_detection/features/spectral.py
+  - src/tfree_detection/stage2/__init__.py
+  - src/tfree_detection/stage2/dino.py
+  - src/tfree_detection/stage2/phase.py
+  - src/tfree_detection/tasks/__init__.py
+  - src/tfree_detection/tasks/amorphous.py
+  - src/tfree_detection/tasks/atomic.py
+  - src/tfree_detection/tasks/base.py
+  - src/tfree_detection/tasks/common.py
+  - src/tfree_detection/tasks/interface.py
+  - src/tfree_detection/tasks/stacking.py
+  - scripts/run_locked_external_test.py
+  - scripts/prepare_locked_hrstem.py
+
+prohibited_actions:
+  - no_label_access_before_prediction_seal
+  - no_detector_or_threshold_adaptation
+  - no_image_specific_task_selection
+  - no_exclusion_of_failed_images
+  - no_replacement_prediction_set_after_unblinding
+  - no_active_learning_or_student_training_on_this_asset
+  - no_claim_that_class_2_is_pure_amorphous_ground_truth
+  - no_claim_of_cross_lab_generalization_from_one_archive
+
+interpretation_limits:
+  - >-
+    Expert class 2 combines blur, amorphous contrast, and beam-induced
+    defects; it is not a pure amorphous-region label.
+  - >-
+    Expert class 1 is a secondary-crystal-symmetry mask and does not
+    distinguish stacking faults from phase boundaries.
+  - >-
+    The archive contains several materials and ADF/BF modes but one named
+    instrument and one collaboration, so it cannot prove leave-one-lab-out
+    generalization.
+  - >-
+    No independent Gold calibration partition exists; reliability values are
+    reported descriptively and are not calibrated probabilities.
+  - >-
+    This is a zero-shot external evaluation of frozen analytic detectors, not
+    evidence that the self-improving student has generalized to new material.

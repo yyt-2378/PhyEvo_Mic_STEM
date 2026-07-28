@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/review_response.schema.json",
+  "title": "PhyEvo-Mic expert review response",
+  "type": "object",
+  "required": [
+    "response_id",
+    "candidate_id",
+    "reviewer_id",
+    "action",
+    "defect_labels",
+    "annotation_duration_seconds",
+    "model_assistance_shown"
+  ],
+  "properties": {
+    "response_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "candidate_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "reviewer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "action": {
+      "enum": [
+        "accept",
+        "reject",
+        "change_type",
+        "mark_unknown",
+        "mark_artifact",
+        "adjust_point",
+        "adjust_line",
+        "adjust_contour"
+      ]
+    },
+    "defect_labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "annotation_duration_seconds": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "model_assistance_shown": {
+      "type": "boolean"
+    },
+    "geometry_payload": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "required": [
+            "coordinate_space",
+            "crop_bbox_xyxy",
+            "points_xy"
+          ],
+          "properties": {
+            "coordinate_space": {
+              "const": "source_pixels"
+            },
+            "crop_bbox_xyxy": {
+              "type": "array",
+              "minItems": 4,
+              "maxItems": 4,
+              "items": {
+                "type": "number"
+              }
+            },
+            "points_xy": {
+              "type": "array",
+              "items": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 2,
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "accept",
+              "change_type",
+              "adjust_point",
+              "adjust_line",
+              "adjust_contour"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "defect_labels": {
+            "minItems": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "enum": [
+              "adjust_point",
+              "adjust_line",
+              "adjust_contour"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "geometry_payload": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "geometry_payload"
+        ]
+      }
+    }
+  ],
+  "additionalProperties": false
+}

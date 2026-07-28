@@ -1,0 +1,293 @@
+schema_version: "2.0-design-reference"
+name: open_world_multimodal_structural_evidence_ontology
+status: archived_design_reference
+promoted_runtime_ontology: schemas/defect_ontology.yaml
+runtime_implementation: tfree_detection.evidence.ontology_manifest
+design_principle: >-
+  Record what is observed before asserting why it occurred. A physical defect
+  name is a hypothesis supported by evidence, not a detector branch name.
+
+axes:
+  violation_type:
+    - occupancy
+    - chemical-contrast
+    - intensity
+    - displacement
+    - shape
+    - phase-slip
+    - strain
+    - rotation
+    - polarization-change
+    - coherence-loss
+    - periodicity-loss
+    - short-range-order-change
+    - domain-change
+    - diffraction-signature-change
+    - surface-morphology
+    - temporal-change
+    - acquisition-degradation
+    - specimen-support
+  spatial_support:
+    - point
+    - line
+    - region
+    - interface
+    - field
+  temporal_support:
+    - single-frame
+    - persistent-track
+    - abrupt-event
+    - progressive-region
+    - not-applicable
+  evidence_modality:
+    - real-space-image
+    - atom-graph
+    - reciprocal-space
+    - spectroscopy
+    - temporal-sequence
+    - simulation-truth
+    - acquisition-metadata
+  causal_certainty:
+    - observation-only
+    - mechanism-consistent
+    - mechanism-confirmed
+  epistemic_state:
+    - confirmed
+    - probable
+    - composite
+    - unresolved
+    - artifact
+    - out-of-domain
+    - invalid-measurement
+
+label_tiers:
+  gold_experimental:
+    allowed_sources: [expert_consensus]
+    minimum_independent_reviewers: 2
+    requires_positive_and_negative_controls: true
+  gold_simulation:
+    allowed_sources: [verifiable_simulation_truth]
+    must_be_reported_separately_from_experimental_gold: true
+  silver:
+    allowed_sources:
+      - author_curated
+      - physics_pseudo
+      - digital_twin_projection
+      - transferred_external_annotation
+    requires_reliability_and_provenance: true
+  unresolved:
+    allowed_sources:
+      - physics_pseudo
+      - student_proposal
+      - expert_disagreement
+      - insufficient_auxiliary_evidence
+    eligible_for_hard_label_training: false
+
+families:
+  atomic_site_anomaly:
+    spatial_support: [point, region]
+    labels:
+      vacancy_like:
+        required_violations_any: [occupancy, intensity]
+        minimum_evidence_modalities: 1
+        caution: intensity_alone_does_not_confirm_a_vacancy
+      substitution_like:
+        required_violations_any: [chemical-contrast, intensity, displacement]
+        minimum_evidence_modalities: 1
+        caution: species_identity_requires_chemistry_or_validated_forward_model
+      interstitial_or_adatom_like:
+        required_violations_any: [occupancy, chemical-contrast, displacement]
+        minimum_evidence_modalities: 1
+      antisite_like:
+        required_violations_any: [chemical-contrast, intensity]
+        minimum_evidence_modalities: 2
+      atomic_column_intensity_anomaly:
+        required_violations_any: [intensity]
+        minimum_evidence_modalities: 1
+        is_observation_label: true
+      point_defect_cluster_or_complex:
+        required_violations_any: [occupancy, intensity, displacement, strain]
+        minimum_evidence_modalities: 2
+
+  lattice_deformation_and_topology:
+    spatial_support: [point, line, region]
+    labels:
+      dislocation_core_or_line:
+        required_violations_any: [phase-slip, displacement, rotation, strain]
+        minimum_evidence_modalities: 2
+      stacking_fault:
+        required_violations_any: [phase-slip, displacement, coherence-loss]
+        minimum_evidence_modalities: 2
+      local_strain_anomaly:
+        required_violations_any: [strain, displacement]
+        minimum_evidence_modalities: 1
+        is_observation_label: true
+      lattice_rotation_or_bending:
+        required_violations_any: [rotation, displacement]
+        minimum_evidence_modalities: 1
+      nanovoid_or_pore:
+        required_violations_any: [occupancy, shape, surface-morphology]
+        minimum_evidence_modalities: 2
+
+  domain_symmetry_and_interface:
+    spatial_support: [line, region, interface]
+    labels:
+      grain_boundary:
+        required_violations_any: [rotation, domain-change, phase-slip]
+        minimum_evidence_modalities: 2
+      twin_boundary:
+        required_violations_any: [domain-change, rotation]
+        minimum_evidence_modalities: 2
+      heterophase_interface:
+        required_violations_any: [domain-change, diffraction-signature-change]
+        minimum_evidence_modalities: 2
+      orientation_domain_wall:
+        required_violations_any: [rotation, domain-change]
+        minimum_evidence_modalities: 1
+      ferroelectric_or_polarization_domain:
+        required_violations_any: [polarization-change, displacement, domain-change]
+        minimum_evidence_modalities: 2
+      secondary_symmetry_region:
+        required_violations_any: [domain-change, periodicity-loss, shape]
+        minimum_evidence_modalities: 2
+      epitaxial_or_coherent_interface:
+        required_violations_any: [domain-change, strain]
+        minimum_evidence_modalities: 2
+
+  order_and_coherence_degradation:
+    spatial_support: [region, interface]
+    labels:
+      local_amorphous_region:
+        required_violations_any: [periodicity-loss, coherence-loss]
+        minimum_evidence_modalities: 2
+      partial_disordering:
+        required_violations_any: [short-range-order-change, coherence-loss]
+        minimum_evidence_modalities: 2
+      crystalline_amorphous_interface:
+        required_violations_any:
+          - periodicity-loss
+          - short-range-order-change
+          - diffraction-signature-change
+        minimum_evidence_modalities: 2
+      beam_damage_consistent_region:
+        required_violations_any: [temporal-change, occupancy, coherence-loss]
+        minimum_evidence_modalities: 2
+        preferred_evidence: [temporal-sequence, acquisition-metadata]
+      phase_nucleation_or_transformation_front:
+        required_violations_any: [temporal-change, domain-change]
+        minimum_evidence_modalities: 2
+
+  chemical_and_spectroscopic_anomaly:
+    spatial_support: [point, line, region, interface]
+    labels:
+      dopant_or_composition_anomaly:
+        required_violations_any: [chemical-contrast, intensity]
+        minimum_evidence_modalities: 2
+        preferred_evidence: [spectroscopy, simulation-truth]
+      segregation_at_interface:
+        required_violations_any: [chemical-contrast, domain-change]
+        minimum_evidence_modalities: 2
+        preferred_evidence: [spectroscopy]
+      oxidation_or_valence_change:
+        required_violations_any: [chemical-contrast, diffraction-signature-change]
+        minimum_evidence_modalities: 2
+        preferred_evidence: [spectroscopy]
+
+  particle_surface_and_morphology:
+    spatial_support: [line, region, interface]
+    labels:
+      surface_step_or_ledge:
+        required_violations_any: [surface-morphology, shape]
+        minimum_evidence_modalities: 1
+      particle_support_interface:
+        required_violations_any: [specimen-support, surface-morphology, domain-change]
+        minimum_evidence_modalities: 2
+      precipitate_or_inclusion:
+        required_violations_any: [domain-change, chemical-contrast, shape]
+        minimum_evidence_modalities: 2
+      facet_or_particle_shape_anomaly:
+        required_violations_any: [surface-morphology, shape]
+        minimum_evidence_modalities: 1
+      interface_roughness:
+        required_violations_any: [surface-morphology, displacement]
+        minimum_evidence_modalities: 1
+
+  acquisition_artifact_and_quality:
+    spatial_support: [point, line, region, field]
+    labels:
+      defocus_or_blur:
+        required_violations_any: [acquisition-degradation, coherence-loss]
+        minimum_evidence_modalities: 1
+      scan_distortion_or_drift:
+        required_violations_any: [acquisition-degradation, displacement, temporal-change]
+        minimum_evidence_modalities: 2
+      vibration_or_double_imaging:
+        required_violations_any: [acquisition-degradation, shape]
+        minimum_evidence_modalities: 1
+      contamination_or_ice:
+        required_violations_any: [acquisition-degradation, specimen-support, intensity]
+        minimum_evidence_modalities: 1
+      thickness_bending_or_diffraction_contrast:
+        required_violations_any: [intensity, rotation, diffraction-signature-change]
+        minimum_evidence_modalities: 2
+      detector_saturation_dead_pixel_or_stripe:
+        required_violations_any: [acquisition-degradation, intensity]
+        minimum_evidence_modalities: 1
+      vacuum_edge_or_support_boundary:
+        required_violations_any: [specimen-support, intensity]
+        minimum_evidence_modalities: 1
+
+  open_set_resolution:
+    spatial_support: [point, line, region, interface, field]
+    labels:
+      unknown_structural_anomaly:
+        epistemic_state: unresolved
+      composite_anomaly:
+        epistemic_state: composite
+      out_of_distribution_sample:
+        epistemic_state: out-of-domain
+      invalid_measurement:
+        epistemic_state: invalid-measurement
+
+reasoning_constraints:
+  - do_not_call_intensity_loss_a_vacancy_without_species_thickness_or_forward_model_support
+  - do_not_call_blur_amorphous_without_real_and_reciprocal_space_consistency
+  - do_not_call_a_line_stacking_fault_if_rotation_or_domain_boundary_explains_it_equally_well
+  - acquisition_artifact_is_a_first_class_output_not_a_discarded_failure
+  - allow_multiple_family_hypotheses_until_auxiliary_evidence_resolves_them
+  - absence_of_auxiliary_information_must_lower_causal_certainty_not_force_a_class
+  - report_simulation_gold_and_experimental_gold_separately
+
+legacy_mapping:
+  local_amorphous_region:
+    new_family: order_and_coherence_degradation
+    new_label: local_amorphous_region
+  atomic_point_defect:
+    new_family: atomic_site_anomaly
+    new_label: unresolved_atomic_site_subtype
+  stacking_fault_or_dislocation_line:
+    new_family: lattice_deformation_and_topology
+    new_label: dislocation_or_stacking_fault_unresolved
+  two_phase_or_twin_boundary:
+    new_family: domain_symmetry_and_interface
+    new_label: interface_subtype_unresolved
+
+external_label_adapters:
+  dennler_class_1:
+    map_to:
+      family: domain_symmetry_and_interface
+      label: secondary_symmetry_region
+      epistemic_state: composite
+  dennler_class_2:
+    map_to:
+      candidates:
+        - order_and_coherence_degradation.local_amorphous_region
+        - acquisition_artifact_and_quality.defocus_or_blur
+        - order_and_coherence_degradation.beam_damage_consistent_region
+      epistemic_state: composite
+  emseek_wse2_mask:
+    map_to:
+      family: atomic_site_anomaly
+      label: atomic_column_intensity_anomaly
+      label_tier: silver
+    note: do_not_force_vacancy_subtype_without_source_semantics_and_auxiliary_evidence

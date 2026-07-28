@@ -1,0 +1,673 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: emseek-balanced-subset-train-v1
+dataset_id: emseek_remaining_v1
+source_uri: https://huggingface.co/datasets/gary23ai/EMSeek
+source_revision: 8f4a987c78af743098459e5d467f2c1b5f5c11b3
+license_spdx: Apache-2.0
+admission_state: training_only
+created_at_utc: '2026-07-27T07:45:34.890660+00:00'
+groups:
+- group_id: emseek-atom-columns-dysco3-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-dysco3-unresolved-acquisition
+  sample_id: emseek-atom-columns-dysco3-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: DyScO3
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-dysco3:image:00188
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/DyScO3/image/268.png
+    role: image
+    sha256: 8cc27cabbeee3e66fa07e795d614ddecac297ffe3b659bced9317f914695cd63
+    bytes: 46850
+    pair_id: atom-columns-dysco3:268
+  - file_id: atom-columns-dysco3:label:00944
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/DyScO3/label/268.png
+    role: annotation
+    sha256: 22b6ef66792ee79674d535ed797583077b988881bdd6bac426ede734cf0159c7
+    bytes: 1634
+    pair_id: atom-columns-dysco3:268
+  - file_id: atom-columns-dysco3:image:00265
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/DyScO3/image/337.png
+    role: image
+    sha256: 05ca9aa7050d9313d19c1961eae14c29caba2e249d5fe16c443bbb70d2bdbb39
+    bytes: 12997
+    pair_id: atom-columns-dysco3:337
+  - file_id: atom-columns-dysco3:label:01021
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/DyScO3/label/337.png
+    role: annotation
+    sha256: a00a197343825e9420a9d7286d33359663d2caecfcaca813f76afae5856eb9e9
+    bytes: 1912
+    pair_id: atom-columns-dysco3:337
+- group_id: emseek-atom-columns-licoo2-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-licoo2-unresolved-acquisition
+  sample_id: emseek-atom-columns-licoo2-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: LiCoO2
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-licoo2:image:01131
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/LiCoO2/image/428.png
+    role: image
+    sha256: 663b5091adfbfbdb016a3635d2375a7ecf18065d8c3195a31cb6814d872d8562
+    bytes: 37253
+    pair_id: atom-columns-licoo2:428
+  - file_id: atom-columns-licoo2:label:02895
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/LiCoO2/label/428.png
+    role: annotation
+    sha256: d13425c628ad3e4453a0b5784c252b1be93168735310fc2c16cf82050bcc43f7
+    bytes: 2321
+    pair_id: atom-columns-licoo2:428
+  - file_id: atom-columns-licoo2:image:01615
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/LiCoO2/image/864.png
+    role: image
+    sha256: b7bf6612650d1355ea7e0e40574f8b547c11ab5ecf3d6545cf2cd224861d7df6
+    bytes: 53059
+    pair_id: atom-columns-licoo2:864
+  - file_id: atom-columns-licoo2:label:03379
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/LiCoO2/label/864.png
+    role: annotation
+    sha256: 9c079db01c0af1b3f3cf86380faf9541a1bf9b212452988edde3c278a0bb1a78
+    bytes: 2727
+    pair_id: atom-columns-licoo2:864
+- group_id: emseek-atom-columns-mos2-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-mos2-unresolved-acquisition
+  sample_id: emseek-atom-columns-mos2-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: MoS2
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-mos2:image:00997
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/MoS2/image/989.png
+    role: image
+    sha256: 64cc5727ea2b286c86ac30510a81621319f0f02d4a8b5c6a09ec731fc73b32a2
+    bytes: 47720
+    pair_id: atom-columns-mos2:989
+  - file_id: atom-columns-mos2:label:02005
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/MoS2/label/989.png
+    role: annotation
+    sha256: b0ebe6070054f5da19b7f48047b26b933399580f90aba0c7072935f4cd5371bc
+    bytes: 1588
+    pair_id: atom-columns-mos2:989
+  - file_id: atom-columns-mos2:image:00040
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/MoS2/image/126.png
+    role: image
+    sha256: c5fce1a8b941b509ffb4ad0b4494cb8326c6083d27572ea7efe298743219106f
+    bytes: 49983
+    pair_id: atom-columns-mos2:126
+  - file_id: atom-columns-mos2:label:01048
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/MoS2/label/126.png
+    role: annotation
+    sha256: 21eb3ebc11d2bec2b82d202cac977a037e6d12e7b0b0c28dd980a0091e83c0a5
+    bytes: 1052
+    pair_id: atom-columns-mos2:126
+- group_id: emseek-atom-columns-nio-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-nio-unresolved-acquisition
+  sample_id: emseek-atom-columns-nio-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: NiO
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-nio:image:00665
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/NiO/image/69.png
+    role: image
+    sha256: 3f419c3581f8ce8120babdee918d4fda15efad430ae6d0b53d1f2e7afaa51101
+    bytes: 50042
+    pair_id: atom-columns-nio:69
+  - file_id: atom-columns-nio:label:01673
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/NiO/label/69.png
+    role: annotation
+    sha256: 49dc16e1779469d861ba0070a69645e7c2e1c4f262bf26753685e548681815b2
+    bytes: 1405
+    pair_id: atom-columns-nio:69
+  - file_id: atom-columns-nio:image:00293
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/NiO/image/354.png
+    role: image
+    sha256: b7031549db29dcc68a53c129aa558476a5c973ff51b3e7650a2d19271959d82b
+    bytes: 36788
+    pair_id: atom-columns-nio:354
+  - file_id: atom-columns-nio:label:01301
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/NiO/label/354.png
+    role: annotation
+    sha256: b4269246628e318a87eb3fe51960b082bfc216618e465eb5cf2180cb47838187
+    bytes: 1363
+    pair_id: atom-columns-nio:354
+- group_id: emseek-atom-columns-pt-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-pt-unresolved-acquisition
+  sample_id: emseek-atom-columns-pt-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Pt
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-pt:image:02133
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Pt/image/65.png
+    role: image
+    sha256: 26bc5e2c1a6201fb68c122fa5ebf5358f6a7f06fedb2f63ed5d5e56eca9698f3
+    bytes: 13650
+    pair_id: atom-columns-pt:65
+  - file_id: atom-columns-pt:label:04653
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Pt/label/65.png
+    role: annotation
+    sha256: 3c1d4baf5a795b3a3b900938a013d37068254c0ca0b55856cfaa26b02890cca6
+    bytes: 691
+    pair_id: atom-columns-pt:65
+  - file_id: atom-columns-pt:image:02469
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Pt/image/952.png
+    role: image
+    sha256: b4f702c85dfa23693298f5f3b12f97216d32f149ab3a2a53642363b0d17ca2f1
+    bytes: 43468
+    pair_id: atom-columns-pt:952
+  - file_id: atom-columns-pt:label:04989
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Pt/label/952.png
+    role: annotation
+    sha256: 09bdcf0b894a24ce979e55efec63efaf719accc620d933d044aa5763065c6d47
+    bytes: 1366
+    pair_id: atom-columns-pt:952
+- group_id: emseek-atom-columns-si-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-si-unresolved-acquisition
+  sample_id: emseek-atom-columns-si-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Si
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-si:image:00004
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Si/image/101.png
+    role: image
+    sha256: 90da7bc93da7e254098639b061a1355f6ea2c58c4f6e6ec0e6b178d94387fa97
+    bytes: 35918
+    pair_id: atom-columns-si:101
+  - file_id: atom-columns-si:label:00508
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Si/label/101.png
+    role: annotation
+    sha256: 9425fc4800b54fca2afc487abc1472b1365995d0d6f06f87c5e4d2ccfb538721
+    bytes: 1388
+    pair_id: atom-columns-si:101
+  - file_id: atom-columns-si:image:00437
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Si/image/492.png
+    role: image
+    sha256: f04db825a0e08984376523bf7a3c063b8b91c6d25728b970d1aa1c303b2566fe
+    bytes: 45794
+    pair_id: atom-columns-si:492
+  - file_id: atom-columns-si:label:00941
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/Si/label/492.png
+    role: annotation
+    sha256: 4769d112e0f20ec6825263e8786036b1f42ae1263ac0c2df73669253c1822f83
+    bytes: 3803
+    pair_id: atom-columns-si:492
+- group_id: emseek-atom-columns-srtio3-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-srtio3-unresolved-acquisition
+  sample_id: emseek-atom-columns-srtio3-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: SrTiO3
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-srtio3:image:01864
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/SrTiO3/image/2676.png
+    role: image
+    sha256: 2a9d9287bccae5b721c39a9c53cdf90a2d6a5aea796b185f7252ceeca579ffc9
+    bytes: 27021
+    pair_id: atom-columns-srtio3:2676
+  - file_id: atom-columns-srtio3:label:06148
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/SrTiO3/label/2676.png
+    role: annotation
+    sha256: 391189bbdd214d8b2d7ae70bf58ea7b04b33e5e09f72e5b7812b543f028a9f5d
+    bytes: 1152
+    pair_id: atom-columns-srtio3:2676
+  - file_id: atom-columns-srtio3:image:03837
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/SrTiO3/image/596.png
+    role: image
+    sha256: 18005c0bfa182bfa61b009e50a5f7196b6839a7d9b771231eb72e3f3d639698a
+    bytes: 30611
+    pair_id: atom-columns-srtio3:596
+  - file_id: atom-columns-srtio3:label:08121
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/SrTiO3/label/596.png
+    role: annotation
+    sha256: 3e398869e85cceeefe7ec376f1e154d125fb3243fd710566d85c9e14c8a680af
+    bytes: 1422
+    pair_id: atom-columns-srtio3:596
+- group_id: emseek-atom-columns-graphene-single-conservative-group
+  partition: train
+  acquisition_id: emseek-atom-columns-graphene-unresolved-acquisition
+  sample_id: emseek-atom-columns-graphene-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: graphene
+  tasks:
+  - atomic_column_localization
+  - atomic_site_anomaly
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: atom-columns-graphene:image:01282
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/graphene/image/791.png
+    role: image
+    sha256: 3058c0e8f2daeba906b384e27e56b09992c98d3cc6c277aa49408510f4ec2084
+    bytes: 49997
+    pair_id: atom-columns-graphene:791
+  - file_id: atom-columns-graphene:label:02794
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/graphene/label/791.png
+    role: annotation
+    sha256: c679ae5fbde4507e04e7fbb5ddda205503250fddeaffa0802cd5d121304a99ce
+    bytes: 4318
+    pair_id: atom-columns-graphene:791
+  - file_id: atom-columns-graphene:image:01086
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/graphene/image/614.png
+    role: image
+    sha256: 462db155c42a4ff9f59c4ab4df7f2d3d98be1b0809019e9d0860691987c0b464
+    bytes: 46000
+    pair_id: atom-columns-graphene:614
+  - file_id: atom-columns-graphene:label:02598
+    relative_path: datasets/public/emseek_remaining_v1/atom_columns/graphene/label/614.png
+    role: annotation
+    sha256: 2dae98b7ec8d176289d01202eb906c0f90027a6ae305c76335b2236787328640
+    bytes: 2592
+    pair_id: atom-columns-graphene:614
+- group_id: emseek-metal-alloy-defects-fecral-single-conservative-group
+  partition: train
+  acquisition_id: emseek-metal-alloy-defects-fecral-unresolved-acquisition
+  sample_id: emseek-metal-alloy-defects-fecral-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: FeCrAl
+  tasks:
+  - irradiation_damage_region
+  - artifact_or_damage_disambiguation
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: metal-alloy-defects-fecral:image:00055
+    relative_path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/image/148.png
+    role: image
+    sha256: dce375bd1a3d56b4f1a713ada34033de03a2b34795e02bac384e6da62eea77d4
+    bytes: 673301
+    pair_id: metal-alloy-defects-fecral:148
+  - file_id: metal-alloy-defects-fecral:label:00238
+    relative_path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/label/148.png
+    role: annotation
+    sha256: 8df3cb0805899aa88db103cb82d1b6dda012ca7084289e2fb542fdd86e6507a0
+    bytes: 7553
+    pair_id: metal-alloy-defects-fecral:148
+  - file_id: metal-alloy-defects-fecral:image:00124
+    relative_path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/image/46.png
+    role: image
+    sha256: 7a95df67c34fff594bb7d450eac3fd736638fa47a36fdf967373cf2cdf77e17a
+    bytes: 659821
+    pair_id: metal-alloy-defects-fecral:46
+  - file_id: metal-alloy-defects-fecral:label:00307
+    relative_path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/label/46.png
+    role: annotation
+    sha256: 5f0f5ffdcf15075df5b290c31dd83f801602fb9b9684e65f628ed85fe19dbaa5
+    bytes: 11415
+    pair_id: metal-alloy-defects-fecral:46
+- group_id: emseek-nanoparticles-au-c-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-au-c-unresolved-acquisition
+  sample_id: emseek-nanoparticles-au-c-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Au@C
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-au-c:image:00106
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@C/image/193.png
+    role: image
+    sha256: 9145fca14d20f3e9babfcdad195f946dd5b391c610613e9c2b289f1a256b2c8b
+    bytes: 4857611
+    pair_id: nanoparticles-au-c:193
+  - file_id: nanoparticles-au-c:label:00434
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@C/label/193.png
+    role: annotation
+    sha256: 4448baa9b362d81b7347699738395ad6b21d06ad3464e82c6ac5ad7fb37d096b
+    bytes: 32603
+    pair_id: nanoparticles-au-c:193
+  - file_id: nanoparticles-au-c:image:00021
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@C/image/116.png
+    role: image
+    sha256: 19f745217e5978a65dfb07f3c9e9bd3dafe6bae35e30a4749742caa35c6a8a42
+    bytes: 877073
+    pair_id: nanoparticles-au-c:116
+  - file_id: nanoparticles-au-c:label:00349
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@C/label/116.png
+    role: annotation
+    sha256: 1eb5219f9826c7d10057533a3f16eb451a23c3d4f376073f689de2014ad67f8c
+    bytes: 8655
+    pair_id: nanoparticles-au-c:116
+- group_id: emseek-nanoparticles-au-ge-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-au-ge-unresolved-acquisition
+  sample_id: emseek-nanoparticles-au-ge-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Au@Ge
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-au-ge:image:00015
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@Ge/image/22.png
+    role: image
+    sha256: 8f065f0eb085653387e64c3c14b736661a113e9a0fce7005037f3ce6aae80b3e
+    bytes: 4195014
+    pair_id: nanoparticles-au-ge:22
+  - file_id: nanoparticles-au-ge:label:00108
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@Ge/label/22.png
+    role: annotation
+    sha256: 07347e5d2d9cfa402bec6ace628f1cfa647b24cd48d5601f85fe0beb4aa53ece
+    bytes: 4194452
+    pair_id: nanoparticles-au-ge:22
+  - file_id: nanoparticles-au-ge:image:00035
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@Ge/image/40.png
+    role: image
+    sha256: c919e34996d07d6f6d0a7614986a0eca6e6ae94f06b28e65885a18da3a953a98
+    bytes: 4195014
+    pair_id: nanoparticles-au-ge:40
+  - file_id: nanoparticles-au-ge:label:00128
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@Ge/label/40.png
+    role: annotation
+    sha256: 5ae84136f73a8ca0c4adbdaca753fc20149c0f9ad16fe9a5d39eec5b1da1a855
+    bytes: 4194452
+    pair_id: nanoparticles-au-ge:40
+- group_id: emseek-nanoparticles-au-sin-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-au-sin-unresolved-acquisition
+  sample_id: emseek-nanoparticles-au-sin-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Au@SiN
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-au-sin:image:00045
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@SiN/image/5.png
+    role: image
+    sha256: 82aaa4a3e828ecbe34820371045f6a2b156d3316fa15d940c70f0a004c3aa3a5
+    bytes: 5026225
+    pair_id: nanoparticles-au-sin:5
+  - file_id: nanoparticles-au-sin:label:00128
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@SiN/label/5.png
+    role: annotation
+    sha256: d8eb7833079f472dcbdb2137a2a71c8cebf3c5578423590515b7c04e41bfe538
+    bytes: 22639
+    pair_id: nanoparticles-au-sin:5
+  - file_id: nanoparticles-au-sin:image:00003
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@SiN/image/11.png
+    role: image
+    sha256: 44096284714fac0ef085ec703667021cf456515052b91f3f0582e86c02039a0f
+    bytes: 4870643
+    pair_id: nanoparticles-au-sin:11
+  - file_id: nanoparticles-au-sin:label:00086
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Au@SiN/label/11.png
+    role: annotation
+    sha256: c9e65261f821a3c6bf45a599ac77fd3fc20a7341c84756b513667924b9713c93
+    bytes: 20057
+    pair_id: nanoparticles-au-sin:11
+- group_id: emseek-nanoparticles-cdse-c-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-cdse-c-unresolved-acquisition
+  sample_id: emseek-nanoparticles-cdse-c-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: CdSe@C
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-cdse-c:image:00002
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/CdSe@C/image/10.png
+    role: image
+    sha256: 23f87fe5a91bc28c1d79d0e7759a951070ff01d2b59fbf2cd8682a02423f178c
+    bytes: 5904423
+    pair_id: nanoparticles-cdse-c:10
+  - file_id: nanoparticles-cdse-c:label:00013
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/CdSe@C/label/10.png
+    role: annotation
+    sha256: 7327e5ac05b955098e87d823413e8126d3d9eee181389ea6edfb4baad368e94e
+    bytes: 39929
+    pair_id: nanoparticles-cdse-c:10
+  - file_id: nanoparticles-cdse-c:image:00003
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/CdSe@C/image/11.png
+    role: image
+    sha256: 50f17e904c952331f9b3b88dbb5ae7e08dc3161668906f12d9d2729ad436a144
+    bytes: 6249718
+    pair_id: nanoparticles-cdse-c:11
+  - file_id: nanoparticles-cdse-c:label:00014
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/CdSe@C/label/11.png
+    role: annotation
+    sha256: 7ee14e35da958b30a9eac53cdb03433b340ca27a5a8bc306c0d24563aa9f8a01
+    bytes: 35218
+    pair_id: nanoparticles-cdse-c:11
+- group_id: emseek-nanoparticles-fe3o4-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-fe3o4-unresolved-acquisition
+  sample_id: emseek-nanoparticles-fe3o4-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Fe3O4
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-fe3o4:image:00002
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4/image/2.png
+    role: image
+    sha256: a0378a26ffb41b2b539753a85677d66b8e86ac60be0087c32a2175fb0517ed3f
+    bytes: 553413
+    pair_id: nanoparticles-fe3o4:2
+  - file_id: nanoparticles-fe3o4:label:00010
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4/label/2.png
+    role: annotation
+    sha256: 1ab86d80e7d2bbd7e759062b0daa5e6be9e5e2f5b0b46630332529fd058277cf
+    bytes: 6621
+    pair_id: nanoparticles-fe3o4:2
+  - file_id: nanoparticles-fe3o4:image:00006
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4/image/6.png
+    role: image
+    sha256: a87ba0a0774299e0700bfdc0e644ee3ff104e683b0537e091471b8bc8483bd4f
+    bytes: 535629
+    pair_id: nanoparticles-fe3o4:6
+  - file_id: nanoparticles-fe3o4:label:00014
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4/label/6.png
+    role: annotation
+    sha256: 9f4cfe7c4e511a4a4e789d8da4982e480763ff22f41c21671033e18f661e1bec
+    bytes: 5901
+    pair_id: nanoparticles-fe3o4:6
+- group_id: emseek-nanoparticles-fe3o4-sio2-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-fe3o4-sio2-unresolved-acquisition
+  sample_id: emseek-nanoparticles-fe3o4-sio2-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Fe3O4@SiO2
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-fe3o4-sio2:image:00001
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4@SiO2/image/1.png
+    role: image
+    sha256: 9a6c334ef79937efb739469434e63520746b27642fad1667430d8e929b618dd3
+    bytes: 575899
+    pair_id: nanoparticles-fe3o4-sio2:1
+  - file_id: nanoparticles-fe3o4-sio2:label:00010
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4@SiO2/label/1.png
+    role: annotation
+    sha256: c4ea3db4dbe4491b23a14c2e6f4addb6c55d02be652e300a28618c76abddf46c
+    bytes: 6509
+    pair_id: nanoparticles-fe3o4-sio2:1
+  - file_id: nanoparticles-fe3o4-sio2:image:00008
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4@SiO2/image/8.png
+    role: image
+    sha256: c66d581e3432fe27d724f5f95b29dff5864e91bcb3bfbf694f3e442a1993eff1
+    bytes: 553740
+    pair_id: nanoparticles-fe3o4-sio2:8
+  - file_id: nanoparticles-fe3o4-sio2:label:00017
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Fe3O4@SiO2/label/8.png
+    role: annotation
+    sha256: 001ba2075cc358a5319dde16304fefac55ce74ff9f7b1857ae02a4497a1bbc0d
+    bytes: 12002
+    pair_id: nanoparticles-fe3o4-sio2:8
+- group_id: emseek-nanoparticles-pd-c-single-conservative-group
+  partition: train
+  acquisition_id: emseek-nanoparticles-pd-c-unresolved-acquisition
+  sample_id: emseek-nanoparticles-pd-c-unresolved-sample
+  lab_id: emseek_source_metadata_unresolved
+  microscope_id: unresolved
+  material: Pd@C
+  tasks:
+  - particle_and_surface_morphology
+  - particle_support_interface
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: true
+  files:
+  - file_id: nanoparticles-pd-c:image:00028
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Pd@C/image/34.png
+    role: image
+    sha256: 69b335c6178c6ffeacb2ef28db74814f56ccc1bc940d6870beb234de711aff2a
+    bytes: 4198646
+    pair_id: nanoparticles-pd-c:34
+  - file_id: nanoparticles-pd-c:label:00124
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Pd@C/label/34.png
+    role: annotation
+    sha256: 2389935329567130163dd38cf2044d06ef3033a571d6869e90840eadfd72886b
+    bytes: 4195014
+    pair_id: nanoparticles-pd-c:34
+  - file_id: nanoparticles-pd-c:image:00084
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Pd@C/image/85.png
+    role: image
+    sha256: ee8b86f7624180e74991a805ca51d11649efb8db3d3126dc0a21ba0123c1adfc
+    bytes: 4198604
+    pair_id: nanoparticles-pd-c:85
+  - file_id: nanoparticles-pd-c:label:00180
+    relative_path: datasets/public/emseek_remaining_v1/nanoparticles/Pd@C/label/85.png
+    role: annotation
+    sha256: a5b93cc5bb83e0b7c4208bb483216826defdcc08e2bb64125794b909b80462e2
+    bytes: 4195014
+    pair_id: nanoparticles-pd-c:85
+- group_id: emseek-balanced-subset-v1-source-manifest-group
+  partition: train
+  acquisition_id: emseek-balanced-subset-v1-source-manifest
+  sample_id: emseek-balanced-subset-v1-source-manifest
+  lab_id: emseek_repository
+  microscope_id: not_applicable
+  material: mixed
+  tasks:
+  - provenance
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: emseek-balanced-subset-v1-source-manifest
+    relative_path: datasets/intake/emseek_balanced_subset_v1_source_manifest.json
+    role: metadata
+    sha256: 8320d48463583496e9e30988929c9dab5a47684244a84483b04f1adb8386d63d
+    bytes: 43822
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: 33860c0e683c68a76284815c429f787fa17b2e3fa9d2400f22c41431574752ca

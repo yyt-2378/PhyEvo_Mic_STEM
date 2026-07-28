@@ -1,0 +1,30 @@
+{
+  "benchmark": "evidence_student_vs_hard_pseudolabel",
+  "status": "synthetic_gate_passed",
+  "scope": "held-out synthetic rotation/noise conditions; not cross-material or external validation",
+  "random_seed": 23,
+  "training_cases": 6,
+  "counterfactual_pairs": 3,
+  "test_cases": 3,
+  "epochs": 50,
+  "evidence_preserving_student": {
+    "iou": 0.6648214779961251,
+    "dice": 0.798669991687448,
+    "precision": 0.7911725955204216,
+    "recall": 0.806310842564619
+  },
+  "hard_pseudolabel_student": {
+    "iou": 0.6036559139784946,
+    "dice": 0.7528496714496447,
+    "precision": 0.6268423403305047,
+    "recall": 0.942262504196039
+  },
+  "iou_difference": 0.061165564017630514,
+  "release_claim_allowed": false,
+  "interpretation": "With identical counterfactual pairs, initialization, and architecture, the geometry head consumes predicted violation/evidence/reliability channels. Physical evidence losses outperform the hard-mask-only ablation on held-out synthetic nuisance conditions. Precision improves while recall decreases. This passes only the synthetic software gate.",
+  "next_method_step": "Repeat on independent Gold materials and a prospectively locked cross-lab set; do not tune on this held-out synthetic set.",
+  "blocking_real_data_requirements": [
+    "independent Gold train/calibration assets",
+    "prospectively locked external material/lab assets"
+  ]
+}

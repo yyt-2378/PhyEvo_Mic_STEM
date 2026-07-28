@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/data_registry.schema.json",
+  "title": "PhyEvo-Mic partition registry",
+  "type": "object",
+  "required": [
+    "registry_version",
+    "split_unit",
+    "assets"
+  ],
+  "properties": {
+    "registry_version": {
+      "type": "string"
+    },
+    "split_unit": {
+      "enum": [
+        "acquisition",
+        "sample",
+        "lab",
+        "explicit_group"
+      ]
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/asset"
+      }
+    }
+  },
+  "$defs": {
+    "asset": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "dataset_id",
+        "relative_path",
+        "partition",
+        "split_group_id",
+        "acquisition_id",
+        "sample_id",
+        "lab_id",
+        "tasks",
+        "checksum",
+        "checksum_algorithm",
+        "eligible_for_active_learning"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dataset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "partition": {
+          "enum": [
+            "train",
+            "calibration",
+            "development_test",
+            "locked_external_test"
+          ]
+        },
+        "split_group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "checksum": {
+          "type": "string",
+          "minLength": 32
+        },
+        "eligible_for_active_learning": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

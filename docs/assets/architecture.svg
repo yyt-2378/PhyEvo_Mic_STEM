@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="820" viewBox="0 0 1440 820" role="img" aria-labelledby="title desc">
+  <title id="title">PhyEvo-Mic training-free STEM analysis architecture</title>
+  <desc id="desc">Input and provenance flow through five physics teachers, a shared evidence bundle, open-world resolution, multi-geometry outputs, and an audited improvement loop.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#14233d"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#23d5ab"/>
+      <stop offset="1" stop-color="#4f8cff"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".3"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#75a7ff"/>
+    </marker>
+    <style>
+      .title{font:700 40px system-ui,sans-serif;fill:#f7fbff}
+      .subtitle{font:400 18px system-ui,sans-serif;fill:#a9bad0}
+      .head{font:700 21px system-ui,sans-serif;fill:#f7fbff}
+      .body{font:400 15px system-ui,sans-serif;fill:#c6d2e1}
+      .small{font:500 13px system-ui,sans-serif;fill:#98abc2}
+      .box{fill:#172a46;stroke:#3d5b80;stroke-width:2}
+      .teacher{fill:#17334a;stroke:#21c8a2;stroke-width:2}
+      .output{fill:#28284d;stroke:#9b83ff;stroke-width:2}
+      .flow{fill:none;stroke:#75a7ff;stroke-width:3;marker-end:url(#arrow)}
+    </style>
+  </defs>
+  <rect width="1440" height="820" rx="28" fill="url(#bg)"/>
+  <rect x="64" y="44" width="12" height="70" rx="6" fill="url(#accent)"/>
+  <text x="98" y="78" class="title">PhyEvo_Mic_STEM</text>
+  <text x="98" y="107" class="subtitle">Training-free physics evidence → open-world microscopy decisions</text>
+
+  <rect class="box" filter="url(#shadow)" x="60" y="180" width="220" height="160" rx="18"/>
+  <text x="86" y="218" class="head">Input + provenance</text>
+  <text x="86" y="252" class="body">2-D STEM / NData / EMD</text>
+  <text x="86" y="280" class="body">bit-depth-safe normalization</text>
+  <text x="86" y="308" class="body">SHA-256 + channel selection</text>
+
+  <path class="flow" d="M280 260 H350"/>
+
+  <rect class="teacher" filter="url(#shadow)" x="360" y="145" width="320" height="285" rx="18"/>
+  <text x="388" y="185" class="head">Five physics teachers</text>
+  <text x="388" y="222" class="body">① amorphous / order loss</text>
+  <text x="388" y="258" class="body">② atomic-site residual</text>
+  <text x="388" y="294" class="body">③ phase-slip / stacking</text>
+  <text x="388" y="330" class="body">④ reciprocal interface</text>
+  <text x="388" y="366" class="body">⑤ symmetry group relation</text>
+  <text x="388" y="403" class="small">No supervised labels or backprop required</text>
+
+  <path class="flow" d="M680 260 H750"/>
+
+  <rect class="box" filter="url(#shadow)" x="760" y="145" width="280" height="285" rx="18"/>
+  <text x="788" y="185" class="head">Shared evidence layer</text>
+  <text x="788" y="222" class="body">node / edge / region / field</text>
+  <text x="788" y="258" class="body">reliability + validity + OOD</text>
+  <text x="788" y="294" class="body">physical violation ontology</text>
+  <text x="788" y="330" class="body">ranked hypotheses</text>
+  <text x="788" y="366" class="body">artifact competition</text>
+  <text x="788" y="403" class="small">EvidenceBundle + resolver + abstention</text>
+
+  <path class="flow" d="M1040 260 H1110"/>
+
+  <rect class="output" filter="url(#shadow)" x="1120" y="145" width="260" height="285" rx="18"/>
+  <text x="1148" y="185" class="head">Multi-geometry output</text>
+  <text x="1148" y="226" class="body">● point</text>
+  <text x="1148" y="262" class="body">╱ line</text>
+  <text x="1148" y="298" class="body">│ interface</text>
+  <text x="1148" y="334" class="body">▰ region</text>
+  <text x="1148" y="374" class="body">probable / unresolved</text>
+  <text x="1148" y="402" class="body">artifact / invalid</text>
+
+  <rect class="box" x="150" y="545" width="1140" height="190" rx="22"/>
+  <text x="185" y="588" class="head">Audited self-improvement loop</text>
+  <rect x="185" y="620" width="205" height="70" rx="14" fill="#203858"/>
+  <text x="208" y="648" class="body">teacher–student</text>
+  <text x="208" y="674" class="body">disagreement</text>
+  <path class="flow" d="M390 655 H455"/>
+  <rect x="465" y="620" width="205" height="70" rx="14" fill="#203858"/>
+  <text x="488" y="648" class="body">blinded two-expert</text>
+  <text x="488" y="674" class="body">active review</text>
+  <path class="flow" d="M670 655 H735"/>
+  <rect x="745" y="620" width="205" height="70" rx="14" fill="#203858"/>
+  <text x="770" y="648" class="body">Gold calibration +</text>
+  <text x="770" y="674" class="body">locked evaluation</text>
+  <path class="flow" d="M950 655 H1015"/>
+  <rect x="1025" y="620" width="230" height="70" rx="14" fill="#203858"/>
+  <text x="1048" y="648" class="body">non-regression release</text>
+  <text x="1048" y="674" class="body">or audited rejection</text>
+  <path d="M1140 620 C1140 500 925 500 900 430" fill="none" stroke="#23d5ab" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+
+  <text x="720" y="785" text-anchor="middle" class="small">Physics candidates are Silver evidence—not experimental Gold—until independently calibrated.</text>
+</svg>

@@ -1,0 +1,35 @@
+{
+  "neural_training_used": false,
+  "supervised_labels_used": false,
+  "per_image_statistical_adaptation": true,
+  "cases": [
+    {
+      "angle": 0.0,
+      "noise": 0.08,
+      "seed": 1,
+      "iou": 0.6468377185814675,
+      "precision": 0.6468377185814675,
+      "recall": 1.0,
+      "regions": 1
+    },
+    {
+      "angle": 17.0,
+      "noise": 0.1,
+      "seed": 2,
+      "iou": 0.7836528758829465,
+      "precision": 0.7956967213114754,
+      "recall": 0.9810510358767054,
+      "regions": 1
+    },
+    {
+      "angle": 33.0,
+      "noise": 0.14,
+      "seed": 3,
+      "iou": 0.8343544857768053,
+      "precision": 0.8616949152542372,
+      "recall": 0.9633653360282971,
+      "regions": 1
+    }
+  ],
+  "mean_iou": 0.7549483600804064
+}

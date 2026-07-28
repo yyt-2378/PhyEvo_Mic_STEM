@@ -1,0 +1,53 @@
+{
+  "seal_format": "phyevo-mic-protocol-seal-v1",
+  "sealed_at_utc": "2026-07-26T11:25:02.677560+00:00",
+  "protocol_id": "dennler-2021-hrstem-zero-shot-v1",
+  "asset_id": "dennler_2021_hrstem_locked_archive",
+  "protocol_file_sha256": "8c36a2fb4341fb197915b5fa6826f58905277fddb9009d7120aa74c27be140d4",
+  "registry_content_sha256": "4ea83e7fb8b61de80e96bfae471838d4190808259d920a7c3c61d18b08a01042",
+  "archive_relative_path": "datasets/public/dennler_2021_hrstem_defects/hrstem_defects_dataset.zip",
+  "archive_sha256": "abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec",
+  "detector_config_sha256": {
+    "configs/amorphous.yaml": "73788bb6667b5570b30a847726d99285bbedfe468db531128e63a07f1afa6b4b",
+    "configs/stacking_fault.yaml": "88b7e2aa52b7e9af2dca7660b18db765b4decdce2740589c55b1f00d09a3fe4c",
+    "configs/phase_boundary.yaml": "894e1e42b62dd0e7cdef6381297f7992268a20095a490480d2d42886727b7d18"
+  },
+  "frozen_file_sha256": {
+    "pyproject.toml": "fa3244ce33a33e0347f005037bb0f3df227410b18c732dc36059209150145fec",
+    "configs/amorphous.yaml": "73788bb6667b5570b30a847726d99285bbedfe468db531128e63a07f1afa6b4b",
+    "configs/stacking_fault.yaml": "88b7e2aa52b7e9af2dca7660b18db765b4decdce2740589c55b1f00d09a3fe4c",
+    "configs/phase_boundary.yaml": "894e1e42b62dd0e7cdef6381297f7992268a20095a490480d2d42886727b7d18",
+    "src/tfree_detection/__init__.py": "4a0a5de80a7cc3713d364ab4100301cd9d27386c72ba51e7abebe61c10c040da",
+    "src/tfree_detection/config.py": "5623b5abdfd8537c6764b3163a5c60552510cfcca12aabbaa3e753a1b5face8d",
+    "src/tfree_detection/context.py": "71da605c7b8c0fe376d80dfb5f952db6107daa756af905ebe2c17bcac617eb12",
+    "src/tfree_detection/evaluation.py": "ab13241dd3ae736338cd850dffd4905473a35c8db9208e9715d474711e79ae96",
+    "src/tfree_detection/evidence.py": "d677d2d8c412caad23a7610373ddadf93b3d768f6b0b1137df0dc6900e67529f",
+    "src/tfree_detection/framework.py": "63236ccdc3223637fddbbc2ec3ade6211717da377699668b351d8d2fa8075ae2",
+    "src/tfree_detection/fusion.py": "5e3e7b85e4e3aafee8c15e55be587d96794f478b2bae033c93bd2a52829d56d7",
+    "src/tfree_detection/governance.py": "b53d7a953dd748801d6c5598641bf884adfbba273ef3d9653f941650760fd263",
+    "src/tfree_detection/locked_evaluation.py": "001dad0b5fa6d3b63a865181a7f2b0289d321a07673a32807bc36de8280ec86a",
+    "src/tfree_detection/models.py": "ac2347c013f038e6a826accd6aa1b217083ea22774a6a884c9412b0f54bfd4be",
+    "src/tfree_detection/postprocessing.py": "784574b6fc36ff35e5ec2862ac5b17cdd13fad87d43e4bc81824d64348fd9103",
+    "src/tfree_detection/preprocessing.py": "da227470db2fac64303e42dd093a25ccab2fe2d7671d46f4a6221c23375644d6",
+    "src/tfree_detection/features/__init__.py": "8b7bdc279cbbaee4c73c485b776617e8bebfd3a8a1a484b32c314ee93deb6c62",
+    "src/tfree_detection/features/lattice.py": "e07ea962f389c012087c9aa77a5f8b400d70787195f5f3f20f2e50d85d49cf5c",
+    "src/tfree_detection/features/spectral.py": "8713361b7f9a2ab82db9f4bbced1235721cf9f95c50709694494a84883da0f46",
+    "src/tfree_detection/stage2/__init__.py": "a4095af724d66493f370a3c2f3d4ab22c9ec199ff070b4b492cbac4a4812e86e",
+    "src/tfree_detection/stage2/dino.py": "900239710f530d28e52ad5d5a3f26234aa3f3497eb6dbba711b89e88f3b666ee",
+    "src/tfree_detection/stage2/phase.py": "2a19d15c57bc30c33fd752454bb0ca50c9b69ad5e49013d27be4fdf698ffc984",
+    "src/tfree_detection/tasks/__init__.py": "3196ecc8cf0f5b53d1df9f7f74ea1b54a6d60adf51bab3168cc5612467ad8359",
+    "src/tfree_detection/tasks/amorphous.py": "1b661dbead9132613756b1b22fbe4487b4ee8802d45b9d763d23584b6456138c",
+    "src/tfree_detection/tasks/atomic.py": "93ade69de6be373ce4f49b981fc41e2f2a38372471e417ad49b131b483a1dfaa",
+    "src/tfree_detection/tasks/base.py": "52440a7bbb123fe05170e6da3f1d3a90999015961e23f120484150c8d2d5234e",
+    "src/tfree_detection/tasks/common.py": "d8eb632744443d4a8996948bfeb4699da712de90449320c44450583529649a2f",
+    "src/tfree_detection/tasks/interface.py": "1a52664555ee0edc4cc9f8c67fb835223c1a417fcb024d58031d0fa5d66630e2",
+    "src/tfree_detection/tasks/stacking.py": "92e4ba99026f619f103b87a00730a89730c990d5a9ddd879b93e2e0c704733d2",
+    "scripts/run_locked_external_test.py": "bf48ff6d80d5db3779dba2a26355c855d4cb753fcfbbbaaf86772c6681338362",
+    "scripts/prepare_locked_hrstem.py": "b391593295cd73731f2f64f31a4abe88ca167077c36dba1c4cef6d2c123da7a8"
+  },
+  "state_at_seal": {
+    "locked_labels_unpacked": false,
+    "detector_metrics_observed": false
+  },
+  "seal_content_sha256": "c4a16f061a277e08378a10c1655b046b7c85a0f3dee1e20d3bc20e54b2a24cef"
+}

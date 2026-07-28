@@ -1,0 +1,5 @@
+{
+  "prediction_manifest_sha256": "cfc9a329356dec0f8aaeafbb19ab5979f24663c97c3d3e089fbda03a56fda7f2",
+  "prediction_content_sha256": "b4c820b66fe3690f6d92822e5569697c2ff41c1ecdfac50b30a80b9a2be9acbe",
+  "labels_read_during_prediction": false
+}

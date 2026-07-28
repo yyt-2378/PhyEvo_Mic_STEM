@@ -1,0 +1,90 @@
+protocol_format: phyevo-mic-posthoc-diagnostic-v1
+protocol_version: "1.0.0"
+protocol_id: dennler-2021-posthoc-v0.4-diagnostic-v1
+created_date: "2026-07-28"
+scientific_status: posthoc_after_unblinding_not_locked
+asset_id: dennler_2021_hrstem_locked_archive
+archive_path: datasets/public/dennler_2021_hrstem_defects/hrstem_defects_dataset.zip
+archive_sha256: abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec
+historical_locked_protocol: benchmarks/locked_dennler_v1_protocol.yaml
+historical_prediction_set_sha256: f7b126bb10691d81c3e08d677325e2e36dac5d0f1619436bd9e220ef773232de
+
+question: >-
+  After the Dennler v1 failure has already been unblinded, which v0.4
+  geometry and scale mechanisms explain or repair under-coverage? This run
+  is diagnostic only and cannot establish a new zero-shot or locked claim.
+
+prediction_stage:
+  label_directories_forbidden:
+    - hrstem_defects_dataset/defective/labels
+  source_directories:
+    - hrstem_defects_dataset/defective/images
+    - hrstem_defects_dataset/non_defective/images
+  new_candidate_generators:
+    - scale_aware_reciprocal_carrier_coherence_loss
+    - local_wavevector_domain_symmetry
+  retained_historical_branches:
+    - stacking_fault
+    - phase_boundary
+  geometry_outputs:
+    - coherence_loss_region
+    - secondary_symmetry_region
+    - structural_boundary
+    - any_defect_region
+    - domain_symmetry_region_ablation
+    - augmented_secondary_symmetry_region_ablation
+    - augmented_any_defect_region_ablation
+  invariants:
+    - border_touching_physical_candidates_are_retained
+    - edge_measurement_reliability_is_lowered_not_deleted
+    - historical_locked_predictions_are_read_only
+    - unvalidated_domain_proposals_do_not_enter_primary_masks
+    - no_neural_training
+    - no_supervised_fitting
+  primary_composition:
+    coherence_loss_region: scale_aware_reciprocal_carrier_coherence_loss
+    secondary_symmetry_region: read_only_historical_structure_branch
+    structural_boundary: physically_gated_local_wavevector_boundary
+    any_defect_region:
+      - coherence_loss_region
+      - secondary_symmetry_region
+  exploratory_composition:
+    augmented_secondary_symmetry_region:
+      - secondary_symmetry_region
+      - domain_symmetry_region_ablation
+    augmented_any_defect_region:
+      - coherence_loss_region
+      - augmented_secondary_symmetry_region
+
+posthoc_scoring:
+  label_decoder: global_sorted_black_gray_white
+  class_semantics:
+    0: main_crystal_symmetry_non_defective
+    1: secondary_crystal_symmetry_defect
+    2: blurred_amorphous_or_beam_defect
+  targets:
+    coherence_loss_region:
+      truth_classes: [2]
+      geometry: region
+    secondary_symmetry_region:
+      truth_classes: [1]
+      geometry: region_and_boundary
+    structural_boundary:
+      truth_classes: [1]
+      geometry: boundary_only
+    any_defect_region:
+      truth_classes: [1, 2]
+      geometry: region
+  comparison_status: descriptive_against_historical_v0.3_only
+
+prohibited_claims:
+  - new_locked_test
+  - zero_shot_external_validation
+  - independent_generalization
+  - threshold_selection_without_label_influence
+  - replacement_of_historical_prediction_set
+
+required_next_evidence:
+  - a_new_unseen_locked_external_dataset
+  - independent_experimental_gold_calibration
+  - geometry_matched_region_line_interface_metrics

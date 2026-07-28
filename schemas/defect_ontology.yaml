@@ -1,0 +1,114 @@
+schema_version: "2.0"
+name: open_world_multihypothesis_structural_evidence_graph
+runtime_source: tfree_detection.evidence.ontology_manifest
+resolver_source: tfree_detection.resolver.attach_hypothesis_resolutions
+compatibility:
+  legacy_detector_masks_unchanged: true
+  legacy_defect_type_preserved: true
+  physical_subtype_is_resolver_output: true
+axes:
+  violation_type:
+    - occupancy
+    - chemical-contrast
+    - intensity
+    - displacement
+    - shape
+    - phase-slip
+    - strain
+    - rotation
+    - coherence-loss
+    - periodicity-loss
+    - short-range-order-change
+    - domain-change
+    - diffraction-signature-change
+    - surface-morphology
+    - temporal-change
+    - acquisition-degradation
+    - specimen-support
+  spatial_support:
+    - point
+    - line
+    - region
+    - interface
+    - field
+  epistemic_state:
+    - confirmed
+    - probable
+    - composite
+    - unresolved
+    - artifact
+    - out_of_domain
+    - invalid_measurement
+label_tiers:
+  gold:
+    allowed_sources:
+      - expert_consensus
+      - verifiable_simulation_truth
+    physics_teacher_may_create: false
+  silver:
+    allowed_sources:
+      - physics_pseudo
+      - digital_twin
+    requires_reliability: true
+  unresolved:
+    allowed_sources:
+      - physics_pseudo
+      - student_proposal
+      - expert_disagreement
+    eligible_for_hard_label_training: false
+hypotheses:
+  amorphous_region:
+    - local_amorphous_region
+    - partial_disordering
+    - local_strain_or_deformation_region
+    - defocus_or_blur
+  atomic_point_defect:
+    - vacancy_like
+    - substitution_or_intensity_anomaly
+    - interstitial_or_adatom_like
+    - displaced_atom_column
+    - atomic_point_defect
+  stacking_fault:
+    - stacking_fault
+    - dislocation_core_or_line
+    - lattice_rotation_or_bending
+    - scan_or_coherence_artifact
+    - stacking_fault_or_dislocation_line
+  phase_boundary:
+    - heterophase_interface
+    - twin_or_orientation_domain_boundary
+    - two_phase_or_twin_boundary
+families:
+  - atomic_site_anomaly
+  - lattice_deformation_and_topology
+  - domain_symmetry_and_interface
+  - order_and_coherence_degradation
+  - chemical_and_spectroscopic_anomaly
+  - particle_surface_and_morphology
+  - acquisition_artifact_and_quality
+  - open_set_resolution
+decision_states:
+  background: 0
+  confirmed_candidate: 1
+  uncertain_candidate: 2
+  out_of_domain: 3
+  invalid_measurement: 4
+  artifact: 5
+  unresolved: 6
+semantics:
+  confirmed_candidate: >-
+    Internally supported and reliable physics-teacher candidate. It is not a
+    human-gold label and is not a calibrated probability of correctness.
+  legacy_confidence: >-
+    Within-image ranking score only; calibration requires an independent gold
+    calibration partition.
+  probable: >-
+    One supported physical hypothesis exceeds the configured transparent
+    margin. It remains Silver and is not causal confirmation.
+  artifact: >-
+    Acquisition-degradation evidence exceeds supported physical alternatives;
+    the candidate is retained as a first-class output and is not a hard defect
+    training target.
+  unresolved: >-
+    No hypothesis is sufficiently supported, or competing physical hypotheses
+    are too close to separate without auxiliary evidence.

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/dataset_label_adapter.schema.json",
+  "title": "Provenance-preserving external dataset label adaptation",
+  "type": "object",
+  "required": [
+    "adapter_protocol_version",
+    "adapter_id",
+    "adapter_version",
+    "dataset_id",
+    "asset_id",
+    "annotation_id",
+    "original",
+    "adapted"
+  ],
+  "properties": {
+    "adapter_protocol_version": {
+      "const": "1.0"
+    },
+    "adapter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapter_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "annotation_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "original": {
+      "type": "object",
+      "required": [
+        "source_label",
+        "source_payload",
+        "annotation_qualification"
+      ],
+      "properties": {
+        "source_label": {
+          "type": "string"
+        },
+        "source_payload": {
+          "type": "object"
+        },
+        "annotation_qualification": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "adapted": {
+      "type": "object",
+      "required": [
+        "semantic_role",
+        "ontology_family",
+        "ontology_label",
+        "alternative_hypotheses",
+        "spatial_support",
+        "epistemic_state",
+        "label_tier",
+        "eligible_for_hard_label_training",
+        "requires_auxiliary_evidence",
+        "notes"
+      ],
+      "properties": {
+        "semantic_role": {
+          "enum": [
+            "defect_candidate",
+            "structure_reference",
+            "normal_control",
+            "artifact",
+            "unknown"
+          ]
+        },
+        "ontology_family": {
+          "type": "string"
+        },
+        "ontology_label": {
+          "type": "string"
+        },
+        "alternative_hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "spatial_support": {
+          "type": "string"
+        },
+        "epistemic_state": {
+          "enum": [
+            "confirmed",
+            "probable",
+            "composite",
+            "unresolved",
+            "artifact",
+            "out_of_domain",
+            "invalid_measurement"
+          ]
+        },
+        "label_tier": {
+          "enum": [
+            "gold",
+            "silver",
+            "unresolved"
+          ]
+        },
+        "eligible_for_hard_label_training": {
+          "type": "boolean"
+        },
+        "requires_auxiliary_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

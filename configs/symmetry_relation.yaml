@@ -1,0 +1,28 @@
+task: symmetry_relation
+
+preprocess:
+  lower_percentile: 1.0
+  upper_percentile: 99.0
+  background_sigma: 0.0
+
+symmetry_relation:
+  motif_bins: 8
+  reference_patch_cells: 4.5
+  analysis_stride_cells: 1.15
+  maximum_references: 5
+  minimum_references: 3
+  reference_quality_quantile: 0.25
+  identity_shift_tolerance_bins: 1
+  minimum_motif_effect: 0.08
+  maximum_aligned_residual: 0.42
+  domain_score_threshold: 3.5
+  orientation_score_threshold: 3.5
+  phase_slip_score_threshold: 4.0
+  burgers_score_threshold: 5.0
+  minimum_coherence: 0.25
+  minimum_domain_cells: 3
+  minimum_boundary_phase_support: 0.25
+  boundary_support_radius_cells: 2.0
+  geometry_width_cells: 0.30
+  artifact_competition_weight: 0.75
+  edge_reliability_floor: 0.25

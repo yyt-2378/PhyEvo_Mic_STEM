@@ -1,0 +1,64 @@
+task: amorphous_region
+
+preprocess:
+  lower_percentile: 1.0
+  upper_percentile: 99.0
+  background_sigma: 0.0
+
+spectral:
+  patch_size: 128
+  stride: 24
+  min_frequency: 0.035
+  max_frequency: 0.32
+  radial_bin_width: 0.008
+  peak_fraction: 0.004
+  autocorrelation_min_lag: 8
+  autocorrelation_max_lag: 24
+  global_peak_count: 12
+  global_peak_min_separation: 0.012
+  global_peak_radius: 0.012
+
+fusion:
+  top_k: 3
+  smooth_sigma_grid: 1.0
+  threshold_quantile: 0.94
+  threshold_mad: 2.5
+  support_z: 1.25
+  minimum_evidence_groups: 2
+
+postprocess:
+  border_margin: null
+  exclude_border_touching: true
+  morphology_radius: 6
+  minimum_region_area: 2500
+  minimum_hole_area: 1500
+
+output:
+  save_feature_maps: true
+  save_numpy_arrays: true
+  figure_dpi: 160
+
+stage2:
+  enabled: true
+  phase:
+    enabled: true
+    frequency_filter_sigma: 0.009
+    derivative_smoothing_sigma: 3.0
+    amplitude_background_sigma: 120.0
+    fft_padding: 128
+    minimum_basis_angle_degrees: 15.0
+    minimum_coherence: 0.65
+    transition_inner_radius: 12
+    transition_outer_radius: 90
+    reference_inner_radius: 110
+    reference_outer_radius: 190
+  dino:
+    enabled: true
+    model_id: facebook/dino-vits8
+    local_model_directory: vendor/models/dino-vits8
+    input_size: 224
+    microscopy_patch_size: 128
+    batch_size: 4
+    samples_per_zone: 16
+    device: auto
+    random_seed: 13

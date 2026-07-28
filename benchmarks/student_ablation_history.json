@@ -1,0 +1,52 @@
+{
+  "policy": "Record failed as well as successful ablations; no failed checkpoint is reused as a pseudo-label teacher.",
+  "attempts": [
+    {
+      "attempt": 1,
+      "counterfactual_pairs": 0,
+      "evidence_student_iou": 0.30747812251392204,
+      "hard_pseudolabel_iou": 0.4066843667031079,
+      "difference": -0.09920624418918589,
+      "status": "failed",
+      "diagnosis": "Auxiliary multi-head losses caused negative transfer under scarce pseudo-label data."
+    },
+    {
+      "attempt": 2,
+      "counterfactual_pairs": 0,
+      "evidence_student_iou": 0.11726423621572762,
+      "hard_pseudolabel_iou": 0.14531207038768215,
+      "difference": -0.028047834171954528,
+      "status": "failed",
+      "diagnosis": "Partition-fair reliability weighting narrowed but did not reverse the evidence-student deficit."
+    },
+    {
+      "attempt": 3,
+      "counterfactual_pairs": 3,
+      "evidence_student_iou": 0.6074980872226473,
+      "hard_pseudolabel_iou": 0.5622680412371134,
+      "difference": 0.04523004598553393,
+      "status": "invalidated",
+      "diagnosis": "This apparent gain used a wrong amorphous reliability interpretation: anomaly-vote support_count was treated as measurement validity. The result was invalidated after visual audit.",
+      "claim_limit": "Held-out synthetic nuisance conditions only; not cross-material or external validation."
+    },
+    {
+      "attempt": 4,
+      "counterfactual_pairs": 3,
+      "evidence_student_iou": 0.14129167638144088,
+      "hard_pseudolabel_iou": 0.2442608882214117,
+      "difference": -0.10296921183997082,
+      "status": "failed",
+      "diagnosis": "After correcting reliability to Fourier window validity, auxiliary evidence losses still caused negative transfer because geometry did not explicitly consume evidence predictions."
+    },
+    {
+      "attempt": 5,
+      "counterfactual_pairs": 3,
+      "evidence_student_iou": 0.6648214779961251,
+      "hard_pseudolabel_iou": 0.6036559139784946,
+      "difference": 0.061165564017630514,
+      "status": "synthetic_gate_passed",
+      "diagnosis": "The geometry decoder explicitly fuses predicted violation, evidence, and reliability channels; physical auxiliary losses now constrain features used for candidate prediction.",
+      "claim_limit": "Held-out synthetic nuisance conditions only; not cross-material or external validation."
+    }
+  ]
+}

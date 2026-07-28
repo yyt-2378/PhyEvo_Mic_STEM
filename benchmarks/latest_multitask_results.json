@@ -1,0 +1,39 @@
+{
+  "neural_training_used": false,
+  "supervised_labels_used": false,
+  "per_image_statistical_adaptation": true,
+  "ground_truth": "deterministic_synthetic_masks",
+  "tasks": [
+    {
+      "task": "amorphous_region",
+      "iou": 0.8609493954321541,
+      "precision": 0.8832988743395359,
+      "recall": 0.9714502273875695
+    },
+    {
+      "task": "atomic_point_defect",
+      "iou": 0.6739130434782609,
+      "precision": 1.0,
+      "recall": 0.6739130434782609,
+      "detected_sites": 4
+    },
+    {
+      "task": "stacking_fault",
+      "iou": 0.5909694555112882,
+      "precision": 0.7974910394265233,
+      "recall": 0.6953125
+    },
+    {
+      "task": "phase_boundary",
+      "iou": 0.47422428536525774,
+      "precision": 0.7954918032786885,
+      "recall": 0.5400667779632721,
+      "domain_fractions": [
+        0.515,
+        0.485
+      ],
+      "signature_separation": 1.8270047138998409
+    }
+  ],
+  "mean_iou": 0.6500140449467402
+}

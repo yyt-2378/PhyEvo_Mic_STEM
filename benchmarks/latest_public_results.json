@@ -1,0 +1,78 @@
+{
+  "dataset": {
+    "doi": "10.5281/zenodo.5520169",
+    "license": "CC-BY-4.0",
+    "checksums_verified": true,
+    "pixel_ground_truth_available": false
+  },
+  "metric_scope": "reproducibility and qualitative sanity only; no public-data accuracy is claimed without exhaustive machine-readable labels",
+  "neural_training_used": false,
+  "supervised_labels_used": false,
+  "per_image_statistical_adaptation": true,
+  "checks": {
+    "atomic_candidate_fraction_below_10_percent": true,
+    "atomic_auto_detected_multiple_sublattices": true,
+    "stacking_has_compact_candidate_set": true,
+    "interface_has_two_crystalline_domains": true
+  },
+  "tasks": {
+    "atomic_point_defect": {
+      "image_shape": [
+        1024,
+        1024
+      ],
+      "expected_sites": 4674,
+      "inferred_sublattices": 2,
+      "reliable_image_fraction": 0.7822360992431641,
+      "candidate_count": 205,
+      "candidate_fraction_of_sites": 0.043859649122807015,
+      "candidate_types": {
+        "displaced_atom_column": 12,
+        "intensity_or_substitution_anomaly": 56,
+        "vacancy_or_low_intensity_column": 137
+      }
+    },
+    "stacking_fault": {
+      "image_shape": [
+        1239,
+        1024
+      ],
+      "candidate_count": 2,
+      "valid_border_margin_pixels": 80,
+      "candidate_boxes": [
+        [
+          374,
+          582,
+          484,
+          633
+        ],
+        [
+          541,
+          582,
+          651,
+          633
+        ]
+      ]
+    },
+    "phase_boundary": {
+      "image_shape": [
+        1024,
+        1024
+      ],
+      "candidate_count": 1,
+      "domain_fractions": [
+        0.26847768565884633,
+        0.7313459163873699
+      ],
+      "specimen_mask_applied": true,
+      "candidate_boxes": [
+        [
+          424,
+          32,
+          992,
+          663
+        ]
+      ]
+    }
+  }
+}

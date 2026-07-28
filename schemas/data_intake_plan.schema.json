@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/data_intake_plan.schema.json",
+  "title": "PhyEvo-Mic prospective data intake plan",
+  "type": "object",
+  "required": [
+    "plan_format",
+    "plan_id",
+    "dataset_id",
+    "source_uri",
+    "source_revision",
+    "license_spdx",
+    "admission_state",
+    "created_at_utc",
+    "groups",
+    "seal"
+  ],
+  "properties": {
+    "plan_format": {
+      "const": "phyevo-mic-data-intake-v1"
+    },
+    "plan_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "dataset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_uri": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "license_spdx": {
+      "type": "string",
+      "minLength": 1
+    },
+    "admission_state": {
+      "enum": [
+        "quarantine",
+        "training_only",
+        "development_candidate",
+        "calibration_candidate",
+        "locked_candidate"
+      ]
+    },
+    "created_at_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "groups": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/group"
+      }
+    },
+    "seal": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "content_sha256"
+      ],
+      "properties": {
+        "algorithm": {
+          "const": "sha256"
+        },
+        "content_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "group": {
+      "type": "object",
+      "required": [
+        "group_id",
+        "partition",
+        "acquisition_id",
+        "sample_id",
+        "lab_id",
+        "tasks",
+        "grouping_evidence",
+        "annotation_qualification",
+        "reviewer_count",
+        "control_role",
+        "eligible_for_active_learning",
+        "files"
+      ],
+      "properties": {
+        "group_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "partition": {
+          "enum": [
+            "train",
+            "calibration",
+            "development_test",
+            "locked_external_test"
+          ]
+        },
+        "acquisition_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sample_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lab_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tasks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "grouping_evidence": {
+          "enum": [
+            "laboratory_log",
+            "repository_metadata",
+            "author_statement",
+            "single_group_conservative"
+          ]
+        },
+        "annotation_qualification": {
+          "enum": [
+            "none",
+            "author_curated",
+            "expert_single",
+            "expert_consensus",
+            "simulation_truth"
+          ]
+        },
+        "reviewer_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "control_role": {
+          "enum": [
+            "positive",
+            "negative",
+            "mixed",
+            "unlabeled"
+          ]
+        },
+        "eligible_for_active_learning": {
+          "type": "boolean"
+        },
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/file"
+          }
+        }
+      }
+    },
+    "file": {
+      "type": "object",
+      "required": [
+        "file_id",
+        "relative_path",
+        "role",
+        "sha256",
+        "bytes"
+      ],
+      "properties": {
+        "file_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relative_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "image",
+            "annotation",
+            "metadata"
+          ]
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "pair_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}

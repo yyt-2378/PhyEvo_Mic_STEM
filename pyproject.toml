@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tfree-detection"
+version = "0.4.0"
+description = "Physics-evidence-guided, self-improving microscopy defect platform"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.22",
+  "scipy>=1.8",
+  "scikit-image>=0.19",
+  "matplotlib>=3.5",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7"]
+stage2 = ["torch>=1.12", "transformers>=4.24"]
+learning = ["torch>=1.12"]
+
+[project.scripts]
+tfree-detect = "tfree_detection.cli:main"
+
+[project.urls]
+Repository = "https://github.com/yyt-2378/PhyEvo_Mic_STEM"
+Documentation = "https://github.com/yyt-2378/PhyEvo_Mic_STEM/tree/main/docs"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

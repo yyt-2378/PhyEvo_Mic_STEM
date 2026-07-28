@@ -1,0 +1,203 @@
+datasets:
+  - id: guo_2021_atomic_defects
+    title: Data for Defect detection in atomic-resolution images via unsupervised learning with translational invariance
+    authors:
+      - Yueming Guo
+      - Sergei V. Kalinin
+      - Hui Cai
+      - Kai Xiao
+      - Sergiy Krylyuk
+      - Albert V. Davydov
+      - Qianying Guo
+      - Andrew R. Lupini
+    year: 2021
+    doi: 10.5281/zenodo.5520169
+    record_url: https://zenodo.org/records/5520169
+    paper_url: https://doi.org/10.1038/s41524-021-00642-1
+    license: CC-BY-4.0
+    labels:
+      pixel_ground_truth: false
+      note: Paper figures identify examples, but the archive does not provide a machine-readable, exhaustive pixel mask.
+    files:
+      - name: Recording_of_SuperScan_img_stack.ndata1
+        source_name: Recording of SuperScan (a)img_stack.ndata1
+        url: https://zenodo.org/api/records/5520169/files/Recording%20of%20SuperScan%20(a)img_stack.ndata1/content
+        bytes: 104862360
+        md5: 06ef37dd2e9dcf36bcab8b360da244c2
+        tasks:
+          - atomic_point_defect
+          - stacking_fault
+          - temporal_defect_evolution
+      - name: 2H_MoWTe2_large_field_of_view_acquisition.ndata1
+        source_name: 2H MoWTe2 large field of view acquisition.ndata1
+        url: https://zenodo.org/records/5520169/files/2H%20MoWTe2%20large%20field%20of%20view%20acquisition.ndata1?download=1
+        bytes: 4201026
+        md5: 5ba0698e02efa481ad425b9d3b1165b3
+        tasks:
+          - atomic_point_defect
+          - stacking_fault
+      - name: relaxed_single_Al_partial_dislocations_verified.tif
+        source_name: relaxed_single_Al partial_dislocations.tif
+        url: https://zenodo.org/api/records/5520169/files/relaxed_single_Al%20partial_dislocations.tif/content
+        bytes: 5471022
+        md5: 7f67ed89f081eab4e946c5916977f2cf
+        tasks:
+          - stacking_fault
+      - name: ZrO2_monoclinic_twin_boundary.tif
+        source_name: ZrO2_monoclinic (1).tif
+        url: https://zenodo.org/records/5520169/files/ZrO2_monoclinic%20%281%29.tif?download=1
+        bytes: 2097488
+        md5: 06fd28497b94c5a60b2afb6f1fc9deee
+        tasks:
+          - phase_boundary
+  - id: al_sigma3_twin_boundaries
+    title: Microstates and defects of incoherent Sigma3 [111] twin boundaries in aluminum
+    year: 2022
+    doi: 10.5281/zenodo.6414955
+    record_url: https://zenodo.org/records/6414955
+    paper_url: https://doi.org/10.1038/s41467-022-28692-9
+    license: CC-BY-4.0
+    material: Al
+    labels:
+      pixel_ground_truth: false
+      source: experimental_and_atomistic_evidence
+      qualification: author_curated_not_gold
+      note: >-
+        The archive provides paired STEM/EBSD observations and atomistic
+        simulation, but no exhaustive two-expert pixel mask. Experimental and
+        simulation assets must remain distinguishable in provenance.
+    grouping:
+      partition: train
+      evidence: repository_metadata
+      note: >-
+        The two experimental orientations and EBSD acquisition are separate
+        acquisition groups. The simulation archive is a linked digital-twin
+        group and must not cross a split with derived experimental labels.
+    files:
+      - name: EBSD_data.osc
+        source_name: EBSD_data.osc
+        url: https://zenodo.org/api/records/6414955/files/EBSD_data.osc/content
+        bytes: 68773183
+        md5: 0f22fa7d439b8d31a31c595ccdfd6eab
+        role: metadata
+        tasks:
+          - twin_boundary
+          - grain_boundary
+      - name: Sigma3_ORI.emd
+        source_name: Sigma3_ORI.emd
+        url: https://zenodo.org/api/records/6414955/files/Sigma3_ORI.emd/content
+        bytes: 28883920
+        md5: 986f7d23a80d5b1f27b40489a96c7c02
+        role: image
+        tasks:
+          - twin_boundary
+          - interface_defect
+      - name: Sigma3_ORII.emd
+        source_name: Sigma3_ORII.emd
+        url: https://zenodo.org/api/records/6414955/files/Sigma3_ORII.emd/content
+        bytes: 58721072
+        md5: cacbf850efd8a733071d2c9c9956de74
+        role: image
+        tasks:
+          - twin_boundary
+          - interface_defect
+      - name: simulation.zip
+        source_name: simulation.zip
+        url: https://zenodo.org/api/records/6414955/files/simulation.zip/content
+        bytes: 122054770
+        md5: 8595b02d66fb1a9abf79f1bbb68604fa
+        role: metadata
+        tasks:
+          - twin_boundary
+          - digital_twin
+      - name: README.md
+        source_name: README.md
+        url: https://zenodo.org/api/records/6414955/files/README.md/content
+        bytes: 5897
+        md5: 909d52a16d60c4aa21b52862f98b264c
+        role: metadata
+        tasks:
+          - provenance
+  - id: dennler_2021_hrstem_defects
+    title: Dataset HRSTEM Images of Defective and Non-Defective Quasi-Periodic Materials
+    authors:
+      - Nik Dennler
+      - Antonio Foncubierta-Rodriguez
+      - Titus Neupert
+      - Marilyne Sousa
+    year: 2021
+    doi: 10.5281/zenodo.5792917
+    record_url: https://zenodo.org/records/5792917
+    paper_url: https://doi.org/10.1016/j.micron.2021.103069
+    license: CC-BY-4.0
+    materials:
+      - InP
+      - GaAs
+      - InGaAs
+      - InAlGaAs
+    instrument: JEOL ARM200F
+    labels:
+      pixel_ground_truth: true
+      source: microscopy_expert
+      classes:
+        0: main_crystal_symmetry_non_defective
+        1: secondary_crystal_symmetry_defect
+        2: blurred_amorphous_or_beam_defect
+      labeled_defective_images: 31
+      implicit_normal_images: 30
+      note: >-
+        The complete archive was prospectively frozen as locked_external_test.
+        It was then evaluated once against prediction set
+        f7b126bb10691d81c3e08d677325e2e36dac5d0f1619436bd9e220ef773232de
+        under protocol dennler-2021-hrstem-zero-shot-v1. It remains forbidden
+        for threshold/model selection, calibration, active learning, or training.
+    files:
+      - name: hrstem_defects_dataset.zip
+        source_name: hrstem_defects_dataset.zip
+        url: https://zenodo.org/api/records/5792917/files/hrstem_defects_dataset.zip/content
+        bytes: 63624231
+        md5: 623ef8eef6e06591cd1260978713830d
+        sha256: abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec
+        tasks:
+          - amorphous_region
+          - stacking_fault
+          - phase_boundary
+  - id: emseek_wse2_atomic_defects
+    title: EMSeek WSe2 atomic-defect subset
+    year: 2026
+    record_url: https://huggingface.co/datasets/gary23ai/EMSeek
+    paper_url: https://pmc.ncbi.nlm.nih.gov/articles/PMC13041767/
+    license: Apache-2.0
+    source_revision: 8f4a987c78af743098459e5d467f2c1b5f5c11b3
+    material: WSe2
+    labels:
+      pixel_ground_truth: false
+      point_annotations: true
+      source: author_curated
+      reviewer_count: unknown
+      qualification: author_curated_not_gold
+      note: >-
+        Evaluation uses centers of all nonblack connected components. Palette
+        subclass semantics are not inferred. The public reviewer count is
+        unresolved, so these labels cannot satisfy the platform's Gold rule.
+    grouping:
+      split_group_id: emseek_wse2_single_conservative_group
+      partition: train
+      evidence: single_group_conservative
+      note: >-
+        Acquisition and sample relationships are unresolved; all pairs remain
+        in one group and cannot be split into calibration or test partitions.
+    content_summary:
+      image_count: 107
+      annotation_count: 107
+      remote_file_count: 214
+      remote_total_bytes: 92121442
+      admitted_file_assets_including_manifest: 215
+    files:
+      - name: emseek_wse2_source_manifest.json
+        relative_path: intake/emseek_wse2_source_manifest.json
+        bytes: 93051
+        sha256: 41891936c965b4a636c6ad9671a706d8ba79c82706e5fc7cea2bf89cd88c8a0e
+        role: immutable_per_file_source_manifest
+        tasks:
+          - atomic_point_defect

@@ -1,0 +1,40 @@
+{
+  "manifest_format": "tfree-sample-manifest-v1",
+  "registry_version": "4.0.0",
+  "registry_sha256": "51a4d07dff2e00c3923279e5b358ea8f6487cc27bbaf0254d86d162b41861395",
+  "asset_count": 291,
+  "partition_counts": {
+    "development_test": 10,
+    "locked_external_test": 1,
+    "train": 280
+  },
+  "dataset_counts": {
+    "al_sigma3_twin_boundaries": 5,
+    "dennler_2021_hrstem_defects": 1,
+    "emseek_remaining_v1": 65,
+    "emseek_wse2_atomic_defects": 215,
+    "guo_2021_atomic_defects": 3,
+    "guo_2021_superscan": 1,
+    "local_zeolite_reference": 1
+  },
+  "role_counts": {
+    "annotation": 139,
+    "container": 2,
+    "image": 146,
+    "metadata": 4
+  },
+  "format_counts": {
+    "emd": 2,
+    "json": 2,
+    "md": 1,
+    "ndata1": 2,
+    "osc": 1,
+    "png": 279,
+    "tif": 2,
+    "zip": 2
+  },
+  "channel_selection_required": 2,
+  "frame_selection_required": 3,
+  "runnable_without_selection": 111,
+  "records_sha256": "cca21f9fc9cac17dcfff433f00502dfb776913a8bc4e95d73149a4dac2396226"
+}

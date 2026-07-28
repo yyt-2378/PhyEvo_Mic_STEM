@@ -1,0 +1,35 @@
+{
+  "basis": [
+    [24.0, 0.0],
+    [0.0, 13.5]
+  ],
+  "nodes": [
+    {
+      "site_id": "backbone_A",
+      "fractional_coordinate": [0.0, 0.0],
+      "sublattice": "backbone",
+      "expected_species": "Si",
+      "expected_relative_intensity": 1.0
+    },
+    {
+      "site_id": "attachment_O",
+      "fractional_coordinate": [0.5, 0.25],
+      "sublattice": "attachment",
+      "expected_species": "O",
+      "expected_relative_intensity": 0.35,
+      "optional": false
+    }
+  ],
+  "edges": [
+    {
+      "source": "backbone_A",
+      "target": "attachment_O",
+      "kind": "coordination"
+    }
+  ],
+  "symmetries": ["identity", "mirror_x"],
+  "metadata": {
+    "coordinate_unit": "pixel",
+    "description": "Minimal schema example; replace with the measured unit cell."
+  }
+}

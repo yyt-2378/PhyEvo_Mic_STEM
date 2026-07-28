@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/tfree/sample-manifest-v1.schema.json",
+  "title": "Training-free microscopy sample manifest record",
+  "type": "object",
+  "required": [
+    "manifest_format",
+    "registry_version",
+    "registry_sha256",
+    "asset",
+    "inspection",
+    "readiness"
+  ],
+  "properties": {
+    "manifest_format": {
+      "const": "tfree-sample-manifest-v1"
+    },
+    "registry_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "asset": {
+      "type": "object",
+      "required": [
+        "asset_id",
+        "dataset_id",
+        "relative_path",
+        "partition",
+        "split_group_id",
+        "tasks",
+        "checksum",
+        "role",
+        "bytes"
+      ]
+    },
+    "inspection": {
+      "type": "object",
+      "required": [
+        "inspection_status",
+        "format"
+      ]
+    },
+    "readiness": {
+      "type": "object",
+      "required": [
+        "direct_detector_tasks",
+        "task_adapter_candidates",
+        "executable_detector_tasks",
+        "channel_selection_required",
+        "frame_selection_required",
+        "can_run_without_selection",
+        "blocking_reasons"
+      ]
+    }
+  },
+  "additionalProperties": false
+}

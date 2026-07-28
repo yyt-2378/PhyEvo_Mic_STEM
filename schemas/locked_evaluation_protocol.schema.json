@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phyevo-mic.local/schemas/locked_evaluation_protocol.schema.json",
+  "title": "PhyEvo-Mic locked external evaluation protocol",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "protocol_format",
+    "protocol_version",
+    "protocol_id",
+    "asset_id",
+    "registry_path",
+    "archive_sha256",
+    "dataset_layout",
+    "detectors",
+    "targets",
+    "metrics",
+    "frozen_files",
+    "prohibited_actions",
+    "interpretation_limits"
+  ],
+  "properties": {
+    "protocol_format": {
+      "const": "phyevo-mic-locked-protocol-v1"
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "asset_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "registry_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "archive_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "dataset_layout": {
+      "type": "object",
+      "required": [
+        "defective_images",
+        "defective_labels",
+        "normal_images",
+        "expected_defective_images",
+        "expected_normal_images",
+        "pairing_rule",
+        "label_decoder"
+      ],
+      "properties": {
+        "expected_defective_images": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "expected_normal_images": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "pairing_rule": {
+          "const": "exact_filename"
+        },
+        "label_decoder": {
+          "const": "global_sorted_black_gray_white"
+        }
+      }
+    },
+    "detectors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "config_path", "adaptation"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "config_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "adaptation": {
+            "const": "none"
+          }
+        }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "role",
+          "truth_classes",
+          "prediction"
+        ],
+        "properties": {
+          "truth_classes": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [1, 2]
+            }
+          },
+          "prediction": {
+            "type": "object",
+            "required": ["operation", "members"],
+            "properties": {
+              "operation": {
+                "enum": ["single", "union"]
+              },
+              "members": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "frozen_files": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "prohibited_actions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "interpretation_limits": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

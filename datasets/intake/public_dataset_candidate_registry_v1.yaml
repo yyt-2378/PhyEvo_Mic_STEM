@@ -1,0 +1,581 @@
+catalog_version: "1.0.0"
+audited_on: "2026-07-27"
+scope: public_STEM_TEM_sources_for_defect_ontology_expansion
+catalog_only: true
+note: >-
+  This file records candidates and does not admit any asset into a train,
+  calibration, development_test, or locked_external_test partition. Admission
+  still requires a sealed intake plan, immutable revision, file checksums,
+  provenance audit, and group-level split decision.
+
+governance:
+  default_partition_after_label_or_sample_inspection: train_or_development
+  public_author_labels_are_gold: false
+  unresolved_license_action: quarantine
+  future_pristine_locked_test_policy: >-
+    Discover and seal a separate source before downloading images or opening
+    labels. None of the sources catalogued below should be advertised as a new
+    pristine locked test after it has influenced ontology or method design.
+  dataset_protection: never_delete_or_overwrite_source_assets
+  required_before_download:
+    - verify_data_license_not_only_code_license
+    - freeze_canonical_url_and_revision_or_doi_version
+    - record_expected_bytes_and_checksums_when_available
+    - define_acquisition_sample_lab_and_microscope_groups
+    - define_annotation_qualification_and_control_role
+
+intake_tiers:
+  A: label_ready_or_nearly_label_ready
+  B: evidence_rich_raw_data_requiring_expert_adapter_or_relabel
+  C: unlabeled_diversity_self_supervision_or_ood
+  D: simulation_or_digital_twin
+  H: historical_only_not_reusable
+
+sources:
+  - source_id: emseek_huggingface
+    title: EMSeek
+    canonical_url: https://huggingface.co/datasets/gary23ai/EMSeek
+    doi: null
+    priority: P0
+    intake_tier: A
+    status: partially_ingested
+    license:
+      spdx: Apache-2.0
+      verified: true
+      applies_to_data: stated_on_dataset_card
+    reported_size: 4.33_GB
+    modalities: [STEM, TEM]
+    experimental_or_simulated: mixed_or_collection_dependent
+    material_examples:
+      - WSe2
+      - FeCrAl
+      - perovskites
+      - transition_metal_dichalcogenides
+      - metals
+      - silicon
+      - graphene
+      - nanoparticles
+    annotation_examples: [pixel_mask, bounding_box, point_or_prompt]
+    target_families:
+      - atomic_site_anomaly
+      - irradiation_damage
+      - atomic_column_localization
+      - particle_and_surface_morphology
+    intended_roles: [train, development]
+    future_pristine_locked_eligible: false
+    local_state: WSe2_images_and_author_point_labels_already_ingested_as_one_train_group
+    limitations:
+      - author_curated_labels_are_not_expert_consensus_gold
+      - acquisition_and_sample_grouping_need_source_audit
+      - single_atom_catalyst_directory_is_a_placeholder_and_must_be_excluded
+    next_action: >-
+      Freeze a Hub revision, enumerate FeCrAl, atom_columns, and nanoparticle
+      subsets separately, then create one sealed intake plan per provenance group.
+
+  - source_id: guo_2021_translational_invariance
+    title: Data for Defect detection in atomic-resolution images via unsupervised learning with translational invariance
+    canonical_url: https://zenodo.org/records/5520169
+    doi: 10.5281/zenodo.5520169
+    priority: P0
+    intake_tier: B
+    status: partially_ingested
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_117_MB_total
+    modalities: [atomic_resolution_STEM, SuperScan_movie]
+    experimental_or_simulated: experimental
+    material_examples: [2H_MoWTe2, Al, monoclinic_ZrO2]
+    annotation_examples: [raw_image, acquisition_movie]
+    target_families:
+      - atomic_site_anomaly
+      - dislocation_and_stacking_fault
+      - twin_and_phase_interface
+      - temporal_acquisition_consistency
+    intended_roles: [development, expert_relabel]
+    future_pristine_locked_eligible: false
+    local_state: three_static_assets_ingested_as_development;_SuperScan_movie_not_ingested
+    limitations: [no_consensus_pixel_gold, small_number_of_acquisitions]
+    next_action: admit_the_104.9_MB_SuperScan_movie_as_a_separate_development_group
+
+  - source_id: dennler_2021_hrstem_defects
+    title: TEMDefectClassification HRSTEM defects archive
+    canonical_url: https://zenodo.org/records/5792917
+    companion_url: https://github.com/nkdnnlr/TEMDefectClassification
+    doi: 10.5281/zenodo.5792917
+    paper_doi: 10.1016/j.micron.2021.103069
+    priority: historical
+    intake_tier: H
+    status: consumed_locked_external_test
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    modalities: [HRSTEM]
+    experimental_or_simulated: experimental
+    material_examples: [InP, GaAs, InGaAs, InAlGaAs]
+    annotation_examples: [image_level_expert_class]
+    target_families: [secondary_symmetry_region, coherence_loss_or_acquisition_degradation]
+    intended_roles: [historical_result_only]
+    future_pristine_locked_eligible: false
+    limitations:
+      - locked_test_has_already_been_consumed
+      - class_2_is_a_composite_of_blur_amorphous_and_beam_related_appearance
+    next_action: never_use_for_training_calibration_active_learning_or_threshold_selection
+
+  - source_id: warwick_electron_microscopy_dataset
+    title: Warwick Electron Microscopy Dataset
+    canonical_url: https://wrap.warwick.ac.uk/id/eprint/142120/
+    companion_url: https://github.com/Jeffrey-Ede/datasets
+    doi: 10.1038/s41597-020-00620-y
+    priority: P1
+    intake_tier: C
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: data_descriptor_and_public_repository
+    reported_content:
+      experimental_STEM_images: 19769
+      experimental_TEM_images: 17266
+      simulated_exit_wave_functions: 98340
+    modalities: [STEM, TEM, simulated_exit_wave]
+    experimental_or_simulated: mixed
+    material_examples: [hundreds_of_materials_projects]
+    annotation_examples: [unlabeled_image]
+    target_families: [background_diversity, image_quality, out_of_distribution]
+    intended_roles: [self_supervised_adaptation, feature_bank, ood, normal_and_hard_negative_mining]
+    future_pristine_locked_eligible: false
+    limitations:
+      - no_defect_masks
+      - scientific_metadata_and_independent_grouping_are_limited
+      - must_not_mix_simulated_and_experimental_assets_without_provenance
+    next_action: sample_a_checksum_frozen_material_diverse_subset_after_grouping_audit
+
+  - source_id: tem_imagenet_v1_3
+    title: TEM ImageNet v1.3
+    canonical_url: https://sites.google.com/view/temimagenet/home
+    companion_url: https://github.com/xinhuolin/TEM-ImageNet-v1.3
+    doi: null
+    priority: P1_hold
+    intake_tier: D
+    status: quarantine_license
+    license:
+      spdx: NOASSERTION
+      verified: false
+      applies_to_data: not_declared_on_repository_as_of_audit
+    modalities: [simulated_ADF_STEM]
+    experimental_or_simulated: simulated
+    material_examples:
+      - Pt
+      - NiO
+      - SrTiO3
+      - DyScO3
+      - Si
+      - graphene
+      - amorphous_graphene
+      - MoS2
+      - TiO2
+      - LiCoO2
+    annotation_examples:
+      - atomic_coordinates
+      - atom_segmentation
+      - atomic_column_gaussian_map
+      - clean_noisy_pair
+      - imaging_conditions
+    target_families:
+      - atomic_column_localization
+      - image_quality
+      - local_order_and_amorphization
+    intended_roles: [digital_twin, sensitivity_benchmark]
+    future_pristine_locked_eligible: false
+    limitations:
+      - data_reuse_license_not_verified
+      - simulated_truth_must_be_reported_separately_from_experimental_gold
+    next_action: obtain_or_verify_an_explicit_data_license_before_any_download_or_use
+
+  - source_id: stemgym
+    title: STEMGym
+    canonical_url: https://huggingface.co/datasets/johnpolat/STEMGym
+    doi: null
+    priority: P1
+    intake_tier: D
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: stated_on_dataset_card
+    reported_size: 8.46_GB
+    modalities: [simulated_STEM, acquisition_environment]
+    experimental_or_simulated: simulated
+    material_examples: [SrTiO3, BaTiO3, SiGe, GaN_InGaN, Pt_on_amorphous_carbon]
+    annotation_examples:
+      - atom_positions
+      - atom_types
+      - vacancy_truth
+      - substitution_truth
+      - defect_mask
+      - phase_map
+      - acquisition_metadata
+    target_families:
+      - vacancy_like
+      - substitution_like
+      - grain_boundary
+      - phase_boundary
+      - particle_and_surface_morphology
+    intended_roles: [digital_twin, active_acquisition_simulation, controlled_stress_test]
+    future_pristine_locked_eligible: false
+    limitations:
+      - simulated_only
+      - benchmark_is_new_and_requires_independent_validation
+    next_action: ingest_a_small_balanced_scenario_subset_before_the_full_archive
+
+  - source_id: ornl_graphene_stem_standard
+    title: Graphene STEM Standard Dataset
+    canonical_url: https://doi.org/10.13139/ORNLNCCS/1773705
+    companion_url: https://zenodo.org/records/4885132
+    doi: 10.13139/ORNLNCCS/1773705
+    priority: P1_hold
+    intake_tier: B
+    status: quarantine_license
+    license:
+      spdx: NOASSERTION
+      verified: false
+      applies_to_data: not_visible_on_primary_catalog_during_audit
+    modalities: [atomic_resolution_STEM, time_series]
+    experimental_or_simulated: experimental
+    material_examples: [graphene]
+    annotation_examples: [raw_frames, acquisition_metadata]
+    target_families:
+      - atomic_site_anomaly
+      - beam_induced_damage
+      - temporal_defect_evolution
+      - phase_transformation
+    intended_roles: [development, temporal_expert_relabel]
+    future_pristine_locked_eligible: false
+    limitations: [license_requires_confirmation, no_consensus_defect_masks]
+    next_action: confirm_data_license_and_freeze_the_movie_as_one_indivisible_acquisition_group
+
+  - source_id: ornl_sm_bfo_stem
+    title: Sm-BFO STEM Datasets
+    canonical_url: https://doi.org/10.13139/ORNLNCCS/1773704
+    companion_url: https://zenodo.org/records/4876786
+    doi: 10.13139/ORNLNCCS/1773704
+    priority: P1_hold
+    intake_tier: B
+    status: quarantine_license
+    license:
+      spdx: NOASSERTION
+      verified: false
+      applies_to_data: not_visible_on_primary_catalog_during_audit
+    modalities: [atomic_resolution_STEM]
+    experimental_or_simulated: experimental
+    material_examples: [Sm_doped_BiFeO3]
+    annotation_examples: [atomic_coordinates, center_of_mass_descriptors, polarization_values]
+    target_families:
+      - ferroelectric_domain
+      - polarization_change
+      - phase_transition
+      - local_lattice_displacement
+    intended_roles: [development, evidence_adapter]
+    future_pristine_locked_eligible: false
+    limitations: [license_requires_confirmation, coordinates_are_not_defect_consensus_gold]
+    next_action: confirm_license_then_build_a_polarization_and_domain_evidence_adapter
+
+  - source_id: al_sigma3_twin_boundaries
+    title: Microstates and defects of incoherent Sigma3 [111] twin boundaries in aluminum
+    canonical_url: https://zenodo.org/records/6414955
+    doi: 10.5281/zenodo.6414955
+    priority: P0
+    intake_tier: B
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_278_MB
+    modalities: [STEM, EBSD, atomistic_simulation]
+    experimental_or_simulated: paired_experimental_and_simulated
+    material_examples: [Al]
+    annotation_examples: [orientation_data, raw_image, simulation_structure]
+    target_families:
+      - twin_boundary
+      - grain_boundary
+      - disconnection_and_interface_defect
+    intended_roles: [development, expert_relabel, experiment_simulation_consistency]
+    future_pristine_locked_eligible: false
+    limitations: [no_ready_consensus_pixel_mask]
+    next_action: create_linked_experimental_and_simulation_groups_without_cross_split_leakage
+
+  - source_id: ayyubi_2026_defect_classification
+    title: Unsupervised defect classification in atomic-resolution STEM images
+    canonical_url: https://github.com/RAW-Ayyubi/defect-classification-in-stem-images
+    doi: 10.1038/s41524-026-02037-6
+    priority: P1_hold
+    intake_tier: B
+    status: quarantine_license
+    license:
+      spdx: NOASSERTION
+      verified: false
+      applies_to_data: no_repository_license_detected_as_of_audit
+    modalities: [atomic_resolution_STEM]
+    experimental_or_simulated: mixed_experimental_and_manipulated
+    material_examples: [CdTe, SrTiO3]
+    annotation_examples: [image_category, artificial_vacancy_or_patch_variants]
+    target_families:
+      - atomic_site_anomaly
+      - secondary_symmetry_region
+      - open_set_clustering
+      - acquisition_or_manipulation_artifact
+    intended_roles: [development, open_world_discovery]
+    future_pristine_locked_eligible: false
+    limitations:
+      - license_requires_author_confirmation
+      - manipulated_defects_must_not_be_reported_as_experimental_gold
+    next_action: request_or_verify_data_reuse_terms_and_write_an_explicit_label_semantics_adapter
+
+  - source_id: fourdstem_point_defect_concentration
+    title: Nanoscale mapping of point defect concentrations with 4D-STEM
+    canonical_url: https://zenodo.org/records/7041997
+    doi: 10.5281/zenodo.7041997
+    priority: P0
+    intake_tier: B
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_23.1_GB_total
+    modalities: [4D_STEM, diffraction, calibration]
+    experimental_or_simulated: experimental
+    material_examples: [Au, irradiated_Al]
+    annotation_examples: [raw_4D_data, calibration, dose_and_treatment_metadata]
+    target_families:
+      - point_defect_concentration
+      - irradiation_damage
+      - strain_field
+      - reciprocal_space_anomaly
+    intended_roles: [development, multi_scale_evidence]
+    future_pristine_locked_eligible: false
+    limitations: [not_atomic_site_pixel_gold, very_large_archive]
+    next_action: start_with_irradiated_Al_and_calibration_files_before_considering_full_Au_series
+
+  - source_id: fast_4dstem_phase_mapping
+    title: Fast 4D-STEM-based phase mapping for amorphous and mixed materials
+    canonical_url: https://zenodo.org/records/20366781
+    companion_url: https://github.com/awwerbro/fast_mapping_4DSTEM
+    doi: 10.5281/zenodo.20366781
+    priority: P0
+    intake_tier: B
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: 301.7_MB
+    modalities: [4D_STEM]
+    experimental_or_simulated: experimental
+    material_examples: [TiO2_on_SiO2, NMC_LGPS_interface]
+    annotation_examples: [raw_4D_data, processing_code]
+    target_families:
+      - crystalline_amorphous_interface
+      - heterophase_interface
+      - short_range_order_change
+      - reciprocal_space_anomaly
+    intended_roles: [development, multi_modal_evidence, expert_relabel]
+    future_pristine_locked_eligible: false
+    limitations: [published_phase_maps_are_not_automatically_consensus_gold]
+    next_action: ingest_both_H5_files_as_separate_material_and_acquisition_groups
+
+  - source_id: ws2_beam_induced_defect_tracking
+    title: Deep learning analysis of defect and phase evolution during electron beam irradiation of WS2
+    canonical_url: https://www.nature.com/articles/s41524-019-0152-9
+    companion_url: https://github.com/artemmaksov/ORNL-DeepLearningForAtomicScaleDefectTracking
+    doi: 10.1038/s41524-019-0152-9
+    priority: P1_hold
+    intake_tier: B
+    status: quarantine_license
+    license:
+      spdx: NOASSERTION
+      verified: false
+      applies_to_data: separate_repository_data_license_not_detected_as_of_audit
+    modalities: [atomic_resolution_STEM, time_series]
+    experimental_or_simulated: experimental
+    material_examples: [Mo_doped_WS2]
+    annotation_examples: [movie, algorithmic_masks, analysis_notebooks]
+    target_families:
+      - point_defect
+      - extended_defect
+      - beam_induced_damage
+      - phase_nucleation_and_transformation_front
+    intended_roles: [development, temporal_consistency]
+    future_pristine_locked_eligible: false
+    limitations:
+      - algorithmic_masks_are_not_expert_gold
+      - data_reuse_terms_require_confirmation
+    next_action: verify_supplementary_data_terms_then_freeze_the_complete_movie_as_one_group
+
+  - source_id: high_resolution_4dstem_srtio3
+    title: High-resolution 4D STEM dataset of SrTiO3 along the [100] axis
+    canonical_url: https://zenodo.org/records/5113449
+    doi: 10.5281/zenodo.5113449
+    priority: P2
+    intake_tier: C
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    modalities: [atomic_resolution_4D_STEM]
+    experimental_or_simulated: experimental
+    material_examples: [SrTiO3]
+    annotation_examples: [calibrated_scan_and_diffraction_coordinates]
+    target_families:
+      - atomic_column_localization
+      - reciprocal_space_normal_control
+      - acquisition_quality
+    intended_roles: [normal_control, development, 4D_pipeline_validation]
+    future_pristine_locked_eligible: false
+    limitations: [not_a_defect_labeled_dataset]
+    next_action: use_as_normal_control_only_after_confirming_no_hidden_sample_overlap
+
+  - source_id: sei_beam_artifact_controlled_dose
+    title: Electron Beam-Induced Artifacts in SEI Characterization
+    canonical_url: https://zenodo.org/records/14555388
+    doi: 10.5281/zenodo.14555388
+    priority: P1
+    intake_tier: B
+    status: candidate
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_9.3_GB
+    modalities: [electron_diffraction, controlled_dose_series]
+    experimental_or_simulated: experimental
+    material_examples: [solid_electrolyte_interphase]
+    annotation_examples: [raw_DM4, dose_metadata]
+    target_families:
+      - beam_induced_artifact
+      - dose_dependent_structure_change
+      - invalid_measurement_or_causal_ambiguity
+    intended_roles: [artifact_counterexample, temporal_evidence, development]
+    future_pristine_locked_eligible: false
+    limitations: [not_atomic_resolution_site_label, large_archive]
+    next_action: inventory_dose_groups_and_select_a_small_contrastive_sequence
+
+  - source_id: wide_field_orientation_mapping
+    title: Wide field of view crystal orientation mapping of layered materials
+    canonical_url: https://zenodo.org/records/3784335
+    doi: 10.5281/zenodo.3784335
+    priority: P2
+    intake_tier: B
+    status: candidate_large
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_114_GB
+    modalities: [4D_STEM, orientation_map, strain_map]
+    experimental_or_simulated: experimental
+    material_examples: [graphene, graphene_oxide, MoS2]
+    annotation_examples: [raw_4D_data, processing_notebooks, derived_orientation_and_grain_information]
+    target_families:
+      - grain_boundary
+      - orientation_domain
+      - strain_field
+      - multilayer_region
+    intended_roles: [mesoscale_development, expert_relabel]
+    future_pristine_locked_eligible: false
+    limitations: [very_large_archive, scale_differs_from_atomic_site_detection]
+    next_action: evaluate_the_small_82_by_60_graphene_oxide_example_before_any_bulk_download
+
+  - source_id: merlinem_quad_4dstem
+    title: MerlinEM quad 4D-STEM dataset
+    canonical_url: https://zenodo.org/records/10813049
+    doi: 10.5281/zenodo.10813049
+    priority: P2
+    intake_tier: C
+    status: candidate_large
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_8.5_GB
+    modalities: [4D_STEM]
+    experimental_or_simulated: experimental
+    material_examples: [Au_cross_grating]
+    annotation_examples: [raw_detector_data, instrument_metadata]
+    target_families: [acquisition_quality, detector_artifact, reciprocal_space_normal_control]
+    intended_roles: [pipeline_validation, ood, normal_control]
+    future_pristine_locked_eligible: false
+    limitations: [not_a_defect_labeled_dataset]
+    next_action: defer_until_the_4D_STEM_adapter_is_operational
+
+  - source_id: metal_support_interface_ptychography
+    title: Contact-induced restructuring of metal-support interface via adaptive propagator ptychography
+    canonical_url: https://zenodo.org/records/19201546
+    doi: 10.5281/zenodo.19201546
+    priority: P2
+    intake_tier: B
+    status: candidate_large
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_7.1_GB
+    modalities: [electron_ptychography, STEM]
+    experimental_or_simulated: experimental
+    material_examples: [metal_support_interface]
+    annotation_examples: [raw_and_reconstructed_data]
+    target_families:
+      - particle_support_interface
+      - interface_restructuring
+      - surface_atomic_arrangement
+    intended_roles: [development, morphology_and_interface_extension]
+    future_pristine_locked_eligible: false
+    limitations: [requires_ptychography_adapter, no_ready_consensus_mask]
+    next_action: defer_until_interface_evidence_bundle_supports_ptychography
+
+  - source_id: gaa_transistor_3d_strain_roughness
+    title: 3D atomic-scale metrology of strain relaxation and roughness in gate-all-around transistors
+    canonical_url: https://zenodo.org/records/15882443
+    doi: 10.5281/zenodo.15882443
+    priority: P2
+    intake_tier: B
+    status: candidate_large
+    license:
+      spdx: CC-BY-4.0
+      verified: true
+      applies_to_data: zenodo_record
+    reported_size: approximately_18.2_GB
+    modalities: [4D_STEM, ADF_STEM, iDPC_STEM, ptychography]
+    experimental_or_simulated: experimental
+    material_examples: [gate_all_around_transistor_interfaces]
+    annotation_examples: [raw_and_reconstructed_data, strain_and_roughness_analysis]
+    target_families:
+      - strain_field
+      - interface_roughness
+      - heterointerface
+      - multi_modal_consistency
+    intended_roles: [development, multi_modal_evidence]
+    future_pristine_locked_eligible: false
+    limitations: [very_large_archive, semiconductor_device_domain_shift]
+    next_action: metadata_only_until_multi_modal_registration_is_implemented
+
+recommended_first_wave:
+  - emseek_huggingface
+  - guo_2021_translational_invariance
+  - al_sigma3_twin_boundaries
+  - fourdstem_point_defect_concentration
+  - fast_4dstem_phase_mapping
+  - stemgym
+
+first_wave_exit_criteria:
+  - every_source_has_immutable_revision_or_doi_version
+  - every_file_has_sha256_and_role
+  - no_source_group_crosses_partitions
+  - every_external_label_has_explicit_semantics_and_qualification
+  - no_license_quarantine_source_is_downloaded_into_the_dataset_tree
+  - simulated_and_experimental_metrics_are_reported_separately

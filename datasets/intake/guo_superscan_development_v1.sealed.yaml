@@ -1,0 +1,35 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: guo-superscan-development-v1
+dataset_id: guo_2021_superscan
+source_uri: https://zenodo.org/records/5520169
+source_revision: 10.5281/zenodo.5520169:2024-07-17
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-27T07:42:24.486636+00:00'
+groups:
+- group_id: guo-superscan-single-acquisition
+  partition: development_test
+  acquisition_id: guo-superscan-img-stack
+  sample_id: guo-superscan-sample-unresolved
+  lab_id: guo_2021_archive
+  microscope_id: unresolved_public_metadata
+  material: unresolved_atomic_crystal
+  tasks:
+  - atomic_point_defect
+  - stacking_fault
+  - temporal_defect_evolution
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: guo-superscan-movie
+    relative_path: datasets/public/guo_2021_atomic_defects/Recording_of_SuperScan_img_stack.ndata1
+    role: image
+    sha256: 79eb74f69c07c982a4e1326c458c55757c27a975d197d24f217150788bbd3a9f
+    bytes: 104862360
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: 85e71a4d1f4c850b0b526a86d21268875da5862597b4f24e901e1acf8dae1096

@@ -1,0 +1,26 @@
+{
+  "case_format": "phyevo-mic-expert-review-case-v1",
+  "case_count": 154,
+  "image_plane_count": 354,
+  "dataset_case_counts": {
+    "al_sigma3_twin_boundaries": 50,
+    "guo_2021_atomic_defects": 3,
+    "guo_2021_superscan": 100,
+    "local_zeolite_reference": 1
+  },
+  "split_case_counts": {
+    "train": 131,
+    "validation": 23
+  },
+  "case_type_counts": {
+    "multichannel_frame": 50,
+    "single_plane": 104
+  },
+  "geometry_case_counts": {
+    "interface": 51,
+    "line": 1,
+    "point": 101,
+    "region": 1
+  },
+  "duplicate_annotation_planes_avoided": 200
+}

@@ -69,7 +69,9 @@ def _candidate_crop(
     padding_pixels: int,
 ) -> tuple[np.ndarray, np.ndarray, tuple[int, int, int, int]]:
     height, width = result.image_shape
-    x1, y1, x2, y2 = candidate.bbox_xyxy
+    x1, y1, x2, y2 = (
+        candidate.geometry_bbox_xyxy or candidate.bbox_xyxy
+    )
     crop_bbox = (
         max(0, x1 - padding_pixels),
         max(0, y1 - padding_pixels),
@@ -82,8 +84,21 @@ def _candidate_crop(
     )
     raw = np.round(gray * 255).astype(np.uint8)
     rgb = np.repeat(raw[..., None], 3, axis=-1).astype(np.float32)
-    candidate_mask = np.zeros_like(result.mask, dtype=bool)
-    candidate_mask[y1:y2, x1:x2] = result.mask[y1:y2, x1:x2]
+    matched_region = next(
+        (
+            region
+            for region in result.regions
+            if region.candidate_id == candidate.candidate_id
+        ),
+        None,
+    )
+    if matched_region is None:
+        candidate_mask = np.zeros_like(result.mask, dtype=bool)
+        candidate_mask[y1:y2, x1:x2] = result.final_geometry_mask[
+            y1:y2, x1:x2
+        ]
+    else:
+        candidate_mask = result.final_geometry_for_region(matched_region)
     local_mask = candidate_mask[cy1:cy2, cx1:cx2]
     if np.any(local_mask):
         orange = np.asarray([255, 132, 0], dtype=np.float32)
@@ -103,7 +118,9 @@ def _candidate_crop_item(
     mask = np.asarray(item.mask, dtype=bool)
     candidate = item.candidate
     height, width = image.shape
-    x1, y1, x2, y2 = candidate.bbox_xyxy
+    x1, y1, x2, y2 = (
+        candidate.geometry_bbox_xyxy or candidate.bbox_xyxy
+    )
     if not (0 <= x1 < x2 <= width and 0 <= y1 < y2 <= height):
         raise ValueError("Candidate bbox lies outside its source image")
     crop_bbox = (

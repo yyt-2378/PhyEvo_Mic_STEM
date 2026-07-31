@@ -1,0 +1,43 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: srtio3-high-resolution-4dstem-development-v1
+dataset_id: strauch_2021_srtio3_high_resolution_4dstem
+source_uri: https://zenodo.org/records/5113449
+source_revision: 10.5281/zenodo.5113449:v1:2021-07-19
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-29T02:00:14.025267+00:00'
+groups:
+- group_id: srtio3-high-resolution-single-acquisition
+  partition: development_test
+  acquisition_id: strauch-2021-srtio3-20200518-165148
+  sample_id: strauch-2021-srtio3-crystal
+  lab_id: strauch_2021_archive
+  microscope_id: FEI_Titan_80_300_Medipix_Merlin
+  material: SrTiO3
+  tasks:
+  - acquisition_quality
+  - atomic_column_localization
+  - provenance
+  - ptychographic_reconstruction
+  - reciprocal_space_normal_control
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: strauch_2021_srtio3_high_resolution_4dstem:20200518_165148.zip
+    relative_path: datasets/public/strauch_2021_srtio3_high_resolution_4dstem/20200518_165148.zip
+    role: image
+    sha256: c9ab6d029607de333917bdad614c74aef188e170797c41da13a1202dd86e31eb
+    bytes: 176555935
+    pair_id: null
+  - file_id: strauch_2021_srtio3_high_resolution_4dstem:simple-ssb.ipynb
+    relative_path: datasets/public/strauch_2021_srtio3_high_resolution_4dstem/simple-ssb.ipynb
+    role: metadata
+    sha256: 3850714474e16e37ae006f679de2ab0c23b18f2d88ea5332fa1045cc557f4cbf
+    bytes: 577540
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: 1edad677ad5530c555ed4704bb95916cee569b69f2cc2b1d17b4f891baf11d08

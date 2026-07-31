@@ -8,7 +8,7 @@ PhyEvo_Mic_STEM/
 │   ├── tasks/                 非晶、点缺陷、相位线、界面任务
 │   ├── symmetry/              Class1 群作用、参考选择、多几何任务
 │   ├── features/              Fourier、倒易晶格、复载波特征
-│   ├── stage2/                GPA 与可选冻结 DINO 验证
+│   ├── stage2/                GPA、冻结 DINO 与物理约束 SAM 3 proposal 门控
 │   ├── evidence.py            EvidenceBundle 和物理证据本体
 │   ├── resolver.py            开放世界多假设解析
 │   ├── student.py             证据保持学生模型接口
@@ -17,6 +17,7 @@ PhyEvo_Mic_STEM/
 ├── configs/                   五任务可复现 YAML 配置
 ├── tests/                     单元、合成、协议和回归测试
 ├── scripts/                   数据登记、评估、可视化和审阅脚本
+├── environments/sam3/         独立 Python 3.12 SAM 3 环境定义
 ├── benchmarks/                冻结协议与轻量指标摘要
 ├── schemas/                   数据、证据、审阅和骨架 schema
 ├── datasets/                  数据注册表与轻量元数据
@@ -44,6 +45,24 @@ DetectionResult
 EvidenceBundle → resolver → reliability / abstention
       ↓
 reporting / benchmark / review / student
+```
+
+SAM 3 不进入主环境依赖，调用关系是：
+
+```text
+DetectionResult.mask + score
+      ↓
+stage2/sam3_refine.py
+      ↓ immutable file protocol
+scripts/run_sam3_boundary_worker.py (Python 3.12)
+      ↓ candidate × role × ensemble proposals only
+candidate-local consensus + physics gates
+      ↓
+region geometry or domain-A/B shared-interface adapter
+      ↓
+accepted / partially_accepted / candidate-local coarse fallback
+      ↓
+final_geometry_mask → report / candidate table / expert review / evaluation
 ```
 
 ## Class1 模块
@@ -91,4 +110,3 @@ symmetry/task.py
 5. 添加干净对照、物理阳性和几何不变量测试；
 6. 新建 `configs/<task>.yaml`；
 7. 用新目录运行 benchmark，禁止覆盖 sealed 输出。
-

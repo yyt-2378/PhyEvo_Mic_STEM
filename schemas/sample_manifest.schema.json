@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.org/tfree/sample-manifest-v1.schema.json",
+  "$id": "https://example.org/tfree/sample-manifest.schema.json",
   "title": "Training-free microscopy sample manifest record",
   "type": "object",
   "required": [
@@ -13,7 +13,10 @@
   ],
   "properties": {
     "manifest_format": {
-      "const": "tfree-sample-manifest-v1"
+      "enum": [
+        "tfree-sample-manifest-v1",
+        "tfree-sample-manifest-v2"
+      ]
     },
     "registry_version": {
       "type": "string",
@@ -55,7 +58,109 @@
         "can_run_without_selection",
         "blocking_reasons"
       ]
+    },
+    "data_interface": {
+      "type": "object",
+      "required": [
+        "interface_format",
+        "access_mode",
+        "adapter",
+        "adapter_status",
+        "required_selectors",
+        "canonical_output",
+        "source_policy",
+        "ready_for_detector_now"
+      ],
+      "properties": {
+        "interface_format": {
+          "const": "tfree-data-interface-v1"
+        },
+        "access_mode": {
+          "enum": [
+            "direct_2d",
+            "select_plane",
+            "select_channel_and_plane",
+            "derive_evidence_map",
+            "annotation_reference",
+            "metadata_only",
+            "container_adapter_required",
+            "adapter_required"
+          ]
+        },
+        "adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapter_status": {
+          "enum": [
+            "ready",
+            "selector_required",
+            "derivation_required",
+            "reference_only",
+            "metadata_only",
+            "adapter_required"
+          ]
+        },
+        "required_selectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "constraint"
+            ]
+          }
+        },
+        "canonical_output": {
+          "type": "object",
+          "required": [
+            "kind",
+            "axes",
+            "dtype"
+          ],
+          "properties": {
+            "kind": {
+              "type": "string",
+              "minLength": 1
+            },
+            "axes": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "dtype": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "additionalProperties": false
+        },
+        "source_policy": {
+          "const": "read_only_checksum_anchored"
+        },
+        "ready_for_detector_now": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
     }
   },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "manifest_format": {
+            "const": "tfree-sample-manifest-v2"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "data_interface"
+        ]
+      }
+    }
+  ],
   "additionalProperties": false
 }

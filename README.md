@@ -15,6 +15,7 @@
 | 五分钟安装并跑通一张图 | [使用说明](docs/usage_zh.md) |
 | 理解源码和目录边界 | [仓库结构](docs/repository_structure_zh.md) |
 | 查看当前效果、指标与限制 | [结果总览](docs/results_summary_zh.md) |
+| 使用物理约束 SAM 3 细化边界 | [SAM 3 边界细化](docs/sam3_boundary_refinement_zh.md) |
 | 浏览全部研究文档 | [文档导航](docs/index_zh.md) |
 | 了解公开范围与首次发布流程 | [发布说明](docs/publishing_zh.md) |
 | 理解最新 Class1 群关系方法 | [Class1 最终报告](docs/class1_symmetry_relation_final_zh.md) |
@@ -26,7 +27,7 @@
 
 | 任务 | 输出几何 | 主要物理证据 |
 |---|---|---|
-| `amorphous_region` | region | Fourier、Patterson、清晰度、可选 GPA/DINO |
+| `amorphous_region` | region | Fourier、Patterson、清晰度、可选 GPA/DINO/SAM 3 几何细化 |
 | `atomic_point_defect` | point | 晶格配准、位点存在性/强度/位移残差 |
 | `stacking_fault` | line | 双载波相位跳变、曲率、剪切/旋转 |
 | `phase_boundary` | interface | 局部倒易签名分域与界面追踪 |
@@ -47,6 +48,8 @@ tfree-detect detect \
 ```text
 physics teacher
       ↓  soft mask + node/edge/region/field evidence + reliability + provenance
+optional guarded SAM 3
+      ↓  boundary proposal OR deterministic coarse-mask fallback
 multi-hypothesis resolver
       ↓  probable / artifact / unresolved + ranked alternatives
 evidence-preserving student
@@ -60,7 +63,7 @@ non-regression release gate or audited rejection
 
 当前状态必须分成两层理解：
 
-- 软件闭环已实现，97 项自动测试通过，四任务冻结基准的 IoU/precision/recall 均保留
+- 软件闭环已实现，116 项自动测试通过，四任务冻结基准的 IoU/precision/recall 均保留
   100%；
 - 新增的 WSe₂ train-domain 原子缺陷开发证据表明，互补双物理教师共识达到 site
   precision 0.8914、recall 0.6674、F1 0.7633；这 107 张图仍属于一个保守 train group，
@@ -90,9 +93,14 @@ SuperScan 时序证据见
 [`docs/non_human_loop_completion_status_zh.md`](docs/non_human_loop_completion_status_zh.md)。
 
 目前生产数据入口是
-[`datasets/partition_registry_v4.yaml`](datasets/partition_registry_v4.yaml)，共 291 个
+[`datasets/partition_registry_v6.yaml`](datasets/partition_registry_v6.yaml)，共 313 个
 checksum 固定资产；对应的逐资产 shape/dtype/container/channel/selection 状态位于
-[`datasets/standardized/sample_manifest_v3.jsonl`](datasets/standardized/sample_manifest_v3.jsonl)。
+[`datasets/standardized/sample_manifest_v7.jsonl`](datasets/standardized/sample_manifest_v7.jsonl)。
+12 个已纳管数据集、23 个公开来源和统一 `tfree-data-interface-v1` 的完整汇总见
+[`docs/data_collection_and_interface_standardization_zh.md`](docs/data_collection_and_interface_standardization_zh.md)。
+最新加入的 NMC/LGPS、WSe₂ raw 1657、SrTiO₃、辐照 Al、聚合物 4D-STEM、容器清单和
+training-free 实测见
+[`docs/public_stem_dataset_expansion_2026_07_29_zh.md`](docs/public_stem_dataset_expansion_2026_07_29_zh.md)。
 
 新增的可执行入口：
 
@@ -129,6 +137,14 @@ domain-signature 界面和群关系 Class1。它们共享输入、配置、结�
 第二阶段已经实现：对第一阶段候选的核心、过渡环带和邻近正常参考带做几何相位分析
 （GPA）与冻结 DINO ViT-S/8 特征验证。它可以在非晶核心无法定位清晰原子时，定量分析
 周围晶格的相干度下降、拉伸、压缩和剪切关系。
+
+SAM 3 物理约束边界层也已接入：主环境从 coarse mask 和物理分数生成正负点、box 与
+coarse-mask prompts，隔离 Python 3.12 worker 返回候选级 proposal；某候选核心召回
+低于 0.95 时只回退该候选。两相界面通过 domain A/domain B 两侧 region mask 重建共享
+边界，不把界面当填充区域。组合几何已进入候选表、主报告、专家复核与边界评估。当前
+v2 协议与 prepare-only 参考图已验证，但本机尚未执行授权 checkpoint 的真实 SAM
+推理，详见
+[`docs/sam3_boundary_refinement_zh.md`](docs/sam3_boundary_refinement_zh.md)。
 
 ## 多任务总览
 
@@ -488,6 +504,13 @@ periodic-only、legacy-only 和 random sham prompt 各 25 个，并生成 assist
 多图 HTML。当前没有收到专家 response，所以这是“可执行实验已准备”，不是 pilot 已完成。
 入口、私有 key 隔离和 reviewer 分配要求见
 [`docs/expert_review_workflow_zh.md`](docs/expert_review_workflow_zh.md)。
+
+另一条面向当前公开二维 STEM 数据的在线流程已可运行：已有像素标签的 200 张只进入自动
+评测；354 个无标签图像平面合并为 154 个专家病例（train 131 / validation 23）。Streamlit
+并排显示原图与预计算 training-free 预测，支持接受、修正、拒绝、无缺陷、artifact 和
+unknown；SQLite 保存一个当前结果和完整不可变历史，刷新后可续审。启动与导出见
+[`docs/expert_review_platform_2d_zh.md`](docs/expert_review_platform_2d_zh.md)。当前正式账本为空，
+因此这里声明的是“平台已验证”，不是“专家标注已经完成”。
 
 ### 校准、OOD 与发布
 

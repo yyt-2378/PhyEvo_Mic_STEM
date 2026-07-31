@@ -1,0 +1,50 @@
+task: phase_boundary
+
+preprocess:
+  lower_percentile: 0.5
+  upper_percentile: 99.5
+  background_sigma: 0.0
+
+spectral:
+  min_frequency: 0.02
+  max_frequency: 0.38
+
+phase_boundary:
+  patch_size: 64
+  stride: 12
+  radial_bins: 5
+  orientation_bins: 12
+  minimum_phase_fraction: 0.08
+  minimum_signature_separation: 0.8
+  boundary_width: 5
+  minimum_region_area: 80
+  minimum_boundary_length: 64.0
+  clustering_iterations: 40
+
+stage2:
+  sam3:
+    enabled: true
+    backend: sam2
+    inference_mode: isolated_process
+    worker_python: /home/aiprogram/anaconda3/envs/sam/bin/python
+    worker_script: scripts/run_sam2_boundary_worker.py
+    checkpoint_path: /home/aiprogram/project/yaotian/sam2/checkpoints/sam2.1_hiera_large.pt
+    model_variant: sam2.1_hiera_large
+    device: cuda
+    timeout_seconds: 600
+    ensemble_size: 8
+    positive_points_per_candidate: 3
+    negative_points_per_candidate: 8
+    box_padding_pixels: 24
+    box_padding_lattice_cells: 0
+    use_coarse_mask_prompt: true
+    interface_geometry_mode: paired_domains
+    interface_max_gap_pixels: 8
+    interface_half_width_pixels: 5
+    minimum_seed_core_recall: 0.95
+    fallback_to_coarse: true
+
+output:
+  save_feature_maps: true
+  save_numpy_arrays: true
+  figure_dpi: 180

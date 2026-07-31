@@ -1,0 +1,43 @@
+{
+  "manifest_format": "phyevo-mic-2d-review-manifest-v1",
+  "split_policy": "source-group-isolated-v1",
+  "sample_count": 554,
+  "dataset_counts": {
+    "al_sigma3_twin_boundaries": 250,
+    "dennler_2021_hrstem_defects": 61,
+    "emseek_remaining_v1": 32,
+    "emseek_wse2_atomic_defects": 107,
+    "guo_2021_atomic_defects": 3,
+    "guo_2021_superscan": 100,
+    "local_zeolite_reference": 1
+  },
+  "split_counts": {
+    "test": 63,
+    "train": 384,
+    "validation": 107
+  },
+  "label_kind_counts": {
+    "implicit_empty_mask": 30,
+    "none": 100,
+    "pixel_mask": 170,
+    "source_prior_only": 254
+  },
+  "priority_counts": {
+    "high_boundary_trace": 250,
+    "high_unlabeled": 104,
+    "locked_benchmark": 61,
+    "reference_audit": 139
+  },
+  "task_counts": {
+    "amorphous_region": 3,
+    "atomic_point_defect": 224,
+    "phase_boundary": 265,
+    "stacking_fault": 62
+  },
+  "review_eligible_count": 493,
+  "pixel_mask_count": 170,
+  "implicit_empty_mask_count": 30,
+  "source_prior_only_count": 254,
+  "unlabeled_count": 354,
+  "records_sha256": "7476364871ec7f705a77a4310daad82fe946ba1df0a2d39431bebe6fb169435e"
+}

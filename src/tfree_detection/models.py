@@ -85,6 +85,50 @@ class DetectionResult:
     reliability_map: np.ndarray | None = None
     decision_map: np.ndarray | None = None
     hypothesis_maps: Dict[str, np.ndarray] = field(default_factory=dict)
+    boundary_refinement: Any | None = None
+
+    @property
+    def final_geometry_mask(self) -> np.ndarray:
+        """Return accepted refined geometry, or the untouched physics mask."""
+
+        if self.boundary_refinement is None:
+            return self.mask
+        return self.boundary_refinement.final_mask
+
+    def boundary_refinement_for_region(
+        self, region: DetectionRegion
+    ) -> Any | None:
+        """Match one physics region to its candidate-local refinement."""
+
+        if self.boundary_refinement is None:
+            return None
+        candidates = getattr(
+            self.boundary_refinement, "candidate_results", ()
+        )
+        if not candidates:
+            return None
+        x1, y1, x2, y2 = region.bbox_xyxy
+        best = None
+        best_overlap = 0
+        for candidate in candidates:
+            overlap = int(candidate.coarse_mask[y1:y2, x1:x2].sum())
+            if overlap > best_overlap:
+                best = candidate
+                best_overlap = overlap
+        return best
+
+    def final_geometry_for_region(
+        self, region: DetectionRegion
+    ) -> np.ndarray:
+        """Return one candidate's refined-or-local-fallback geometry."""
+
+        candidate = self.boundary_refinement_for_region(region)
+        if candidate is not None:
+            return candidate.final_mask
+        x1, y1, x2, y2 = region.bbox_xyxy
+        geometry = np.zeros(self.image_shape, dtype=bool)
+        geometry[y1:y2, x1:x2] = self.mask[y1:y2, x1:x2]
+        return geometry
 
     def summary(self) -> Dict[str, Any]:
         payload = {
@@ -93,9 +137,19 @@ class DetectionResult:
             "detected_region_count": len(self.regions),
             "detected_area_pixels": int(self.mask.sum()),
             "detected_area_fraction": float(self.mask.mean()),
+            "final_geometry_area_pixels": int(
+                self.final_geometry_mask.sum()
+            ),
+            "final_geometry_area_fraction": float(
+                self.final_geometry_mask.mean()
+            ),
             "regions": [region.to_dict() for region in self.regions],
             "metadata": self.metadata,
         }
         if self.evidence_bundle is not None:
             payload["evidence_bundle"] = self.evidence_bundle.protocol_dict()
+        if self.boundary_refinement is not None:
+            payload["boundary_refinement"] = (
+                self.boundary_refinement.to_summary()
+            )
         return payload

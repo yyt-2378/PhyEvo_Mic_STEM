@@ -1,0 +1,49 @@
+{
+  "manifest_format": "tfree-sample-manifest-v1",
+  "registry_version": "6.0.0",
+  "registry_sha256": "48befa710cc2a2fadd5c845ff7ceee6b422ba5274152809854bf5a1f41010b0c",
+  "asset_count": 313,
+  "partition_counts": {
+    "development_test": 32,
+    "locked_external_test": 1,
+    "train": 280
+  },
+  "dataset_counts": {
+    "al_sigma3_twin_boundaries": 5,
+    "dennler_2021_hrstem_defects": 1,
+    "emseek_remaining_v1": 65,
+    "emseek_wse2_atomic_defects": 215,
+    "guo_2021_atomic_defects": 3,
+    "guo_2021_superscan": 1,
+    "local_zeolite_reference": 1,
+    "mills_2022_irradiated_al_4dstem": 2,
+    "strauch_2021_srtio3_high_resolution_4dstem": 2,
+    "wang_2026_polymer_lamella_4dstem_rt": 1,
+    "werbrouck_2026_fast_4dstem_phase": 14,
+    "zhang_2026_wse2_3d_defects_coordinates": 3
+  },
+  "role_counts": {
+    "annotation": 139,
+    "container": 6,
+    "image": 161,
+    "metadata": 7
+  },
+  "format_counts": {
+    "dm4": 1,
+    "emd": 2,
+    "hdf5": 1,
+    "hdf5_4dstem": 2,
+    "ipynb": 1,
+    "json": 2,
+    "md": 2,
+    "ndata1": 2,
+    "osc": 1,
+    "png": 279,
+    "tif": 14,
+    "zip": 6
+  },
+  "channel_selection_required": 2,
+  "frame_selection_required": 5,
+  "runnable_without_selection": 141,
+  "records_sha256": "d79989766849531d3bc0c769105823e58c67999093d3611eaabd268de2ca2226"
+}

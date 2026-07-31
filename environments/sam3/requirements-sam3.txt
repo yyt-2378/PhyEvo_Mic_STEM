@@ -1,0 +1,3 @@
+numpy>=1.26
+Pillow>=10
+git+https://github.com/facebookresearch/sam3.git@6dbb02bd38288df755dfa1378000a861e65b84f6

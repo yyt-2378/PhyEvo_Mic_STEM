@@ -10,6 +10,7 @@ from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Dict, Iterable, Mapping, Sequence
 
+import numpy as np
 import yaml
 
 from .evidence import LabelTier
@@ -387,6 +388,14 @@ class CandidateRecord:
     epistemic_state: str = "unresolved"
     hypothesis_ranking: tuple[Mapping[str, Any], ...] = ()
     missing_auxiliary_evidence: tuple[str, ...] = ()
+    geometry_source: str = "physics_coarse_mask"
+    geometry_bbox_xyxy: tuple[int, int, int, int] | None = None
+    geometry_centroid_xy: tuple[float, float] | None = None
+    geometry_area_pixels: int | None = None
+    boundary_refinement_status: str = "not_requested"
+    boundary_refinement_metrics: Mapping[str, Any] = field(
+        default_factory=dict
+    )
 
     def to_dict(self) -> Dict[str, Any]:
         payload = asdict(self)
@@ -400,7 +409,33 @@ class CandidateRecord:
         payload["missing_auxiliary_evidence"] = list(
             self.missing_auxiliary_evidence
         )
+        if self.geometry_bbox_xyxy is not None:
+            payload["geometry_bbox_xyxy"] = list(self.geometry_bbox_xyxy)
+        if self.geometry_centroid_xy is not None:
+            payload["geometry_centroid_xy"] = list(
+                self.geometry_centroid_xy
+            )
         return payload
+
+
+def _mask_geometry(
+    mask: np.ndarray,
+) -> tuple[
+    tuple[int, int, int, int] | None,
+    tuple[float, float] | None,
+    int,
+]:
+    coordinates = np.argwhere(np.asarray(mask, dtype=bool))
+    if not len(coordinates):
+        return None, None, 0
+    y1, x1 = coordinates.min(axis=0)
+    y2, x2 = coordinates.max(axis=0) + 1
+    centroid_y, centroid_x = coordinates.mean(axis=0)
+    return (
+        (int(x1), int(y1), int(x2), int(y2)),
+        (float(centroid_x), float(centroid_y)),
+        int(len(coordinates)),
+    )
 
 
 def candidate_records_from_result(
@@ -415,37 +450,83 @@ def candidate_records_from_result(
             "with evidence_protocol.enabled=true"
         )
     source_id = str(result.evidence_bundle.provenance.get("source_id", "unknown"))
-    return [
-        CandidateRecord(
-            candidate_id=region.candidate_id,
-            task=result.task,
-            source_id=source_id,
-            dataset_id=dataset_id,
-            partition=partition.value if partition is not None else None,
-            geometry=region.spatial_support,
-            violation_types=tuple(region.violation_types),
-            defect_type=region.defect_type,
-            bbox_xyxy=region.bbox_xyxy,
-            centroid_xy=region.centroid_xy,
-            area_pixels=region.area_pixels,
-            teacher_score=region.mean_score,
-            legacy_confidence=region.confidence,
-            reliability=region.reliability,
-            decision_state=region.decision_state,
-            label_tier=region.label_tier,
-            evidence_vector=region.evidence_vector,
-            quality_flags=tuple(region.quality_flags),
-            provenance=region.provenance,
-            resolved_family=region.resolved_family,
-            resolved_label=region.resolved_label,
-            epistemic_state=region.epistemic_state,
-            hypothesis_ranking=tuple(region.hypothesis_ranking),
-            missing_auxiliary_evidence=tuple(
-                region.missing_auxiliary_evidence
-            ),
+    records = []
+    for region in result.regions:
+        refinement = result.boundary_refinement_for_region(region)
+        geometry_mask = result.final_geometry_for_region(region)
+        geometry_bbox, geometry_centroid, geometry_area = _mask_geometry(
+            geometry_mask
         )
-        for region in result.regions
-    ]
+        geometry_source = (
+            "sam3_consensus"
+            if refinement is not None and refinement.accepted
+            else "physics_coarse_mask"
+        )
+        refinement_status = (
+            refinement.status
+            if refinement is not None
+            else result.boundary_refinement.status
+            if result.boundary_refinement is not None
+            else "not_requested"
+        )
+        refinement_metrics = (
+            dict(refinement.metrics)
+            if refinement is not None
+            else dict(result.boundary_refinement.metrics)
+            if result.boundary_refinement is not None
+            else {}
+        )
+        provenance = dict(region.provenance)
+        if refinement is not None:
+            provenance["boundary_refinement"] = {
+                "candidate_id": refinement.candidate_id,
+                "component_label": refinement.component_label,
+                "status": refinement.status,
+                "geometry_source": geometry_source,
+            }
+        elif result.boundary_refinement is not None:
+            provenance["boundary_refinement"] = {
+                "status": result.boundary_refinement.status,
+                "geometry_source": geometry_source,
+                "candidate_level_result_available": False,
+            }
+        records.append(
+            CandidateRecord(
+                candidate_id=region.candidate_id,
+                task=result.task,
+                source_id=source_id,
+                dataset_id=dataset_id,
+                partition=partition.value if partition is not None else None,
+                geometry=region.spatial_support,
+                violation_types=tuple(region.violation_types),
+                defect_type=region.defect_type,
+                bbox_xyxy=region.bbox_xyxy,
+                centroid_xy=region.centroid_xy,
+                area_pixels=region.area_pixels,
+                teacher_score=region.mean_score,
+                legacy_confidence=region.confidence,
+                reliability=region.reliability,
+                decision_state=region.decision_state,
+                label_tier=region.label_tier,
+                evidence_vector=region.evidence_vector,
+                quality_flags=tuple(region.quality_flags),
+                provenance=provenance,
+                resolved_family=region.resolved_family,
+                resolved_label=region.resolved_label,
+                epistemic_state=region.epistemic_state,
+                hypothesis_ranking=tuple(region.hypothesis_ranking),
+                missing_auxiliary_evidence=tuple(
+                    region.missing_auxiliary_evidence
+                ),
+                geometry_source=geometry_source,
+                geometry_bbox_xyxy=geometry_bbox,
+                geometry_centroid_xy=geometry_centroid,
+                geometry_area_pixels=geometry_area,
+                boundary_refinement_status=refinement_status,
+                boundary_refinement_metrics=refinement_metrics,
+            )
+        )
+    return records
 
 
 def write_candidate_jsonl(
@@ -496,6 +577,11 @@ def write_candidate_csv(
         "decision_state",
         "label_tier",
         "quality_flags",
+        "geometry_source",
+        "geometry_bbox_xyxy",
+        "geometry_centroid_xy",
+        "geometry_area_pixels",
+        "boundary_refinement_status",
     ]
     with target.open("x", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=columns)
@@ -507,6 +593,8 @@ def write_candidate_csv(
                 "bbox_xyxy",
                 "centroid_xy",
                 "quality_flags",
+                "geometry_bbox_xyxy",
+                "geometry_centroid_xy",
             ):
                 values[key] = json.dumps(values[key], ensure_ascii=False)
             writer.writerow({key: values[key] for key in columns})

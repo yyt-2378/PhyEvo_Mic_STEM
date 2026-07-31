@@ -1,0 +1,49 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: wse2-3d-raw-1657-and-coordinates-development-v2
+dataset_id: zhang_2026_wse2_3d_defects_coordinates
+source_uri: https://zenodo.org/records/18260255
+source_revision: 10.5281/zenodo.18260255:v1:2026-02-12
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-29T02:00:13.061139+00:00'
+groups:
+- group_id: wse2-3d-raw-1657-and-coordinate-archive
+  partition: development_test
+  acquisition_id: wse2-3d-study-plus-raw-1657
+  sample_id: twisted-bilayer-wse2-published-study
+  lab_id: zhang_2026_archive
+  microscope_id: EMPAD_published_metadata
+  material: twisted_bilayer_WSe2
+  tasks:
+  - atomic_point_defect
+  - moire_corrugation
+  - provenance
+  - ptychographic_reconstruction
+  - topological_defect
+  grouping_evidence: single_group_conservative
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: false
+  files:
+  - file_id: zhang_2026_wse2_3d_defects_coordinates:README.md
+    relative_path: datasets/public/zhang_2026_wse2_3d_defects_coordinates/README.md
+    role: metadata
+    sha256: 653ed132681fe117feef2d31ee55dc63cb205f73d00bf0cd3e05a387b7b2e15c
+    bytes: 1750
+    pair_id: null
+  - file_id: zhang_2026_wse2_3d_defects_coordinates:coordinates.zip
+    relative_path: datasets/public/zhang_2026_wse2_3d_defects_coordinates/coordinates.zip
+    role: annotation
+    sha256: 56050f99299286394c3e8736148a57ffbd8446210fd2fae62912654449e27c2a
+    bytes: 168745
+    pair_id: null
+  - file_id: zhang_2026_wse2_3d_defects_coordinates:1657.zip
+    relative_path: datasets/public/zhang_2026_wse2_3d_defects_coordinates/1657.zip
+    role: image
+    sha256: feeae99bd38704fbf0824f6ef531232e864d8b5cc5e131896ab0e4d6eb518dae
+    bytes: 845922892
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: bdf171a407ed0a3ecdeac7cf406f98d0ea724f19529632260b13865f329b866a

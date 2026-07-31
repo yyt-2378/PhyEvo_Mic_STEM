@@ -595,8 +595,61 @@ def default_label_adapter_registry() -> DatasetLabelAdapterRegistry:
         ),
         fallback=_UNRESOLVED,
     )
+    wse2_3d = RuleBasedDatasetAdapter(
+        adapter_id="wse2-3d-coordinates-v1",
+        dataset_patterns=("zhang_2026_wse2_3d*",),
+        rules=(
+            _Rule(
+                source_patterns=("vacancy",),
+                semantic_role=SemanticRole.DEFECT_CANDIDATE,
+                family="atomic_site_anomaly",
+                label="author_reconstructed_vacancy_candidate",
+                state=EpistemicState.PROBABLE,
+                tier=LabelTier.SILVER,
+                alternatives=(
+                    "vacancy_like",
+                    "coordinate_refinement_failure",
+                ),
+                auxiliary=(
+                    "corresponding_ptychographic_reconstruction",
+                    "expert_review",
+                ),
+                notes=(
+                    "The author status column supplies development evidence; "
+                    "it is not two-expert experimental Gold.",
+                ),
+            ),
+            _Rule(
+                source_patterns=("good",),
+                semantic_role=SemanticRole.STRUCTURE_REFERENCE,
+                family="atomic_site_anomaly",
+                label="author_reconstructed_atomic_coordinate",
+                state=EpistemicState.PROBABLE,
+                tier=LabelTier.SILVER,
+                notes=(
+                    "A Good coordinate is a structure reference, not a "
+                    "negative defect-control claim.",
+                ),
+            ),
+            _Rule(
+                source_patterns=("poor",),
+                semantic_role=SemanticRole.UNKNOWN,
+                family="open_set_resolution",
+                label="low_confidence_atomic_coordinate",
+                state=EpistemicState.UNRESOLVED,
+                tier=LabelTier.UNRESOLVED,
+                alternatives=(
+                    "weak_atomic_column",
+                    "coordinate_refinement_failure",
+                    "true_structural_anomaly",
+                ),
+                auxiliary=("ptychographic_slice_review",),
+            ),
+        ),
+        fallback=_UNRESOLVED,
+    )
     return DatasetLabelAdapterRegistry(
-        (emseek, guo, sigma3, dennler, stemgym)
+        (emseek, guo, sigma3, dennler, stemgym, wse2_3d)
     )
 
 

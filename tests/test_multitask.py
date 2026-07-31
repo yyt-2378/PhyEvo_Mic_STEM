@@ -292,3 +292,34 @@ def test_public_dataset_manifest_has_pinned_provenance() -> None:
     assert locked["labels"]["source"] == "microscopy_expert"
     assert locked["labels"]["labeled_defective_images"] == 31
     assert len(locked["files"][0]["sha256"]) == 64
+
+    fast_4dstem = by_id["werbrouck_2026_fast_4dstem_phase"]
+    assert fast_4dstem["doi"] == "10.5281/zenodo.20366781"
+    assert {entry["name"] for entry in fast_4dstem["files"]} == {
+        "TiO2_dataset.h5",
+        "NMC_LGPS_dataset.h5",
+    }
+
+    wse2 = by_id["zhang_2026_wse2_3d_defects_coordinates"]
+    raw_1657 = next(
+        entry for entry in wse2["files"] if entry["name"] == "1657.zip"
+    )
+    assert raw_1657["bytes"] == 845922892
+    assert (
+        raw_1657["selection_rule"]
+        == "smallest_published_experimental_acquisition_by_bytes"
+    )
+
+    irradiated_al = by_id["mills_2022_irradiated_al_4dstem"]
+    assert irradiated_al["license"] == "CC-BY-4.0"
+    assert {entry["role"] for entry in irradiated_al["files"]} == {
+        "image",
+        "calibration",
+    }
+
+    polymer = by_id["wang_2026_polymer_lamella_4dstem_rt"]
+    assert polymer["files"][0]["bytes"] == 88359973
+    assert (
+        polymer["files"][0]["selection_rule"]
+        == "smallest_published_archive_by_bytes"
+    )

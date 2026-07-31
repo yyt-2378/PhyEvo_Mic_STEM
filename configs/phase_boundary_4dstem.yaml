@@ -1,0 +1,27 @@
+task: phase_boundary
+
+preprocess:
+  lower_percentile: 1.0
+  upper_percentile: 99.0
+  background_sigma: 0.0
+
+spectral:
+  min_frequency: 0.04
+  max_frequency: 0.45
+
+phase_boundary:
+  patch_size: 16
+  stride: 2
+  radial_bins: 3
+  orientation_bins: 8
+  minimum_phase_fraction: 0.08
+  minimum_signature_separation: 0.35
+  boundary_width: 1
+  minimum_region_area: 4
+  minimum_boundary_length: 4.0
+  clustering_iterations: 40
+
+output:
+  save_feature_maps: true
+  save_numpy_arrays: true
+  figure_dpi: 180

@@ -1,0 +1,351 @@
+{
+  "manifest_format": "tfree-fast-4dstem-standardization-v1",
+  "dataset_id": "werbrouck_2026_fast_4dstem_phase",
+  "source_doi": "10.5281/zenodo.20366781",
+  "source_license": "CC-BY-4.0",
+  "source_code": "https://github.com/awwerbro/fast_mapping_4DSTEM",
+  "axis_semantics_source": "author_notebooks",
+  "axis_semantics": [
+    "real_x",
+    "real_y",
+    "reciprocal_x",
+    "reciprocal_y"
+  ],
+  "selection": {
+    "requested_acquisition": "all",
+    "default_rule": "smallest_published_HDF5_by_expected_bytes; fixed before detector execution and independent of outcomes",
+    "complete_source_file_count": 2,
+    "published_source_file_count": 2
+  },
+  "derivation": {
+    "supervised_training_used": false,
+    "external_weights_used": false,
+    "fixed_radial_bins": 4,
+    "fixed_angular_bins": 12,
+    "maps": {
+      "integrated_intensity": "sum over both reciprocal axes",
+      "diffraction_entropy": "normalized Shannon entropy of each diffraction pattern",
+      "radial_first_moment": "intensity-weighted normalized reciprocal radius",
+      "diffraction_peak_fraction": "maximum detector-pixel intensity divided by total",
+      "signature_pc1": "first deterministic SVD coordinate of fixed polar-bin Hellinger signatures",
+      "signature_anomaly": "robust RMS distance from the median polar signature"
+    }
+  },
+  "evaluation_status": "development evidence only; no two-expert pixel Gold",
+  "acquisitions": [
+    {
+      "slug": "tio2",
+      "file": "TiO2_dataset.h5",
+      "acquisition_id": "werbrouck-tio2-sio2",
+      "sample_id": "werbrouck-tio2-on-sio2",
+      "material": "TiO2_on_SiO2",
+      "expected_md5": "45bb27a45a8c9568a7896d8cec8faa13",
+      "expected_bytes": 142469777,
+      "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/TiO2_dataset.h5",
+      "sha256": "4db71cc06931df8df3000fa63f34bd4c51b01379f3e5bfcf729a022999b78b74",
+      "inspection": {
+        "inspection_status": "ok",
+        "format": "hdf5_4dstem",
+        "schema": "werbrouck_fast_mapping_v1",
+        "cube_dataset": "X4D",
+        "shape": [
+          26,
+          78,
+          187,
+          187
+        ],
+        "dtype": "int16",
+        "bytes_uncompressed": 141834264,
+        "axis_semantics": [
+          "real_x",
+          "real_y",
+          "reciprocal_x",
+          "reciprocal_y"
+        ],
+        "scan_shape": [
+          26,
+          78
+        ],
+        "diffraction_shape": [
+          187,
+          187
+        ],
+        "coordinate_shapes": {
+          "x_real": [
+            26,
+            78
+          ],
+          "y_real": [
+            26,
+            78
+          ],
+          "x_reciprocal": [
+            187,
+            187
+          ],
+          "y_reciprocal": [
+            187,
+            187
+          ],
+          "beamstop": [
+            187,
+            187
+          ]
+        },
+        "metadata_keys": [
+          "beam_energy",
+          "beamstop_width",
+          "camera_length",
+          "camera_length_not_corrected",
+          "center_x",
+          "center_y",
+          "comp",
+          "detector",
+          "detector_binning",
+          "detector_pix_width",
+          "detector_side",
+          "dims",
+          "wavelength"
+        ]
+      },
+      "derived": [
+        {
+          "map_name": "integrated_intensity",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/integrated_intensity.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "c529f7a7deb83c970be93e9c461e2d43df6e16306933108e4e63de0876416db3",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_entropy",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/diffraction_entropy.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "141499a98d3765333933c20dea724c41d50e9547b62bae6ba8c62cbf958ddf71",
+          "detector_ready": false
+        },
+        {
+          "map_name": "radial_first_moment",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/radial_first_moment.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "6445f52f6adb9373aab477e5f8903cac9b12eaed0371fe3c7a54859445c5e953",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_peak_fraction",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/diffraction_peak_fraction.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "fc2a91840875b116573ba2d934042f79062ff76ee233ce2cad924c88a2e40280",
+          "detector_ready": false
+        },
+        {
+          "map_name": "signature_pc1",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/signature_pc1.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "d4efd7a3b2150e08ff9c40add8decb542fb31918b4e8559e381a05a08bfa44e2",
+          "detector_ready": true
+        },
+        {
+          "map_name": "signature_anomaly",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/signature_anomaly.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "443e975d56ce5a34c393d7027021df2519bb89f3dc3e1311822ca898323039fe",
+          "detector_ready": true
+        },
+        {
+          "map_name": "standardization_overview",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-tio2-sio2/standardization_overview.png",
+          "bytes": 185865,
+          "sha256": "6ea059d5f655cd6963e54c1be3504345b376a6dfc4ab631a200fddccbbde70b5",
+          "detector_ready": false
+        }
+      ]
+    },
+    {
+      "slug": "nmc-lgps",
+      "file": "NMC_LGPS_dataset.h5",
+      "acquisition_id": "werbrouck-nmc-lgps",
+      "sample_id": "werbrouck-nmc-lgps-interface",
+      "material": "NMC_LGPS_interface",
+      "expected_md5": "c3d63ca5a29e5e471245626a65a139d0",
+      "expected_bytes": 159258737,
+      "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/NMC_LGPS_dataset.h5",
+      "sha256": "d1799ce0e41821c2885eea969e431d22b9a0a48f7aa2e9d6de1b1e109b13b944",
+      "inspection": {
+        "inspection_status": "ok",
+        "format": "hdf5_4dstem",
+        "schema": "werbrouck_fast_mapping_v1",
+        "cube_dataset": "X4D",
+        "shape": [
+          36,
+          63,
+          187,
+          187
+        ],
+        "dtype": "int16",
+        "bytes_uncompressed": 158619384,
+        "axis_semantics": [
+          "real_x",
+          "real_y",
+          "reciprocal_x",
+          "reciprocal_y"
+        ],
+        "scan_shape": [
+          36,
+          63
+        ],
+        "diffraction_shape": [
+          187,
+          187
+        ],
+        "coordinate_shapes": {
+          "x_real": [
+            36,
+            63
+          ],
+          "y_real": [
+            36,
+            63
+          ],
+          "x_reciprocal": [
+            187,
+            187
+          ],
+          "y_reciprocal": [
+            187,
+            187
+          ],
+          "beamstop": [
+            187,
+            187
+          ]
+        },
+        "metadata_keys": [
+          "beam_energy",
+          "beamstop_width",
+          "camera_length",
+          "camera_length_not_corrected",
+          "center_x",
+          "center_y",
+          "comp",
+          "detector",
+          "detector_binning",
+          "detector_pix_width",
+          "detector_side",
+          "dims",
+          "wavelength"
+        ]
+      },
+      "derived": [
+        {
+          "map_name": "integrated_intensity",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/integrated_intensity.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "13540c4e0faaa3e578b287c122cb618f1d82cdf414e93f6f90d155f9e9c442f0",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_entropy",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/diffraction_entropy.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "13db83ac37df0306460d88c2d10b1834bbca19c4ef9bd2ed15498ac0f6f90969",
+          "detector_ready": false
+        },
+        {
+          "map_name": "radial_first_moment",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/radial_first_moment.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "4474deaef74986b1b0285d3e496c0d7f7b3337369f78f82ec2e50ac2721782e7",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_peak_fraction",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/diffraction_peak_fraction.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "a7ca3d870ac0d552cdb0b632533352f0d424d6d890e73f8df4f5b45b59e3ee36",
+          "detector_ready": false
+        },
+        {
+          "map_name": "signature_pc1",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/signature_pc1.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "92c16fcf4e7bf65421ab673c2595bf5b51f67e753fab38a8e44c13ddbcd2cfe8",
+          "detector_ready": true
+        },
+        {
+          "map_name": "signature_anomaly",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/signature_anomaly.tif",
+          "shape": [
+            36,
+            63
+          ],
+          "dtype": "float32",
+          "bytes": 9392,
+          "sha256": "c1c1be30968115ef78238bb3a6508bb38371b73c87bc9aed36611915ed40a35d",
+          "detector_ready": true
+        },
+        {
+          "map_name": "standardization_overview",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v2/werbrouck-nmc-lgps/standardization_overview.png",
+          "bytes": 179895,
+          "sha256": "e7b1c5d8010c0be57134fe1ae928ca388dd54ed11d868826c0da102ac22827d9",
+          "detector_ready": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+task: amorphous_region
+
+# This mode exercises physics prompt generation and writes an immutable
+# sam3_exchange request without requiring the separate SAM3 environment.
+stage2:
+  enabled: false
+  sam3:
+    enabled: true
+    inference_mode: prepare_only
+    ensemble_size: 8
+    positive_points_per_candidate: 3
+    negative_points_per_candidate: 8
+    box_padding_pixels: 24
+    use_coarse_mask_prompt: true
+    minimum_seed_core_recall: 0.95
+    minimum_boundary_evidence_alignment: 0.05
+    preserve_candidate_topology: true
+    fallback_to_coarse: true

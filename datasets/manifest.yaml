@@ -201,3 +201,250 @@ datasets:
         role: immutable_per_file_source_manifest
         tasks:
           - atomic_point_defect
+  - id: werbrouck_2026_fast_4dstem_phase
+    title: Fast 4D-STEM-based phase mapping for amorphous and mixed materials
+    authors:
+      - Andreas Werbrouck
+      - Matthias Young
+      - Nikhila Paranamana
+      - Xiaoqing He
+    year: 2026
+    doi: 10.5281/zenodo.20366781
+    record_url: https://zenodo.org/records/20366781
+    paper_url: https://doi.org/10.48550/arXiv.2507.17068
+    license: CC-BY-4.0
+    source_revision: 10.5281/zenodo.20366781:2026-06-04
+    modality: experimental_4d_stem
+    materials:
+      - TiO2_on_SiO2
+      - NMC_LGPS_interface
+    labels:
+      pixel_ground_truth: false
+      source: acquisition_and_author_phase_context
+      qualification: author_context_not_gold
+      note: >-
+        The two HDF5 acquisitions are admitted as development evidence for
+        virtual-detector, amorphous/mixed-phase, and interface testing. Any
+        embedded phase maps remain author-derived evidence, not two-expert
+        Gold.
+    grouping:
+      partition: development_test
+      evidence: one_group_per_published_acquisition
+      note: >-
+        TiO2/SiO2 and NMC/LGPS are different samples and acquisitions. Derived
+        virtual detector images inherit their parent group and may not cross
+        into calibration or locked test.
+    files:
+      - name: TiO2_dataset.h5
+        source_name: TiO2_dataset.h5
+        url: https://zenodo.org/api/records/20366781/files/TiO2_dataset.h5/content
+        bytes: 142469777
+        md5: 45bb27a45a8c9568a7896d8cec8faa13
+        role: image
+        tasks:
+          - amorphous_region
+          - phase_boundary
+          - virtual_detector
+      - name: NMC_LGPS_dataset.h5
+        source_name: NMC_LGPS_dataset.h5
+        url: https://zenodo.org/api/records/20366781/files/NMC_LGPS_dataset.h5/content
+        bytes: 159258737
+        md5: c3d63ca5a29e5e471245626a65a139d0
+        role: image
+        tasks:
+          - amorphous_region
+          - phase_boundary
+          - virtual_detector
+  - id: zhang_2026_wse2_3d_defects_coordinates
+    title: Supplementary data for 3D Mapping of Defects and Moire Corrugations via Electron Ptychography Atomic Coordinate Retrieval
+    year: 2026
+    doi: 10.5281/zenodo.18260255
+    record_url: https://zenodo.org/records/18260255
+    paper_url: https://doi.org/10.1126/sciadv.aeb4305
+    license: CC-BY-4.0
+    source_revision: 10.5281/zenodo.18260255:v1:2026-02-12
+    modality: experimental_4d_stem_with_ptychographic_atomic_coordinates
+    material: twisted_bilayer_WSe2
+    labels:
+      pixel_ground_truth: false
+      coordinate_annotations: true
+      source: author_reconstruction
+      qualification: author_context_not_gold
+      note: >-
+        The coordinate archive and README are paired with acquisition 1657,
+        selected before detector execution as the smallest of the three
+        published experimental archives. The other two raw acquisitions remain
+        catalogued but are not silently downloaded.
+    grouping:
+      partition: development_test
+      evidence: repository_metadata
+      note: >-
+        Coordinates remain linked to their published acquisition identifiers.
+        They cannot be reported as two-expert experimental Gold or used without
+        the corresponding reconstruction/raw-image provenance.
+    files:
+      - name: README.md
+        source_name: README.md
+        url: https://zenodo.org/api/records/18260255/files/README.md/content
+        bytes: 1750
+        md5: 3210f45e2dbc4264451fbdab8826fb9e
+        role: metadata
+        tasks:
+          - provenance
+      - name: coordinates.zip
+        source_name: coordinates.zip
+        url: https://zenodo.org/api/records/18260255/files/coordinates.zip/content
+        bytes: 168745
+        md5: f32c5556f8f9251a6f342b239cd37a80
+        role: annotation
+        tasks:
+          - atomic_point_defect
+          - topological_defect
+          - moire_corrugation
+      - name: 1657.zip
+        source_name: 1657.zip
+        url: https://zenodo.org/api/records/18260255/files/1657.zip/content
+        bytes: 845922892
+        md5: 47d6df3a5fc2cd52496f2c912cf1dbe1
+        role: image
+        selection_rule: smallest_published_experimental_acquisition_by_bytes
+        tasks:
+          - atomic_point_defect
+          - topological_defect
+          - moire_corrugation
+          - ptychographic_reconstruction
+  - id: strauch_2021_srtio3_high_resolution_4dstem
+    title: High-resolution 4D STEM dataset of SrTiO3 along the [100] axis at high magnification
+    authors:
+      - Achim Strauch
+      - Alexander Clausen
+      - Dieter Weber
+      - Knut Mueller-Caspary
+    year: 2021
+    doi: 10.5281/zenodo.5113449
+    record_url: https://zenodo.org/records/5113449
+    paper_url: https://arxiv.org/abs/2106.13457
+    license: CC-BY-4.0
+    source_revision: 10.5281/zenodo.5113449:v1:2021-07-19
+    modality: experimental_atomic_resolution_4d_stem
+    material: SrTiO3
+    labels:
+      pixel_ground_truth: false
+      source: calibrated_acquisition_metadata
+      qualification: unlabeled_normal_control
+      note: >-
+        This is an atom-resolved pipeline and reciprocal-space normal-control
+        acquisition, not a defect-negative Gold label.
+    grouping:
+      partition: development_test
+      evidence: single_published_acquisition
+      note: >-
+        The archive and analysis notebook form one indivisible acquisition
+        group and are ineligible for a future pristine locked test.
+    files:
+      - name: 20200518_165148.zip
+        source_name: 20200518 165148.zip
+        url: https://zenodo.org/api/records/5113449/files/20200518%20165148.zip/content
+        bytes: 176555935
+        md5: 1b7650d5ed35685cb0c6326c22663c28
+        role: image
+        tasks:
+          - atomic_column_localization
+          - reciprocal_space_normal_control
+          - acquisition_quality
+      - name: simple-ssb.ipynb
+        source_name: simple-ssb.ipynb
+        url: https://zenodo.org/api/records/5113449/files/simple-ssb.ipynb/content
+        bytes: 577540
+        md5: ff237bdf47d11da020b5064a741cc383
+        role: metadata
+        tasks:
+          - provenance
+          - ptychographic_reconstruction
+  - id: mills_2022_irradiated_al_4dstem
+    title: Nanoscale mapping of point defect concentrations with 4D-STEM
+    authors:
+      - Sean Mills
+      - Steven Zeltmann
+      - Peter Ercius
+      - Aaron Kohnert
+      - Blas Uberuaga
+      - Andrew Minor
+    year: 2022
+    doi: 10.5281/zenodo.7041997
+    record_url: https://zenodo.org/records/7041997
+    license: CC-BY-4.0
+    source_revision: 10.5281/zenodo.7041997:v2:2022-09-01
+    modality: experimental_4d_stem
+    material: irradiated_Al
+    labels:
+      pixel_ground_truth: false
+      source: treatment_metadata_and_author_analysis
+      qualification: author_context_not_gold
+      note: >-
+        The irradiated-Al acquisition and its matching calibration are selected
+        as the smallest scientifically complete material subset of the 23.1 GB
+        record. Point-defect concentration is not an atomic-site mask.
+    grouping:
+      partition: development_test
+      evidence: matched_acquisition_and_calibration
+      note: >-
+        The raw DM4 and calibration HDF5 must remain in one acquisition group.
+        The larger Au thermal series is catalogued but not downloaded in this
+        storage-bounded wave.
+    files:
+      - name: Al_irradiated.dm4
+        source_name: Al_irradiated.dm4
+        url: https://zenodo.org/api/records/7041997/files/Al_irradiated.dm4/content
+        bytes: 839479107
+        md5: 6af75a89b60a812011870c7f985502fa
+        role: image
+        tasks:
+          - point_defect_concentration
+          - irradiation_damage
+          - strain_field
+          - reciprocal_space_anomaly
+      - name: Al_irradiated_calibration.h5
+        source_name: Al_irradiated_calibration.h5
+        url: https://zenodo.org/api/records/7041997/files/Al_irradiated_calibration.h5/content
+        bytes: 14351000
+        md5: 30b921344b22af6315a8ddf667d92a06
+        role: calibration
+        tasks:
+          - reciprocal_space_calibration
+          - strain_field
+  - id: wang_2026_polymer_lamella_4dstem_rt
+    title: In-situ 4D-STEM imaging of lamellar-cluster orientation in polymer crystallization
+    year: 2026
+    doi: 10.5281/zenodo.18572179
+    record_url: https://zenodo.org/records/18572179
+    license: CC-BY-4.0
+    source_revision: 10.5281/zenodo.18572179:2026-02-10
+    modality: experimental_in_situ_4d_stem
+    material: polymer_lamellar_clusters
+    labels:
+      pixel_ground_truth: false
+      source: acquisition_temperature_metadata
+      qualification: author_context_not_gold
+      note: >-
+        The room-temperature archive is the smallest published file and was
+        chosen before detector execution as a compact orientation/dynamics OOD
+        case. It is not an atomic-defect benchmark.
+    grouping:
+      partition: development_test
+      evidence: one_published_temperature_acquisition
+      note: >-
+        This archive remains one indivisible acquisition group; the other seven
+        temperatures are retained in the public-source catalog.
+    files:
+      - name: polymer_4dstem_rt.zip
+        source_name: 8_120x120_SS_10nm_C2_10um_exp13p3_alpha_0.275_CL1.6_300kV_bin4_mono_100.89_RT.zip
+        url: https://zenodo.org/api/records/18572179/files/8_120x120_SS_10nm_C2_10um_exp13p3_alpha_0.275_CL1.6_300kV_bin4_mono_100.89_RT.zip/content
+        bytes: 88359973
+        md5: 3c969c973336992fb0ba49afb7640736
+        role: image
+        selection_rule: smallest_published_archive_by_bytes
+        tasks:
+          - orientation_domain
+          - phase_evolution
+          - out_of_distribution

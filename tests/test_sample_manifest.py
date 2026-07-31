@@ -74,6 +74,40 @@ def test_sample_manifest_preserves_partition_and_requires_stack_selection(
     assert records[0]["asset"]["partition"] == "development_test"
     assert records[0]["readiness"]["frame_selection_required"] is True
     assert records[0]["readiness"]["can_run_without_selection"] is False
+    interface = records[0]["data_interface"]
+    assert interface["interface_format"] == "tfree-data-interface-v1"
+    assert interface["access_mode"] == "select_plane"
+    assert interface["adapter_status"] == "selector_required"
+    assert interface["canonical_output"]["kind"] == "image_2d"
+    assert interface["required_selectors"][0]["parameters"] == [
+        "frame_index",
+        "projection",
+    ]
     summary = summarize_sample_records(records, registry=registry)
     assert summary["asset_count"] == 1
+    assert summary["dataset_count"] == 1
+    assert summary["total_registered_bytes"] == target.stat().st_size
+    assert summary["material_counts"] == {"unknown": 1}
+    assert summary["task_counts"] == {"atomic_point_defect": 1}
     assert summary["frame_selection_required"] == 1
+    assert summary["adapter_status_counts"] == {"selector_required": 1}
+    assert summary["ready_for_detector_now"] == 0
+
+
+def test_generic_hdf5_is_inventoried_without_guessing_fourdstem_axes(
+    tmp_path: Path,
+) -> None:
+    import pytest
+
+    h5py = pytest.importorskip("h5py")
+    target = tmp_path / "calibration.h5"
+    with h5py.File(target, "w") as archive:
+        group = archive.create_group("calibration")
+        group.create_dataset("gain", data=np.ones((4, 5)))
+
+    inspected = inspect_asset_file(target)
+    assert inspected["inspection_status"] == "ok"
+    assert inspected["format"] == "hdf5"
+    assert inspected["schema"] == "generic_hdf5_axes_not_inferred"
+    assert inspected["dataset_count"] == 1
+    assert inspected["datasets"][0]["path"] == "calibration/gain"

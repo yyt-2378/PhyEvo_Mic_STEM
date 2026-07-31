@@ -1,0 +1,1063 @@
+{
+  "inventory_format": "tfree-public-dataset-wave-v1",
+  "source_file_policy": "verified_in_place_never_overwritten",
+  "bulk_archive_policy": "archive members are inventoried without extraction; containers with logical/archive ratio >= 50 are never bulk-extracted",
+  "dataset_count": 4,
+  "file_count": 8,
+  "source_bytes": 1965416942,
+  "datasets": [
+    {
+      "dataset_id": "zhang_2026_wse2_3d_defects_coordinates",
+      "title": "Supplementary data for 3D Mapping of Defects and Moire Corrugations via Electron Ptychography Atomic Coordinate Retrieval",
+      "source_revision": "10.5281/zenodo.18260255:v1:2026-02-12",
+      "license": "CC-BY-4.0",
+      "file_count": 3,
+      "source_bytes": 846093387,
+      "files": [
+        {
+          "name": "README.md",
+          "source_name": "README.md",
+          "relative_path": "datasets/public/zhang_2026_wse2_3d_defects_coordinates/README.md",
+          "bytes": 1750,
+          "md5": "3210f45e2dbc4264451fbdab8826fb9e",
+          "sha256": "653ed132681fe117feef2d31ee55dc63cb205f73d00bf0cd3e05a387b7b2e15c",
+          "role": "metadata",
+          "tasks": [
+            "provenance"
+          ],
+          "inventory": {
+            "container": "md"
+          }
+        },
+        {
+          "name": "coordinates.zip",
+          "source_name": "coordinates.zip",
+          "relative_path": "datasets/public/zhang_2026_wse2_3d_defects_coordinates/coordinates.zip",
+          "bytes": 168745,
+          "md5": "f32c5556f8f9251a6f342b239cd37a80",
+          "sha256": "56050f99299286394c3e8736148a57ffbd8446210fd2fae62912654449e27c2a",
+          "role": "annotation",
+          "tasks": [
+            "atomic_point_defect",
+            "topological_defect",
+            "moire_corrugation"
+          ],
+          "inventory": {
+            "container": "zip",
+            "member_count": 6,
+            "logical_uncompressed_bytes": 415688,
+            "logical_to_archive_ratio": 2.4634092862010726,
+            "bulk_extraction_policy": "extract_only_with_adapter_and_space_check",
+            "members": [
+              {
+                "member_path": "simulation/",
+                "uncompressed_bytes": 0,
+                "compressed_bytes": 0,
+                "crc32": "00000000",
+                "is_directory": true
+              },
+              {
+                "member_path": "simulation/MD_simulation_coordinates.txt",
+                "uncompressed_bytes": 33235,
+                "compressed_bytes": 15596,
+                "crc32": "679bfabb",
+                "is_directory": false
+              },
+              {
+                "member_path": "simulation/refined_coordinates.txt",
+                "uncompressed_bytes": 53654,
+                "compressed_bytes": 17708,
+                "crc32": "62671ab8",
+                "is_directory": false
+              },
+              {
+                "member_path": "simulation/coordinates_for_4D-STEM_simulation.txt",
+                "uncompressed_bytes": 211833,
+                "compressed_bytes": 95680,
+                "crc32": "a31407eb",
+                "is_directory": false
+              },
+              {
+                "member_path": "1657_refined_coordinates.txt",
+                "uncompressed_bytes": 57082,
+                "compressed_bytes": 18860,
+                "crc32": "134cab12",
+                "is_directory": false
+              },
+              {
+                "member_path": "1815_refined_coordinates.txt",
+                "uncompressed_bytes": 59884,
+                "compressed_bytes": 19731,
+                "crc32": "472ab411",
+                "is_directory": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "1657.zip",
+          "source_name": "1657.zip",
+          "relative_path": "datasets/public/zhang_2026_wse2_3d_defects_coordinates/1657.zip",
+          "bytes": 845922892,
+          "md5": "47d6df3a5fc2cd52496f2c912cf1dbe1",
+          "sha256": "feeae99bd38704fbf0824f6ef531232e864d8b5cc5e131896ab0e4d6eb518dae",
+          "role": "image",
+          "tasks": [
+            "atomic_point_defect",
+            "topological_defect",
+            "moire_corrugation",
+            "ptychographic_reconstruction"
+          ],
+          "inventory": {
+            "container": "zip",
+            "member_count": 2,
+            "logical_uncompressed_bytes": 1175774357,
+            "logical_to_archive_ratio": 1.3899308886417983,
+            "bulk_extraction_policy": "extract_only_with_adapter_and_space_check",
+            "members": [
+              {
+                "member_path": "Niter64.mat",
+                "uncompressed_bytes": 85255317,
+                "compressed_bytes": 84690966,
+                "crc32": "a065e955",
+                "is_directory": false
+              },
+              {
+                "member_path": "scan_x128_y128.raw",
+                "uncompressed_bytes": 1090519040,
+                "compressed_bytes": 761231590,
+                "crc32": "748d2489",
+                "is_directory": false
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "strauch_2021_srtio3_high_resolution_4dstem",
+      "title": "High-resolution 4D STEM dataset of SrTiO3 along the [100] axis at high magnification",
+      "source_revision": "10.5281/zenodo.5113449:v1:2021-07-19",
+      "license": "CC-BY-4.0",
+      "file_count": 2,
+      "source_bytes": 177133475,
+      "files": [
+        {
+          "name": "20200518_165148.zip",
+          "source_name": "20200518 165148.zip",
+          "relative_path": "datasets/public/strauch_2021_srtio3_high_resolution_4dstem/20200518_165148.zip",
+          "bytes": 176555935,
+          "md5": "1b7650d5ed35685cb0c6326c22663c28",
+          "sha256": "c9ab6d029607de333917bdad614c74aef188e170797c41da13a1202dd86e31eb",
+          "role": "image",
+          "tasks": [
+            "atomic_column_localization",
+            "reciprocal_space_normal_control",
+            "acquisition_quality"
+          ],
+          "inventory": {
+            "container": "zip",
+            "member_count": 66,
+            "logical_uncompressed_bytes": 1080035328,
+            "logical_to_archive_ratio": 6.117241700201129,
+            "bulk_extraction_policy": "extract_only_with_adapter_and_space_check",
+            "members": [
+              {
+                "member_path": "20200518 165148/",
+                "uncompressed_bytes": 0,
+                "compressed_bytes": 0,
+                "crc32": "00000000",
+                "is_directory": true
+              },
+              {
+                "member_path": "20200518 165148/default.hdr",
+                "uncompressed_bytes": 2048,
+                "compressed_bytes": 673,
+                "crc32": "c5a052e4",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default1.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2789695,
+                "crc32": "bfceee11",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default10.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2749799,
+                "crc32": "c29045df",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default11.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2754063,
+                "crc32": "32aac0af",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default12.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2748048,
+                "crc32": "44e77940",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default13.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2774133,
+                "crc32": "864673ce",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default14.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2776846,
+                "crc32": "234213d5",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default15.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2781041,
+                "crc32": "22b2738d",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default16.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2783103,
+                "crc32": "519d9868",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default17.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2764707,
+                "crc32": "8561770f",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default18.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2776043,
+                "crc32": "12b1c03c",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default19.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2781417,
+                "crc32": "baba58fe",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default2.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2788657,
+                "crc32": "8b6fadf6",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default20.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2769360,
+                "crc32": "b020f303",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default21.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2784252,
+                "crc32": "83816ddc",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default22.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2780367,
+                "crc32": "278b768a",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default23.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2781682,
+                "crc32": "a2381a67",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default24.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2763740,
+                "crc32": "64f515c6",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default25.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2770129,
+                "crc32": "6fc71f13",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default26.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2744599,
+                "crc32": "1f75aa08",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default27.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2727945,
+                "crc32": "447cfad5",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default28.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2723210,
+                "crc32": "ac4bab8e",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default29.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2717014,
+                "crc32": "798e0c3b",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default3.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2778812,
+                "crc32": "c930c2db",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default30.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2714906,
+                "crc32": "bc999890",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default31.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2710423,
+                "crc32": "791f2ff6",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default32.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2725537,
+                "crc32": "43e57378",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default33.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2733813,
+                "crc32": "bfb5b0bc",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default34.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2757355,
+                "crc32": "34011ecb",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default35.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2756831,
+                "crc32": "c636a59f",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default36.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2767560,
+                "crc32": "24141d30",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default37.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2776596,
+                "crc32": "834d4ced",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default38.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2774133,
+                "crc32": "97619b32",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default39.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2778513,
+                "crc32": "7796358a",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default4.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2759346,
+                "crc32": "5b20102e",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default40.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2774304,
+                "crc32": "07b5f339",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default41.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2781893,
+                "crc32": "352e4105",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default42.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2783496,
+                "crc32": "60391c66",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default43.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2779211,
+                "crc32": "6518be70",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default44.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2773101,
+                "crc32": "12c66e00",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default45.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2758527,
+                "crc32": "5c66304d",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default46.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2757672,
+                "crc32": "ed2a49b9",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default47.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2735672,
+                "crc32": "8c4da5b4",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default48.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2738205,
+                "crc32": "70b63316",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default49.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2731682,
+                "crc32": "0ef7ae8b",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default5.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2749485,
+                "crc32": "f074c510",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default50.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2728535,
+                "crc32": "8bd5e729",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default51.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2724598,
+                "crc32": "45d8356b",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default52.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2725645,
+                "crc32": "21b0814c",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default53.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2743609,
+                "crc32": "a4343774",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default54.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2749864,
+                "crc32": "9abc09d6",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default55.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2768661,
+                "crc32": "91a83721",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default56.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2776904,
+                "crc32": "5b72a2dd",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default57.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2780104,
+                "crc32": "61b89e93",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default58.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2761858,
+                "crc32": "c9bd8c3a",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default59.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2774448,
+                "crc32": "3b7c43ae",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default6.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2760791,
+                "crc32": "d52bd256",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default60.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2772128,
+                "crc32": "e7696b1f",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default61.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2759270,
+                "crc32": "71f22e32",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default62.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2750163,
+                "crc32": "f4ecff35",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default63.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2755656,
+                "crc32": "3ad78374",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default64.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2702782,
+                "crc32": "61518ad0",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default7.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2761824,
+                "crc32": "11421774",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default8.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2762664,
+                "crc32": "f3e763d8",
+                "is_directory": false
+              },
+              {
+                "member_path": "20200518 165148/default9.mib",
+                "uncompressed_bytes": 16875520,
+                "compressed_bytes": 2756585,
+                "crc32": "ba4b08f8",
+                "is_directory": false
+              }
+            ]
+          }
+        },
+        {
+          "name": "simple-ssb.ipynb",
+          "source_name": "simple-ssb.ipynb",
+          "relative_path": "datasets/public/strauch_2021_srtio3_high_resolution_4dstem/simple-ssb.ipynb",
+          "bytes": 577540,
+          "md5": "ff237bdf47d11da020b5064a741cc383",
+          "sha256": "3850714474e16e37ae006f679de2ab0c23b18f2d88ea5332fa1045cc557f4cbf",
+          "role": "metadata",
+          "tasks": [
+            "provenance",
+            "ptychographic_reconstruction"
+          ],
+          "inventory": {
+            "container": "ipynb"
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "mills_2022_irradiated_al_4dstem",
+      "title": "Nanoscale mapping of point defect concentrations with 4D-STEM",
+      "source_revision": "10.5281/zenodo.7041997:v2:2022-09-01",
+      "license": "CC-BY-4.0",
+      "file_count": 2,
+      "source_bytes": 853830107,
+      "files": [
+        {
+          "name": "Al_irradiated.dm4",
+          "source_name": "Al_irradiated.dm4",
+          "relative_path": "datasets/public/mills_2022_irradiated_al_4dstem/Al_irradiated.dm4",
+          "bytes": 839479107,
+          "md5": "6af75a89b60a812011870c7f985502fa",
+          "sha256": "0ad366a20d05cd3e8ba13f5168433234c8909cdf23bffdb072cbe05d5fb77753",
+          "role": "image",
+          "tasks": [
+            "point_defect_concentration",
+            "irradiation_damage",
+            "strain_field",
+            "reciprocal_space_anomaly"
+          ],
+          "inventory": {
+            "container": "dm4",
+            "header_hex": "000000040000000032096f2b00000001",
+            "adapter_status": "container_verified_parser_not_yet_available"
+          }
+        },
+        {
+          "name": "Al_irradiated_calibration.h5",
+          "source_name": "Al_irradiated_calibration.h5",
+          "relative_path": "datasets/public/mills_2022_irradiated_al_4dstem/Al_irradiated_calibration.h5",
+          "bytes": 14351000,
+          "md5": "30b921344b22af6315a8ddf667d92a06",
+          "sha256": "7b3da7768c23ccfac7936342a367df2cdaff2d7c6e9c9fb38d810b9a777e956d",
+          "role": "calibration",
+          "tasks": [
+            "reciprocal_space_calibration",
+            "strain_field"
+          ],
+          "inventory": {
+            "container": "hdf5",
+            "dataset_count": 40,
+            "datasets": [
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_cal/data",
+                "shape": [
+                  512,
+                  512,
+                  3
+                ],
+                "dtype": "float64",
+                "stored_bytes": 6291456
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_cal/dim1",
+                "shape": [
+                  512
+                ],
+                "dtype": "float32",
+                "stored_bytes": 2048
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_cal/dim2",
+                "shape": [
+                  512
+                ],
+                "dtype": "float32",
+                "stored_bytes": 2048
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_cal/dim3",
+                "shape": [
+                  3
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 192
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_sim/data",
+                "shape": [
+                  512,
+                  512,
+                  3
+                ],
+                "dtype": "float64",
+                "stored_bytes": 6291456
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_sim/dim1",
+                "shape": [
+                  512
+                ],
+                "dtype": "float32",
+                "stored_bytes": 2048
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_sim/dim2",
+                "shape": [
+                  512
+                ],
+                "dtype": "float32",
+                "stored_bytes": 2048
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/braggvectormaps_sim/dim3",
+                "shape": [
+                  3
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 192
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_fit/data",
+                "shape": [
+                  30,
+                  30,
+                  2
+                ],
+                "dtype": "float64",
+                "stored_bytes": 14400
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_fit/dim1",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_fit/dim2",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_fit/dim3",
+                "shape": [
+                  2
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 128
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_meas/data",
+                "shape": [
+                  30,
+                  30,
+                  2
+                ],
+                "dtype": "float64",
+                "stored_bytes": 14400
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_meas/dim1",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_meas/dim2",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_cal_meas/dim3",
+                "shape": [
+                  2
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 128
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_fit/data",
+                "shape": [
+                  40,
+                  40,
+                  2
+                ],
+                "dtype": "float64",
+                "stored_bytes": 25600
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_fit/dim1",
+                "shape": [
+                  40
+                ],
+                "dtype": "float32",
+                "stored_bytes": 160
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_fit/dim2",
+                "shape": [
+                  40
+                ],
+                "dtype": "float32",
+                "stored_bytes": 160
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_fit/dim3",
+                "shape": [
+                  2
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 128
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_meas/data",
+                "shape": [
+                  40,
+                  40,
+                  2
+                ],
+                "dtype": "float64",
+                "stored_bytes": 25600
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_meas/dim1",
+                "shape": [
+                  40
+                ],
+                "dtype": "float32",
+                "stored_bytes": 160
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_meas/dim2",
+                "shape": [
+                  40
+                ],
+                "dtype": "float32",
+                "stored_bytes": 160
+              },
+              {
+                "path": "4DSTEM_experiment/data/diffractionslices/centerposition_sim_meas/dim3",
+                "shape": [
+                  2
+                ],
+                "dtype": "|S64",
+                "stored_bytes": 128
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_cal_ellipsecorr/data",
+                "shape": [
+                  30,
+                  30
+                ],
+                "dtype": "object",
+                "stored_bytes": 14400
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_cal_raw/data",
+                "shape": [
+                  30,
+                  30
+                ],
+                "dtype": "object",
+                "stored_bytes": 14400
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_cal_shiftcorr/data",
+                "shape": [
+                  30,
+                  30
+                ],
+                "dtype": "object",
+                "stored_bytes": 14400
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_sim_ellipsecorr/data",
+                "shape": [
+                  40,
+                  40
+                ],
+                "dtype": "object",
+                "stored_bytes": 25600
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_sim_raw/data",
+                "shape": [
+                  40,
+                  40
+                ],
+                "dtype": "object",
+                "stored_bytes": 25600
+              },
+              {
+                "path": "4DSTEM_experiment/data/pointlistarrays/braggpeaks_sim_shiftcorr/data",
+                "shape": [
+                  40,
+                  40
+                ],
+                "dtype": "object",
+                "stored_bytes": 25600
+              },
+              {
+                "path": "4DSTEM_experiment/data/realslices/BF_image_cal/data",
+                "shape": [
+                  30,
+                  30
+                ],
+                "dtype": "uint64",
+                "stored_bytes": 7200
+              },
+              {
+                "path": "4DSTEM_experiment/data/realslices/BF_image_cal/dim1",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/data/realslices/BF_image_cal/dim2",
+                "shape": [
+                  30
+                ],
+                "dtype": "float32",
+                "stored_bytes": 120
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/QR_rotation",
+                "shape": [],
+                "dtype": "float64",
+                "stored_bytes": 8
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/QR_rotation_units",
+                "shape": [],
+                "dtype": "object",
+                "stored_bytes": 16
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/Q_pixel_size",
+                "shape": [],
+                "dtype": "float64",
+                "stored_bytes": 8
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/Q_pixel_size_units",
+                "shape": [],
+                "dtype": "object",
+                "stored_bytes": 16
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/a",
+                "shape": [],
+                "dtype": "float64",
+                "stored_bytes": 8
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/b",
+                "shape": [],
+                "dtype": "float64",
+                "stored_bytes": 8
+              },
+              {
+                "path": "4DSTEM_experiment/metadata/calibration/theta",
+                "shape": [],
+                "dtype": "float64",
+                "stored_bytes": 8
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "dataset_id": "wang_2026_polymer_lamella_4dstem_rt",
+      "title": "In-situ 4D-STEM imaging of lamellar-cluster orientation in polymer crystallization",
+      "source_revision": "10.5281/zenodo.18572179:2026-02-10",
+      "license": "CC-BY-4.0",
+      "file_count": 1,
+      "source_bytes": 88359973,
+      "files": [
+        {
+          "name": "polymer_4dstem_rt.zip",
+          "source_name": "8_120x120_SS_10nm_C2_10um_exp13p3_alpha_0.275_CL1.6_300kV_bin4_mono_100.89_RT.zip",
+          "relative_path": "datasets/public/wang_2026_polymer_lamella_4dstem_rt/polymer_4dstem_rt.zip",
+          "bytes": 88359973,
+          "md5": "3c969c973336992fb0ba49afb7640736",
+          "sha256": "e386d3c2560bc9dc2d4627bdf668a2e6531617e5f84d996e709819c4cdb028ef",
+          "role": "image",
+          "tasks": [
+            "orientation_domain",
+            "phase_evolution",
+            "out_of_distribution"
+          ],
+          "inventory": {
+            "container": "zip",
+            "member_count": 1,
+            "logical_uncompressed_bytes": 10750161528,
+            "logical_to_archive_ratio": 121.66325048560167,
+            "bulk_extraction_policy": "do_not_bulk_extract",
+            "members": [
+              {
+                "member_path": "Diffraction SI.dm4",
+                "uncompressed_bytes": 10750161528,
+                "compressed_bytes": 88359743,
+                "crc32": "3b8c308b",
+                "is_directory": false
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

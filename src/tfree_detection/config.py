@@ -107,10 +107,55 @@ class DINOConfig:
 
 
 @dataclass
+class SAM3RefinementConfig:
+    """Physics-prompted, proposal-only SAM 2/3 boundary refinement."""
+
+    enabled: bool = False
+    backend: str = "sam3"
+    supported_tasks: list[str] = field(
+        default_factory=lambda: ["amorphous_region", "phase_boundary"]
+    )
+    inference_mode: str = "isolated_process"
+    exchange_directory: Optional[str] = None
+    worker_python: Optional[str] = None
+    worker_script: str = "scripts/run_sam3_boundary_worker.py"
+    checkpoint_path: Optional[str] = None
+    model_variant: str = "sam3"
+    device: str = "auto"
+    timeout_seconds: int = 600
+    ensemble_size: int = 8
+    positive_points_per_candidate: int = 3
+    negative_points_per_candidate: int = 8
+    box_padding_pixels: int = 24
+    box_padding_lattice_cells: float = 2.0
+    use_coarse_mask_prompt: bool = True
+    core_score_quantile: float = 0.75
+    stable_core_threshold: float = 0.80
+    selection_threshold: float = 0.50
+    possible_extent_threshold: float = 0.20
+    minimum_seed_core_recall: float = 0.95
+    maximum_negative_leakage: float = 0.05
+    minimum_area_ratio: float = 0.50
+    maximum_area_ratio: float = 2.00
+    minimum_physics_contrast: float = 0.0
+    minimum_prompt_stability: float = 0.50
+    minimum_boundary_evidence_alignment: float = 0.05
+    allow_component_merging: bool = False
+    preserve_candidate_topology: bool = True
+    interface_geometry_mode: str = "paired_domains"
+    interface_max_gap_pixels: int = 8
+    interface_half_width_pixels: int = 5
+    boundary_tolerance_pixels: float = 2.0
+    fallback_to_coarse: bool = True
+    random_seed: int = 31
+
+
+@dataclass
 class Stage2Config:
     enabled: bool = False
     phase: PhaseAnalysisConfig = field(default_factory=PhaseAnalysisConfig)
     dino: DINOConfig = field(default_factory=DINOConfig)
+    sam3: SAM3RefinementConfig = field(default_factory=SAM3RefinementConfig)
 
 
 @dataclass
@@ -296,6 +341,116 @@ class DetectorConfig:
                     raise ValueError("DINO input and microscopy patches are too small")
                 if dino.batch_size < 1 or dino.samples_per_zone < 1:
                     raise ValueError("DINO batch size and samples must be positive")
+        sam3 = self.stage2.sam3
+        if sam3.enabled:
+            if sam3.backend not in {"sam2", "sam3"}:
+                raise ValueError(
+                    "stage2.sam3.backend must be 'sam2' or 'sam3'"
+                )
+            if sam3.inference_mode not in {
+                "isolated_process",
+                "prepare_only",
+                "response_only",
+            }:
+                raise ValueError(
+                    "stage2.sam3.inference_mode must be isolated_process, "
+                    "prepare_only, or response_only"
+                )
+            if not sam3.supported_tasks:
+                raise ValueError(
+                    "stage2.sam3.supported_tasks cannot be empty"
+                )
+            unknown_sam3_tasks = set(sam3.supported_tasks) - supported_tasks
+            if unknown_sam3_tasks:
+                raise ValueError(
+                    "stage2.sam3.supported_tasks contains unknown task(s): "
+                    + ", ".join(sorted(unknown_sam3_tasks))
+                )
+            if sam3.timeout_seconds < 1:
+                raise ValueError(
+                    "stage2.sam3.timeout_seconds must be positive"
+                )
+            if sam3.ensemble_size < 2:
+                raise ValueError(
+                    "stage2.sam3.ensemble_size must be at least 2"
+                )
+            if (
+                sam3.positive_points_per_candidate < 1
+                or sam3.negative_points_per_candidate < 1
+            ):
+                raise ValueError(
+                    "stage2.sam3 positive and negative prompt counts must "
+                    "be positive"
+                )
+            if sam3.box_padding_pixels < 0:
+                raise ValueError(
+                    "stage2.sam3.box_padding_pixels cannot be negative"
+                )
+            if sam3.box_padding_lattice_cells < 0:
+                raise ValueError(
+                    "stage2.sam3.box_padding_lattice_cells cannot be negative"
+                )
+            thresholds = (
+                sam3.possible_extent_threshold,
+                sam3.selection_threshold,
+                sam3.stable_core_threshold,
+            )
+            if not 0 <= thresholds[0] < thresholds[1] < thresholds[2] <= 1:
+                raise ValueError(
+                    "stage2.sam3 consensus thresholds must satisfy "
+                    "0 <= possible < selection < stable <= 1"
+                )
+            if not 0.5 <= sam3.core_score_quantile < 1:
+                raise ValueError(
+                    "stage2.sam3.core_score_quantile must be in [0.5, 1)"
+                )
+            if not 0.95 <= sam3.minimum_seed_core_recall <= 1:
+                raise ValueError(
+                    "Policy A requires stage2.sam3.minimum_seed_core_recall "
+                    "to remain in [0.95, 1]"
+                )
+            if not 0 <= sam3.maximum_negative_leakage < 1:
+                raise ValueError(
+                    "stage2.sam3.maximum_negative_leakage must be in [0, 1)"
+                )
+            if not (
+                0 < sam3.minimum_area_ratio
+                <= sam3.maximum_area_ratio
+            ):
+                raise ValueError(
+                    "stage2.sam3 area ratios must satisfy 0 < minimum <= maximum"
+                )
+            if not 0 <= sam3.minimum_prompt_stability <= 1:
+                raise ValueError(
+                    "stage2.sam3.minimum_prompt_stability must be in [0, 1]"
+                )
+            if not 0 <= sam3.minimum_boundary_evidence_alignment <= 1:
+                raise ValueError(
+                    "stage2.sam3.minimum_boundary_evidence_alignment must "
+                    "be in [0, 1]"
+                )
+            if sam3.interface_geometry_mode != "paired_domains":
+                raise ValueError(
+                    "stage2.sam3.interface_geometry_mode must be "
+                    "'paired_domains'; SAM must not segment an interface "
+                    "as one filled region"
+                )
+            if sam3.interface_max_gap_pixels < 1:
+                raise ValueError(
+                    "stage2.sam3.interface_max_gap_pixels must be positive"
+                )
+            if sam3.interface_half_width_pixels < 0:
+                raise ValueError(
+                    "stage2.sam3.interface_half_width_pixels cannot be negative"
+                )
+            if sam3.boundary_tolerance_pixels < 0:
+                raise ValueError(
+                    "stage2.sam3.boundary_tolerance_pixels cannot be negative"
+                )
+            if not sam3.fallback_to_coarse:
+                raise ValueError(
+                    "Policy A requires stage2.sam3.fallback_to_coarse=true"
+                )
         if self.atomic.polarity not in {"auto", "bright", "dark"}:
             raise ValueError("atomic.polarity must be auto, bright, or dark")
         if self.atomic.peak_sigma <= 0 or self.atomic.peak_min_distance < 1:

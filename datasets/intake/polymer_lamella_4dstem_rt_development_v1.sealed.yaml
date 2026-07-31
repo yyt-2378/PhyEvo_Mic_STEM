@@ -1,0 +1,35 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: polymer-lamella-4dstem-rt-development-v1
+dataset_id: wang_2026_polymer_lamella_4dstem_rt
+source_uri: https://zenodo.org/records/18572179
+source_revision: 10.5281/zenodo.18572179:2026-02-10
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-29T02:00:16.763357+00:00'
+groups:
+- group_id: polymer-lamella-room-temperature-acquisition
+  partition: development_test
+  acquisition_id: wang-2026-polymer-4dstem-rt
+  sample_id: wang-2026-polymer-lamella-sample
+  lab_id: wang_2026_archive
+  microscope_id: published_300kV_4dstem_instrument
+  material: polymer_lamellar_clusters
+  tasks:
+  - orientation_domain
+  - out_of_distribution
+  - phase_evolution
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: unlabeled
+  eligible_for_active_learning: false
+  files:
+  - file_id: wang_2026_polymer_lamella_4dstem_rt:polymer_4dstem_rt.zip
+    relative_path: datasets/public/wang_2026_polymer_lamella_4dstem_rt/polymer_4dstem_rt.zip
+    role: image
+    sha256: e386d3c2560bc9dc2d4627bdf668a2e6531617e5f84d996e709819c4cdb028ef
+    bytes: 88359973
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: 8490d83504f11e7127c318414cd0bcb8b770d65a61adcb0604bfdcd057d98e8f

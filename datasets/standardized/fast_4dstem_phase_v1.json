@@ -1,0 +1,194 @@
+{
+  "manifest_format": "tfree-fast-4dstem-standardization-v1",
+  "dataset_id": "werbrouck_2026_fast_4dstem_phase",
+  "source_doi": "10.5281/zenodo.20366781",
+  "source_license": "CC-BY-4.0",
+  "source_code": "https://github.com/awwerbro/fast_mapping_4DSTEM",
+  "axis_semantics_source": "author_notebooks",
+  "axis_semantics": [
+    "real_x",
+    "real_y",
+    "reciprocal_x",
+    "reciprocal_y"
+  ],
+  "selection": {
+    "requested_acquisition": "tio2",
+    "default_rule": "smallest_published_HDF5_by_expected_bytes; fixed before detector execution and independent of outcomes",
+    "complete_source_file_count": 1,
+    "published_source_file_count": 2
+  },
+  "derivation": {
+    "supervised_training_used": false,
+    "external_weights_used": false,
+    "fixed_radial_bins": 4,
+    "fixed_angular_bins": 12,
+    "maps": {
+      "integrated_intensity": "sum over both reciprocal axes",
+      "diffraction_entropy": "normalized Shannon entropy of each diffraction pattern",
+      "radial_first_moment": "intensity-weighted normalized reciprocal radius",
+      "diffraction_peak_fraction": "maximum detector-pixel intensity divided by total",
+      "signature_pc1": "first deterministic SVD coordinate of fixed polar-bin Hellinger signatures",
+      "signature_anomaly": "robust RMS distance from the median polar signature"
+    }
+  },
+  "evaluation_status": "development evidence only; no two-expert pixel Gold",
+  "acquisitions": [
+    {
+      "slug": "tio2",
+      "file": "TiO2_dataset.h5",
+      "acquisition_id": "werbrouck-tio2-sio2",
+      "sample_id": "werbrouck-tio2-on-sio2",
+      "material": "TiO2_on_SiO2",
+      "expected_md5": "45bb27a45a8c9568a7896d8cec8faa13",
+      "expected_bytes": 142469777,
+      "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/TiO2_dataset.h5",
+      "sha256": "4db71cc06931df8df3000fa63f34bd4c51b01379f3e5bfcf729a022999b78b74",
+      "inspection": {
+        "inspection_status": "ok",
+        "format": "hdf5_4dstem",
+        "schema": "werbrouck_fast_mapping_v1",
+        "cube_dataset": "X4D",
+        "shape": [
+          26,
+          78,
+          187,
+          187
+        ],
+        "dtype": "int16",
+        "bytes_uncompressed": 141834264,
+        "axis_semantics": [
+          "real_x",
+          "real_y",
+          "reciprocal_x",
+          "reciprocal_y"
+        ],
+        "scan_shape": [
+          26,
+          78
+        ],
+        "diffraction_shape": [
+          187,
+          187
+        ],
+        "coordinate_shapes": {
+          "x_real": [
+            26,
+            78
+          ],
+          "y_real": [
+            26,
+            78
+          ],
+          "x_reciprocal": [
+            187,
+            187
+          ],
+          "y_reciprocal": [
+            187,
+            187
+          ],
+          "beamstop": [
+            187,
+            187
+          ]
+        },
+        "metadata_keys": [
+          "beam_energy",
+          "beamstop_width",
+          "camera_length",
+          "camera_length_not_corrected",
+          "center_x",
+          "center_y",
+          "comp",
+          "detector",
+          "detector_binning",
+          "detector_pix_width",
+          "detector_side",
+          "dims",
+          "wavelength"
+        ]
+      },
+      "derived": [
+        {
+          "map_name": "integrated_intensity",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/integrated_intensity.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "c529f7a7deb83c970be93e9c461e2d43df6e16306933108e4e63de0876416db3",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_entropy",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/diffraction_entropy.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "141499a98d3765333933c20dea724c41d50e9547b62bae6ba8c62cbf958ddf71",
+          "detector_ready": false
+        },
+        {
+          "map_name": "radial_first_moment",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/radial_first_moment.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "6445f52f6adb9373aab477e5f8903cac9b12eaed0371fe3c7a54859445c5e953",
+          "detector_ready": false
+        },
+        {
+          "map_name": "diffraction_peak_fraction",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/diffraction_peak_fraction.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "fc2a91840875b116573ba2d934042f79062ff76ee233ce2cad924c88a2e40280",
+          "detector_ready": false
+        },
+        {
+          "map_name": "signature_pc1",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/signature_pc1.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "d4efd7a3b2150e08ff9c40add8decb542fb31918b4e8559e381a05a08bfa44e2",
+          "detector_ready": true
+        },
+        {
+          "map_name": "signature_anomaly",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/signature_anomaly.tif",
+          "shape": [
+            26,
+            78
+          ],
+          "dtype": "float32",
+          "bytes": 8432,
+          "sha256": "443e975d56ce5a34c393d7027021df2519bb89f3dc3e1311822ca898323039fe",
+          "detector_ready": true
+        },
+        {
+          "map_name": "standardization_overview",
+          "relative_path": "datasets/public/werbrouck_2026_fast_4dstem_phase/standardized_v1/werbrouck-tio2-sio2/standardization_overview.png",
+          "bytes": 185865,
+          "sha256": "6ea059d5f655cd6963e54c1be3504345b376a6dfc4ab631a200fddccbbde70b5",
+          "detector_ready": false
+        }
+      ]
+    }
+  ]
+}

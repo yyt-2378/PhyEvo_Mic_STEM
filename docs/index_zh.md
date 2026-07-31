@@ -12,6 +12,8 @@
 
 ## 当前方法
 
+- [SAM2 真实 GPU 实例、六列图与 DINO frozen 流程](sam2_live_and_dino_frozen_validation_zh.md)
+- [SAM 3 物理提示、共识、门控与确定性回退](sam3_boundary_refinement_zh.md)
 - [Class1 多参考群关系、五教师与四几何输出](class1_symmetry_relation_final_zh.md)
 - [Class1 失败迭代与端点假高分审计](class1_failed_iterations_archive_zh.md)
 - [统一 EvidenceBundle 与开放世界 resolver](evidence_protocol_zh.md)
@@ -20,6 +22,9 @@
 
 ## 数据与评估
 
+- [当前数据资产总结与统一接口](data_collection_and_interface_standardization_zh.md)
+- [2026-07-29 公开实验 STEM 第二波：下载、封存、标准化与测试](public_stem_dataset_expansion_2026_07_29_zh.md)
+- [2026-07-28 公开实验 STEM 数据扩展、4D 标准化与测试](public_stem_dataset_expansion_2026_07_28_zh.md)
 - [公开数据标准化状态](public_dataset_standardization_status_zh.md)
 - [缺陷本体和公开数据扩展](public_data_and_defect_ontology_expansion_zh.md)
 - [数据治理和 Gold calibration](data_governance_and_calibration_zh.md)
@@ -30,6 +35,8 @@
 ## 平台与路线图
 
 - [当前实施状态](implementation_status_zh.md)
+- [154病例二维STEM在线专家审核平台](expert_review_platform_2d_zh.md)
+- [二维STEM专家审核一页操作说明](expert_annotation_quick_guide_zh.md)
 - [自提升平台路线图](self_improving_platform_roadmap_zh.md)
 - [非人工环节完成状态](non_human_loop_completion_status_zh.md)
 - [版本迭代对比](version_iteration_comparison_zh.md)
@@ -40,6 +47,7 @@
 - [Learning index](learning/index.md)
 - [边界候选与可靠性分离](learning/entries/2026-07-28-border-aware-candidate-reliability.md)
 - [参考锚定群关系与多几何 Class1](learning/entries/2026-07-28-reference-anchored-symmetry-relations.md)
+- [物理提示、提案所有权与 SAM 2/3 确定性回退](learning/entries/2026-07-29-physics-prompted-sam3-boundary-refinement.md)
 
 ## 推荐阅读顺序
 

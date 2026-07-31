@@ -27,10 +27,24 @@ def _draw_overlay(
     axis: plt.Axes, result: DetectionResult, show_labels: bool = True
 ) -> None:
     axis.imshow(result.normalized_image, cmap="gray", vmin=0, vmax=1)
-    overlay = np.ma.masked_where(~result.mask, result.mask)
+    geometry = result.final_geometry_mask
+    overlay = np.ma.masked_where(~geometry, geometry)
     axis.imshow(overlay, cmap="autumn", alpha=0.42, vmin=0, vmax=1)
-    if np.any(result.mask):
-        axis.contour(result.mask.astype(float), levels=[0.5], colors=["#ff2d2d"], linewidths=1)
+    if result.boundary_refinement is not None and np.any(result.mask):
+        axis.contour(
+            result.mask.astype(float),
+            levels=[0.5],
+            colors=["#ff2d2d"],
+            linewidths=0.9,
+            linestyles="dashed",
+        )
+    if np.any(geometry):
+        axis.contour(
+            geometry.astype(float),
+            levels=[0.5],
+            colors=["#00e5ff" if result.boundary_refinement else "#ff2d2d"],
+            linewidths=1.1,
+        )
     if show_labels:
         maximum_labels = 30
         shown_regions = (
@@ -43,7 +57,19 @@ def _draw_overlay(
             )[:maximum_labels]
         )
         for region in shown_regions:
-            x1, y1, x2, y2 = region.bbox_xyxy
+            geometry = result.final_geometry_for_region(region)
+            coordinates = np.argwhere(geometry)
+            if len(coordinates):
+                y1, x1 = coordinates.min(axis=0)
+                y2, x2 = coordinates.max(axis=0) + 1
+                x1, y1, x2, y2 = (
+                    int(x1),
+                    int(y1),
+                    int(x2),
+                    int(y2),
+                )
+            else:
+                x1, y1, x2, y2 = region.bbox_xyxy
             axis.add_patch(
                 Rectangle(
                     (x1, y1),
@@ -326,6 +352,170 @@ def _save_evidence_protocol_diagnostics(
     plt.close(figure)
 
 
+def _save_sam3_boundary_diagnostics(
+    result: DetectionResult, path: Path, dpi: int
+) -> None:
+    refinement = result.boundary_refinement
+    if refinement is None:
+        raise ValueError("SAM3 diagnostics require a refinement result")
+    backend = str(refinement.provenance.get("backend", "sam3")).lower()
+    sam_label = {
+        "sam2": "SAM 2",
+        "sam3": "SAM 3",
+    }.get(backend, backend.upper())
+    figure, axes = plt.subplots(2, 3, figsize=(15, 9.5))
+    image = result.normalized_image
+    coarse = refinement.coarse_mask
+
+    axes[0, 0].imshow(image, cmap="gray", vmin=0, vmax=1)
+    if np.any(coarse):
+        axes[0, 0].contour(
+            coarse.astype(float),
+            levels=[0.5],
+            colors=["#ff3b30"],
+            linewidths=1.0,
+        )
+    axes[0, 0].set_title("1. Physics coarse candidate (red)")
+
+    axes[0, 1].imshow(image, cmap="gray", vmin=0, vmax=1)
+    shown_prompts = [
+        prompt for prompt in refinement.prompts
+        if prompt.ensemble_index == 0
+    ]
+    for prompt in shown_prompts:
+        x1, y1, x2, y2 = prompt.box_xyxy
+        axes[0, 1].add_patch(
+            Rectangle(
+                (x1, y1),
+                x2 - x1,
+                y2 - y1,
+                fill=False,
+                edgecolor="#00e5ff",
+                linewidth=1.0,
+            )
+        )
+        if prompt.positive_points_xy:
+            positive = np.asarray(prompt.positive_points_xy)
+            axes[0, 1].scatter(
+                positive[:, 0],
+                positive[:, 1],
+                c="#35c759",
+                marker="+",
+                s=28,
+            )
+        if prompt.negative_points_xy:
+            negative = np.asarray(prompt.negative_points_xy)
+            axes[0, 1].scatter(
+                negative[:, 0],
+                negative[:, 1],
+                c="#ff453a",
+                marker="x",
+                s=20,
+            )
+    axes[0, 1].set_title("2. Physics prompts (ensemble 0)")
+
+    axes[0, 2].imshow(image, cmap="gray", vmin=0, vmax=1)
+    shown_probability = axes[0, 2].imshow(
+        np.ma.masked_where(
+            refinement.inclusion_probability <= 0,
+            refinement.inclusion_probability,
+        ),
+        cmap="viridis",
+        vmin=0,
+        vmax=1,
+        alpha=0.72,
+    )
+    axes[0, 2].set_title("3. Proposal inclusion probability")
+    figure.colorbar(
+        shown_probability, ax=axes[0, 2], fraction=0.046, pad=0.03
+    )
+
+    consensus_state = np.zeros(result.image_shape, dtype=np.uint8)
+    consensus_state[refinement.possible_extent] = 1
+    consensus_state[refinement.refined_mask] = 2
+    consensus_state[refinement.stable_core] = 3
+    consensus_cmap = ListedColormap(
+        ["#000000", "#ffd60a", "#0a84ff", "#30d158"]
+    )
+    axes[1, 0].imshow(image, cmap="gray", vmin=0, vmax=1)
+    axes[1, 0].imshow(
+        np.ma.masked_where(consensus_state == 0, consensus_state),
+        cmap=consensus_cmap,
+        vmin=0,
+        vmax=3,
+        alpha=0.60,
+        interpolation="nearest",
+    )
+    axes[1, 0].set_title(
+        "4. Possible / selected / stable consensus"
+    )
+
+    axes[1, 1].imshow(image, cmap="gray", vmin=0, vmax=1)
+    shown_uncertainty = axes[1, 1].imshow(
+        np.ma.masked_where(
+            refinement.boundary_uncertainty <= 0,
+            refinement.boundary_uncertainty,
+        ),
+        cmap="magma",
+        vmin=0,
+        vmax=1,
+        alpha=0.72,
+    )
+    axes[1, 1].set_title("5. Boundary uncertainty")
+    figure.colorbar(
+        shown_uncertainty, ax=axes[1, 1], fraction=0.046, pad=0.03
+    )
+
+    axes[1, 2].imshow(image, cmap="gray", vmin=0, vmax=1)
+    if np.any(coarse):
+        axes[1, 2].contour(
+            coarse.astype(float),
+            levels=[0.5],
+            colors=["#ff453a"],
+            linewidths=0.9,
+            linestyles="dashed",
+        )
+    if refinement.candidate_results:
+        for candidate in refinement.candidate_results:
+            if np.any(candidate.final_mask):
+                axes[1, 2].contour(
+                    candidate.final_mask.astype(float),
+                    levels=[0.5],
+                    colors=[
+                        "#00e5ff" if candidate.accepted else "#ffd60a"
+                    ],
+                    linewidths=1.2,
+                )
+    elif np.any(refinement.final_mask):
+        axes[1, 2].contour(
+            refinement.final_mask.astype(float),
+            levels=[0.5],
+            colors=["#00e5ff"],
+            linewidths=1.2,
+        )
+    accepted_count = sum(
+        item.accepted for item in refinement.candidate_results
+    )
+    candidate_count = len(refinement.candidate_results)
+    decision = (
+        f"{accepted_count}/{candidate_count} CANDIDATES REFINED"
+        if candidate_count
+        else refinement.status.upper().replace("_", " ")
+    )
+    axes[1, 2].set_title(f"6. Final geometry — {decision}")
+
+    for axis in axes.flat:
+        axis.set_axis_off()
+    figure.suptitle(
+        f"{sam_label} is a geometry proposer; "
+        "physics owns candidate existence",
+        fontsize=13,
+    )
+    figure.tight_layout()
+    figure.savefig(path, dpi=dpi, bbox_inches="tight")
+    plt.close(figure)
+
+
 def _save_strain_overlay(
     result: DetectionResult, path: Path, dpi: int, transition_radius: int
 ) -> None:
@@ -397,6 +587,7 @@ def save_result(
         "summary": output / "summary.json",
         "resolved_config": output / "config_resolved.yaml",
         "mask": output / "mask.png",
+        "final_geometry_mask": output / "final_geometry_mask.png",
         "overlay": output / "overlay.png",
         "heatmap": output / "score_heatmap.png",
         "diagnostics": output / "diagnostics.png",
@@ -435,6 +626,11 @@ def save_result(
         (result.mask.astype(np.uint8) * 255),
         check_contrast=False,
     )
+    imsave(
+        str(artifacts["final_geometry_mask"]),
+        (result.final_geometry_mask.astype(np.uint8) * 255),
+        check_contrast=False,
+    )
     _save_overlay(result, artifacts["overlay"], config.output.figure_dpi)
     _save_heatmap(result, artifacts["heatmap"], config.output.figure_dpi)
     _save_diagnostics(result, artifacts["diagnostics"], config.output.figure_dpi)
@@ -466,11 +662,69 @@ def save_result(
         )
         artifacts.update(stage2_artifacts)
 
+    if result.boundary_refinement is not None:
+        refinement = result.boundary_refinement
+        sam3_artifacts = {
+            "sam3_summary": output / "sam3_refinement_summary.json",
+            "sam3_coarse_mask": output / "sam3_coarse_mask.png",
+            "sam3_refined_proposal": output / "sam3_refined_proposal.png",
+            "sam3_final_geometry": output / "sam3_final_geometry.png",
+            "sam3_stable_core": output / "sam3_stable_core.png",
+            "sam3_possible_extent": output / "sam3_possible_extent.png",
+            "sam3_boundary_uncertainty": (
+                output / "sam3_boundary_uncertainty.png"
+            ),
+            "sam3_diagnostics": output / "sam3_diagnostics.png",
+        }
+        existing = [
+            path for path in sam3_artifacts.values() if path.exists()
+        ]
+        if existing:
+            raise FileExistsError(
+                "Refusing to overwrite SAM3 artifacts: "
+                + ", ".join(str(path) for path in existing)
+            )
+        with sam3_artifacts["sam3_summary"].open(
+            "x", encoding="utf-8"
+        ) as stream:
+            json.dump(
+                refinement.to_summary(),
+                stream,
+                ensure_ascii=False,
+                indent=2,
+            )
+        for name, values in (
+            ("sam3_coarse_mask", refinement.coarse_mask),
+            ("sam3_refined_proposal", refinement.refined_mask),
+            ("sam3_final_geometry", refinement.final_mask),
+            ("sam3_stable_core", refinement.stable_core),
+            ("sam3_possible_extent", refinement.possible_extent),
+        ):
+            imsave(
+                str(sam3_artifacts[name]),
+                np.asarray(values, dtype=np.uint8) * 255,
+                check_contrast=False,
+            )
+        imsave(
+            str(sam3_artifacts["sam3_boundary_uncertainty"]),
+            np.round(
+                np.clip(refinement.boundary_uncertainty, 0, 1) * 255
+            ).astype(np.uint8),
+            check_contrast=False,
+        )
+        _save_sam3_boundary_diagnostics(
+            result,
+            sam3_artifacts["sam3_diagnostics"],
+            config.output.figure_dpi,
+        )
+        artifacts.update(sam3_artifacts)
+
     if config.output.save_numpy_arrays:
         numpy_artifacts = {
             "score_array": output / "score_map.npy",
             "probability_array": output / "probability_map.npy",
             "mask_array": output / "mask.npy",
+            "final_geometry_array": output / "final_geometry_mask.npy",
             "feature_archive": output / "feature_maps.npz",
             "evidence_archive": output / "evidence_maps.npz",
         }
@@ -488,9 +742,21 @@ def save_result(
             numpy_artifacts["evidence_reliability_archive"] = (
                 output / "evidence_reliability_maps.npz"
             )
+        if result.boundary_refinement is not None:
+            numpy_artifacts["sam3_consensus_archive"] = (
+                output / "sam3_consensus_maps.npz"
+            )
+            if result.boundary_refinement.proposals:
+                numpy_artifacts["sam3_proposal_archive"] = (
+                    output / "sam3_proposals.npz"
+                )
         np.save(numpy_artifacts["score_array"], result.score_map)
         np.save(numpy_artifacts["probability_array"], result.probability_map)
         np.save(numpy_artifacts["mask_array"], result.mask)
+        np.save(
+            numpy_artifacts["final_geometry_array"],
+            result.final_geometry_mask,
+        )
         np.savez_compressed(numpy_artifacts["feature_archive"], **result.feature_maps)
         np.savez_compressed(numpy_artifacts["evidence_archive"], **result.evidence_maps)
         if result.reliability_map is not None:
@@ -513,5 +779,29 @@ def save_result(
                     for name, evidence in result.evidence_bundle.fields.items()
                 },
             )
+        if result.boundary_refinement is not None:
+            refinement = result.boundary_refinement
+            np.savez_compressed(
+                numpy_artifacts["sam3_consensus_archive"],
+                coarse_mask=refinement.coarse_mask,
+                inclusion_probability=refinement.inclusion_probability,
+                refined_mask=refinement.refined_mask,
+                stable_core=refinement.stable_core,
+                possible_extent=refinement.possible_extent,
+                boundary_uncertainty=refinement.boundary_uncertainty,
+                final_mask=refinement.final_mask,
+                physics_core=refinement.physics_core,
+                negative_reference=refinement.negative_reference,
+            )
+            if refinement.proposals:
+                np.savez_compressed(
+                    numpy_artifacts["sam3_proposal_archive"],
+                    **{
+                        proposal.proposal_id.replace("-", "_"): (
+                            proposal.mask
+                        )
+                        for proposal in refinement.proposals
+                    },
+                )
         artifacts.update(numpy_artifacts)
     return {name: str(path.resolve()) for name, path in artifacts.items()}

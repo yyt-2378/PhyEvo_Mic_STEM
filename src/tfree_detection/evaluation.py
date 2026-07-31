@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, Mapping, Sequence
+from typing import Any, Dict, Mapping, Sequence
 
 import numpy as np
 from scipy.ndimage import binary_erosion, distance_transform_edt, label
@@ -64,6 +64,9 @@ def boundary_metrics(
             "average_symmetric_surface_distance": (
                 0.0 if perfect_empty else float("inf")
             ),
+            "hausdorff_distance_95": (
+                0.0 if perfect_empty else float("inf")
+            ),
         }
     distance_to_target = distance_transform_edt(~target_boundary)
     distance_to_prediction = distance_transform_edt(~predicted_boundary)
@@ -82,6 +85,147 @@ def boundary_metrics(
         "average_symmetric_surface_distance": float(
             0.5
             * (np.mean(predicted_distances) + np.mean(target_distances))
+        ),
+        "hausdorff_distance_95": float(
+            max(
+                np.percentile(predicted_distances, 95),
+                np.percentile(target_distances, 95),
+            )
+        ),
+    }
+
+
+def boundary_refinement_comparison(
+    coarse_prediction: np.ndarray,
+    final_prediction: np.ndarray,
+    truth: np.ndarray,
+    *,
+    tolerance_pixels: float = 2.0,
+    physics_core: np.ndarray | None = None,
+    negative_reference: np.ndarray | None = None,
+    fallback_used: bool = False,
+) -> Dict[str, float | bool | Dict[str, float]]:
+    """Compare final geometry with its own physics-only starting point."""
+
+    coarse = np.asarray(coarse_prediction, dtype=bool)
+    final = np.asarray(final_prediction, dtype=bool)
+    target = np.asarray(truth, dtype=bool)
+    if coarse.shape != final.shape or final.shape != target.shape:
+        raise ValueError("Coarse, final, and truth masks must have equal shape")
+    coarse_metrics = boundary_metrics(
+        coarse, target, tolerance_pixels=tolerance_pixels
+    )
+    final_metrics = boundary_metrics(
+        final, target, tolerance_pixels=tolerance_pixels
+    )
+    payload: Dict[str, float | bool | Dict[str, float]] = {
+        "coarse": coarse_metrics,
+        "final": final_metrics,
+        "boundary_f1_delta": (
+            final_metrics["boundary_f1"] - coarse_metrics["boundary_f1"]
+        ),
+        "assd_delta": (
+            final_metrics["average_symmetric_surface_distance"]
+            - coarse_metrics["average_symmetric_surface_distance"]
+        ),
+        "hd95_delta": (
+            final_metrics["hausdorff_distance_95"]
+            - coarse_metrics["hausdorff_distance_95"]
+        ),
+        "fallback_used": bool(fallback_used),
+        "fallback_equality_verified": bool(
+            not fallback_used or np.array_equal(final, coarse)
+        ),
+    }
+    if physics_core is not None:
+        core = np.asarray(physics_core, dtype=bool)
+        if core.shape != final.shape:
+            raise ValueError("physics_core must match prediction shape")
+        payload["physics_core_recall"] = float(
+            np.logical_and(final, core).sum() / max(int(core.sum()), 1)
+        )
+    if negative_reference is not None:
+        negative = np.asarray(negative_reference, dtype=bool)
+        if negative.shape != final.shape:
+            raise ValueError(
+                "negative_reference must match prediction shape"
+            )
+        payload["negative_leakage"] = float(
+            np.logical_and(final, negative).sum()
+            / max(int(final.sum()), 1)
+        )
+    return payload
+
+
+def expert_correction_metrics(
+    responses: Sequence[Any],
+) -> Dict[str, Any]:
+    """Summarize geometry-correction rate and time by review condition."""
+
+    if not responses:
+        raise ValueError("Expert correction metrics require review responses")
+    adjustment_actions = {
+        "adjust_point",
+        "adjust_line",
+        "adjust_contour",
+    }
+    grouped: Dict[str, list[tuple[float, bool]]] = {
+        "assisted": [],
+        "blinded": [],
+    }
+    for response in responses:
+        duration = float(response.annotation_duration_seconds)
+        if not np.isfinite(duration) or duration <= 0:
+            raise ValueError("Review durations must be finite and positive")
+        action = getattr(response.action, "value", response.action)
+        condition = (
+            "assisted"
+            if bool(response.model_assistance_shown)
+            else "blinded"
+        )
+        grouped[condition].append(
+            (duration, str(action) in adjustment_actions)
+        )
+
+    def summarize(values: list[tuple[float, bool]]) -> Dict[str, Any]:
+        if not values:
+            return {
+                "response_count": 0,
+                "geometry_correction_count": 0,
+                "geometry_correction_rate": None,
+                "mean_annotation_duration_seconds": None,
+                "median_annotation_duration_seconds": None,
+            }
+        durations = np.asarray([item[0] for item in values], dtype=float)
+        corrections = np.asarray(
+            [item[1] for item in values], dtype=bool
+        )
+        return {
+            "response_count": len(values),
+            "geometry_correction_count": int(corrections.sum()),
+            "geometry_correction_rate": float(corrections.mean()),
+            "mean_annotation_duration_seconds": float(durations.mean()),
+            "median_annotation_duration_seconds": float(
+                np.median(durations)
+            ),
+        }
+
+    assisted = summarize(grouped["assisted"])
+    blinded = summarize(grouped["blinded"])
+    assisted_mean = assisted["mean_annotation_duration_seconds"]
+    blinded_mean = blinded["mean_annotation_duration_seconds"]
+    return {
+        "assisted": assisted,
+        "blinded": blinded,
+        "assisted_minus_blinded_mean_seconds": (
+            float(assisted_mean - blinded_mean)
+            if assisted_mean is not None and blinded_mean is not None
+            else None
+        ),
+        "interpretation": (
+            "A negative assisted-minus-blinded duration indicates lower "
+            "review time with model geometry; causal claims require a "
+            "counterbalanced reviewer design."
         ),
     }
 

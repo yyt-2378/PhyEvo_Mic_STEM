@@ -20,6 +20,8 @@ dependencies = [
 dev = ["pytest>=7"]
 stage2 = ["torch>=1.12", "transformers>=4.24"]
 learning = ["torch>=1.12"]
+fourdstem = ["h5py>=3.8", "tifffile>=2022.8"]
+review = ["streamlit>=1.58,<2", "plotly>=5", "Pillow>=9"]
 
 [project.scripts]
 tfree-detect = "tfree_detection.cli:main"

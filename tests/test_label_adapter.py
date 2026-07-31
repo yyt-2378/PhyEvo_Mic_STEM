@@ -79,6 +79,24 @@ def test_unknown_source_label_uses_open_set_exit() -> None:
     assert adapted.ontology_family == "open_set_resolution"
 
 
+def test_wse2_3d_vacancy_status_remains_author_silver() -> None:
+    adapted = default_label_adapter_registry().adapt(
+        _external(
+            "zhang_2026_wse2_3d_defects_coordinates",
+            "Vacancy",
+        )
+    )
+    assert adapted.ontology_label == (
+        "author_reconstructed_vacancy_candidate"
+    )
+    assert adapted.epistemic_state == EpistemicState.PROBABLE
+    assert adapted.label_tier == LabelTier.SILVER
+    assert adapted.eligible_for_hard_label_training is False
+    assert "coordinate_refinement_failure" in (
+        adapted.alternative_hypotheses
+    )
+
+
 def test_gold_rejects_unqualified_source() -> None:
     adapted = default_label_adapter_registry().adapt(
         _external("stemgym_v1", "oxygen vacancy", qualification="none")
@@ -97,6 +115,7 @@ def test_adapter_manifest_and_cli_round_trip(
         "al-sigma3-v1",
         "dennler-2021-v1",
         "stemgym-v1",
+        "wse2-3d-coordinates-v1",
     }
     source = tmp_path / "labels.json"
     output = tmp_path / "adapted.jsonl"

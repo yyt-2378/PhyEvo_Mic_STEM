@@ -1,0 +1,43 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: irradiated-al-4dstem-development-v1
+dataset_id: mills_2022_irradiated_al_4dstem
+source_uri: https://zenodo.org/records/7041997
+source_revision: 10.5281/zenodo.7041997:v2:2022-09-01
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-29T02:00:15.981741+00:00'
+groups:
+- group_id: irradiated-al-raw-and-calibration
+  partition: development_test
+  acquisition_id: mills-2022-irradiated-al
+  sample_id: mills-2022-irradiated-al-sample
+  lab_id: mills_2022_archive
+  microscope_id: FEI_TitanX_Gatan_Orius_830
+  material: irradiated_Al
+  tasks:
+  - irradiation_damage
+  - point_defect_concentration
+  - reciprocal_space_anomaly
+  - reciprocal_space_calibration
+  - strain_field
+  grouping_evidence: repository_metadata
+  annotation_qualification: author_curated
+  reviewer_count: 0
+  control_role: positive
+  eligible_for_active_learning: false
+  files:
+  - file_id: mills_2022_irradiated_al_4dstem:Al_irradiated.dm4
+    relative_path: datasets/public/mills_2022_irradiated_al_4dstem/Al_irradiated.dm4
+    role: image
+    sha256: 0ad366a20d05cd3e8ba13f5168433234c8909cdf23bffdb072cbe05d5fb77753
+    bytes: 839479107
+    pair_id: null
+  - file_id: mills_2022_irradiated_al_4dstem:Al_irradiated_calibration.h5
+    relative_path: datasets/public/mills_2022_irradiated_al_4dstem/Al_irradiated_calibration.h5
+    role: metadata
+    sha256: 7b3da7768c23ccfac7936342a367df2cdaff2d7c6e9c9fb38d810b9a777e956d
+    bytes: 14351000
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: c96a5e113a2532266005072b9be55e8114994606efa26e0c3087d8641140124a

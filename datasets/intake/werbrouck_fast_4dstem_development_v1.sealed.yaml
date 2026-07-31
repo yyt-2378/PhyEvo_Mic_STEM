@@ -1,0 +1,35 @@
+plan_format: phyevo-mic-data-intake-v1
+plan_id: werbrouck-fast-4dstem-development-v1
+dataset_id: werbrouck_2026_fast_4dstem_phase
+source_uri: https://zenodo.org/records/20366781
+source_revision: 10.5281/zenodo.20366781:2026-06-04
+license_spdx: CC-BY-4.0
+admission_state: development_candidate
+created_at_utc: '2026-07-28T15:38:47.958231+00:00'
+groups:
+- group_id: werbrouck-tio2-sio2
+  partition: development_test
+  acquisition_id: werbrouck-tio2-sio2
+  sample_id: werbrouck-tio2-on-sio2
+  lab_id: werbrouck_2026_archive
+  microscope_id: published_4dstem_instrument
+  material: TiO2_on_SiO2
+  tasks:
+  - amorphous_region
+  - phase_boundary
+  - virtual_detector
+  grouping_evidence: repository_metadata
+  annotation_qualification: none
+  reviewer_count: 0
+  control_role: mixed
+  eligible_for_active_learning: false
+  files:
+  - file_id: werbrouck-tio2-sio2-raw-4dstem
+    relative_path: datasets/public/werbrouck_2026_fast_4dstem_phase/TiO2_dataset.h5
+    role: image
+    sha256: 4db71cc06931df8df3000fa63f34bd4c51b01379f3e5bfcf729a022999b78b74
+    bytes: 142469777
+    pair_id: null
+seal:
+  algorithm: sha256
+  content_sha256: 78b4726ad226acccd3e0458c0224159a6a6ef9db2c5f12bac79814ba6b78b659

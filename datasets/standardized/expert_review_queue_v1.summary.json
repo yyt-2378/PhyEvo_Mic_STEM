@@ -1,0 +1,42 @@
+{
+  "queue_format": "phyevo-mic-expert-annotation-queue-v1",
+  "source_manifest": "datasets/standardized/review_2d_manifest_v1.jsonl",
+  "source_manifest_sha256": "dcd989265abd88c4cb8f18af2a3391212ee3d57b4fc205bb73a9e261199e860e",
+  "source_sample_count": 554,
+  "expert_annotation_count": 354,
+  "reference_evaluation_count": 200,
+  "existing_pixel_label_in_queue_count": 0,
+  "dataset_counts": {
+    "al_sigma3_twin_boundaries": 250,
+    "guo_2021_atomic_defects": 3,
+    "guo_2021_superscan": 100,
+    "local_zeolite_reference": 1
+  },
+  "split_counts": {
+    "train": 251,
+    "validation": 103
+  },
+  "geometry_counts": {
+    "interface": 251,
+    "line": 1,
+    "point": 101,
+    "region": 1
+  },
+  "reference_dataset_counts": {
+    "dennler_2021_hrstem_defects": 61,
+    "emseek_remaining_v1": 32,
+    "emseek_wse2_atomic_defects": 107
+  },
+  "policy": {
+    "include_label_kinds": [
+      "none",
+      "source_prior_only"
+    ],
+    "exclude_label_kinds": [
+      "pixel_mask",
+      "implicit_empty_mask"
+    ],
+    "labeled_samples_are_evaluation_only": true,
+    "locked_external_test_is_reviewed": false
+  }
+}

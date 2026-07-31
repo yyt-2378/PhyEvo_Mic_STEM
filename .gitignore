@@ -7,6 +7,7 @@ __pycache__/
 .idea/
 .vscode/
 .venv/
+.venvs/
 dist/
 build/
 *.egg-info/
@@ -48,3 +49,9 @@ benchmarks/prospective_pilots/
 **/private_selection_key.json
 datasets/intake/*_source_manifest.json
 datasets/intake/emseek_remaining_train_v1.sealed.yaml
+
+# Expert annotations are protected runtime data; commit exported manifests only
+# after an explicit data release decision, never the live SQLite/WAL files.
+datasets/expert_annotations/*.sqlite3
+datasets/expert_annotations/*.sqlite3-*
+datasets/expert_annotations/exports/

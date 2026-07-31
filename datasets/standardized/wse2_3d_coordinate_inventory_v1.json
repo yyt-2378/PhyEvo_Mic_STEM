@@ -1,0 +1,182 @@
+{
+  "inventory_format": "tfree-wse2-3d-coordinate-inventory-v1",
+  "dataset_id": "zhang_2026_wse2_3d_defects_coordinates",
+  "source_doi": "10.5281/zenodo.18260255",
+  "license": "CC-BY-4.0",
+  "archive_relative_path": "datasets/public/zhang_2026_wse2_3d_defects_coordinates/coordinates.zip",
+  "archive_bytes": 168745,
+  "archive_sha256": "56050f99299286394c3e8736148a57ffbd8446210fd2fae62912654449e27c2a",
+  "member_count": 5,
+  "experimental_member_count": 2,
+  "simulation_member_count": 3,
+  "coordinate_rows_total": 12466,
+  "members": [
+    {
+      "member_path": "1657_refined_coordinates.txt",
+      "member_bytes": 57082,
+      "member_crc32": "134cab12",
+      "acquisition_id": "1657",
+      "provenance": "experimental_ptychographic_reconstruction",
+      "coordinate_unit": "angstrom",
+      "coordinate_count": 1838,
+      "species_counts": {
+        "Se11": 307,
+        "Se12": 304,
+        "Se21": 307,
+        "Se22": 304,
+        "W1": 309,
+        "W2": 307
+      },
+      "status_counts": {
+        "Good": 1496,
+        "Poor": 322,
+        "Vacancy": 20
+      },
+      "bounds_xyz_angstrom": {
+        "minimum": [
+          0.737,
+          0.686,
+          10.098
+        ],
+        "maximum": [
+          55.063,
+          54.604,
+          32.653
+        ]
+      },
+      "semantics": "author-reconstructed atomic coordinates with an optional Good/Poor/Vacancy status; author status is development evidence, not two-expert Gold"
+    },
+    {
+      "member_path": "1815_refined_coordinates.txt",
+      "member_bytes": 59884,
+      "member_crc32": "472ab411",
+      "acquisition_id": "1815",
+      "provenance": "experimental_ptychographic_reconstruction",
+      "coordinate_unit": "angstrom",
+      "coordinate_count": 1930,
+      "species_counts": {
+        "Se11": 323,
+        "Se12": 322,
+        "Se21": 320,
+        "Se22": 316,
+        "W1": 323,
+        "W2": 326
+      },
+      "status_counts": {
+        "Good": 1833,
+        "Poor": 65,
+        "Vacancy": 32
+      },
+      "bounds_xyz_angstrom": {
+        "minimum": [
+          0.114,
+          0.08,
+          10.462
+        ],
+        "maximum": [
+          55.03,
+          54.632,
+          33.586
+        ]
+      },
+      "semantics": "author-reconstructed atomic coordinates with an optional Good/Poor/Vacancy status; author status is development evidence, not two-expert Gold"
+    },
+    {
+      "member_path": "simulation/MD_simulation_coordinates.txt",
+      "member_bytes": 33235,
+      "member_crc32": "679bfabb",
+      "acquisition_id": "simulation",
+      "provenance": "simulation_or_simulation_refinement",
+      "coordinate_unit": "angstrom",
+      "coordinate_count": 546,
+      "species_counts": {
+        "Se11": 91,
+        "Se12": 91,
+        "Se21": 91,
+        "Se22": 91,
+        "W1": 91,
+        "W2": 91
+      },
+      "status_counts": {
+        "not_provided": 546
+      },
+      "bounds_xyz_angstrom": {
+        "minimum": [
+          -0.01198856863689385,
+          -0.0053158023729378435,
+          9.457695846552243
+        ],
+        "maximum": [
+          45.42315877427763,
+          27.19889568050991,
+          19.641358534767537
+        ]
+      },
+      "semantics": "author-reconstructed atomic coordinates with an optional Good/Poor/Vacancy status; author status is development evidence, not two-expert Gold"
+    },
+    {
+      "member_path": "simulation/coordinates_for_4D-STEM_simulation.txt",
+      "member_bytes": 211833,
+      "member_crc32": "a31407eb",
+      "acquisition_id": "simulation",
+      "provenance": "simulation_or_simulation_refinement",
+      "coordinate_unit": "angstrom",
+      "coordinate_count": 6419,
+      "species_counts": {
+        "Se": 4276,
+        "W": 2143
+      },
+      "status_counts": {
+        "not_provided": 6419
+      },
+      "bounds_xyz_angstrom": {
+        "minimum": [
+          0.0,
+          0.0,
+          0.06
+        ],
+        "maximum": [
+          99.46669,
+          99.477607,
+          34.262856
+        ]
+      },
+      "semantics": "author-reconstructed atomic coordinates with an optional Good/Poor/Vacancy status; author status is development evidence, not two-expert Gold"
+    },
+    {
+      "member_path": "simulation/refined_coordinates.txt",
+      "member_bytes": 53654,
+      "member_crc32": "62671ab8",
+      "acquisition_id": "simulation",
+      "provenance": "simulation_or_simulation_refinement",
+      "coordinate_unit": "angstrom",
+      "coordinate_count": 1733,
+      "species_counts": {
+        "Se11": 287,
+        "Se12": 287,
+        "Se21": 295,
+        "Se22": 295,
+        "W1": 285,
+        "W2": 284
+      },
+      "status_counts": {
+        "Good": 1507,
+        "Poor": 226
+      },
+      "bounds_xyz_angstrom": {
+        "minimum": [
+          0.42,
+          0.629,
+          7.358
+        ],
+        "maximum": [
+          54.19,
+          54.136,
+          28.827
+        ]
+      },
+      "semantics": "author-reconstructed atomic coordinates with an optional Good/Poor/Vacancy status; author status is development evidence, not two-expert Gold"
+    }
+  ],
+  "admission_note": "The archive is inventoried in place. Experimental and simulation coordinates remain distinct; no source row is overwritten."
+}

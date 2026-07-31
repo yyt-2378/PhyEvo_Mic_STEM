@@ -2,7 +2,9 @@ import numpy as np
 import pytest
 
 from tfree_detection.evaluation import (
+    boundary_refinement_comparison,
     boundary_metrics,
+    expert_correction_metrics,
     grouped_bootstrap_interval,
     label_efficiency_auc,
     macro_f1,
@@ -10,6 +12,7 @@ from tfree_detection.evaluation import (
     site_metrics,
     topology_metrics,
 )
+from tfree_detection.review import ReviewAction, ReviewResponse
 
 
 def test_region_and_boundary_metrics_are_exact_for_identical_masks() -> None:
@@ -19,6 +22,7 @@ def test_region_and_boundary_metrics_are_exact_for_identical_masks() -> None:
     boundary = boundary_metrics(mask, mask, tolerance_pixels=1)
     assert boundary["boundary_f1"] == 1.0
     assert boundary["average_symmetric_surface_distance"] == 0.0
+    assert boundary["hausdorff_distance_95"] == 0.0
     assert topology_metrics(mask, mask)["absolute_component_count_error"] == 0
 
 
@@ -30,6 +34,7 @@ def test_boundary_metric_detects_shift_and_site_matching_is_one_to_one() -> None
     boundary = boundary_metrics(shifted, truth, tolerance_pixels=1)
     assert boundary["boundary_f1"] < 1
     assert boundary["average_symmetric_surface_distance"] > 0
+    assert boundary["hausdorff_distance_95"] > 0
 
     sites = site_metrics(
         np.asarray([[10.2, 10.1], [20.0, 20.0], [50.0, 50.0]]),
@@ -39,6 +44,65 @@ def test_boundary_metric_detects_shift_and_site_matching_is_one_to_one() -> None
     assert sites["matched_sites"] == 2
     assert sites["site_precision"] == pytest.approx(2 / 3)
     assert sites["site_recall"] == 1.0
+
+
+def test_boundary_refinement_comparison_quantifies_gain_and_safe_fallback():
+    truth = np.zeros((64, 64), dtype=bool)
+    truth[16:48, 18:46] = True
+    coarse = np.zeros_like(truth)
+    coarse[16:48, 22:50] = True
+    core = np.zeros_like(truth)
+    core[24:40, 26:38] = True
+
+    improved = boundary_refinement_comparison(
+        coarse,
+        truth,
+        truth,
+        tolerance_pixels=1,
+        physics_core=core,
+    )
+    assert improved["boundary_f1_delta"] > 0
+    assert improved["assd_delta"] < 0
+    assert improved["hd95_delta"] < 0
+    assert improved["physics_core_recall"] == 1.0
+
+    fallback = boundary_refinement_comparison(
+        coarse,
+        coarse,
+        truth,
+        tolerance_pixels=1,
+        fallback_used=True,
+    )
+    assert fallback["fallback_equality_verified"] is True
+    assert fallback["boundary_f1_delta"] == 0
+
+
+def test_expert_correction_metrics_preserve_assistance_condition():
+    responses = [
+        ReviewResponse(
+            response_id="assisted-adjust",
+            candidate_id="candidate-a",
+            reviewer_id="expert-a",
+            action=ReviewAction.ADJUST_CONTOUR,
+            defect_labels=("amorphous",),
+            annotation_duration_seconds=8.0,
+            model_assistance_shown=True,
+            geometry_payload={"points_xy": [[0, 0], [1, 0], [1, 1]]},
+        ),
+        ReviewResponse(
+            response_id="blind-accept",
+            candidate_id="candidate-b",
+            reviewer_id="expert-b",
+            action=ReviewAction.ACCEPT,
+            defect_labels=("amorphous",),
+            annotation_duration_seconds=12.0,
+            model_assistance_shown=False,
+        ),
+    ]
+    metrics = expert_correction_metrics(responses)
+    assert metrics["assisted"]["geometry_correction_rate"] == 1.0
+    assert metrics["blinded"]["geometry_correction_rate"] == 0.0
+    assert metrics["assisted_minus_blinded_mean_seconds"] == -4.0
 
 
 def test_classification_efficiency_and_grouped_interval_contracts() -> None:

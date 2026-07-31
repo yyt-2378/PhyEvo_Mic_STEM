@@ -47,6 +47,43 @@ SOURCE_BINDINGS = {
             "datasets/intake/al_sigma3_development_v1.sealed.yaml"
         ],
     },
+    "fast_4dstem_phase_mapping": {
+        "dataset_ids": ["werbrouck_2026_fast_4dstem_phase"],
+        "plans": [
+            "datasets/intake/"
+            "werbrouck_fast_4dstem_development_v3.sealed.yaml"
+        ],
+    },
+    "wse2_3d_defects_moire_ptychography": {
+        "dataset_ids": ["zhang_2026_wse2_3d_defects_coordinates"],
+        "plans": [
+            "datasets/intake/"
+            "wse2_3d_raw_1657_development_v2.sealed.yaml"
+        ],
+    },
+    "high_resolution_4dstem_srtio3": {
+        "dataset_ids": [
+            "strauch_2021_srtio3_high_resolution_4dstem"
+        ],
+        "plans": [
+            "datasets/intake/"
+            "srtio3_high_resolution_4dstem_development_v1.sealed.yaml"
+        ],
+    },
+    "fourdstem_point_defect_concentration": {
+        "dataset_ids": ["mills_2022_irradiated_al_4dstem"],
+        "plans": [
+            "datasets/intake/"
+            "irradiated_al_4dstem_development_v1.sealed.yaml"
+        ],
+    },
+    "polymer_lamellar_cluster_insitu_4dstem": {
+        "dataset_ids": ["wang_2026_polymer_lamella_4dstem_rt"],
+        "plans": [
+            "datasets/intake/"
+            "polymer_lamella_4dstem_rt_development_v1.sealed.yaml"
+        ],
+    },
 }
 
 
@@ -116,6 +153,20 @@ def main() -> None:
             effective_state = "consumed_locked_external_test"
         elif source_id == "emseek_huggingface":
             effective_state = "partially_admitted_remote_scope_frozen"
+        elif (
+            source_id == "fast_4dstem_phase_mapping"
+            and plans
+            and all(plan["all_files_local"] for plan in plans)
+            and local_assets
+        ):
+            effective_state = "admitted_complete_published_record"
+        elif (
+            source_id == "wse2_3d_defects_moire_ptychography"
+            and plans
+            and all(plan["all_files_local"] for plan in plans)
+            and local_assets
+        ):
+            effective_state = "admitted_raw_1657_with_coordinate_archive"
         elif local_assets and all(
             plan["all_files_local"] for plan in plans
         ):

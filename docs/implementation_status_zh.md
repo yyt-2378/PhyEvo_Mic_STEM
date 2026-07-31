@@ -1,8 +1,65 @@
 # PhyEvo-Mic v0.4 实施状态与下一步实验入口
 
-> 审计日期：2026-07-28  
+> 审计日期：2026-07-30
 > 设计标准：
 > [`self_improving_platform_roadmap_zh.md`](self_improving_platform_roadmap_zh.md)
+
+## 2026-07-30：SAM2.1-large 真实 GPU 实例验证完成
+
+平台已复用本机既有 `sam` 环境和 SAM2.1-large checkpoint，在实验分子筛局部非晶图与
+公开 ZrO₂ 孪晶/两相界面图上完成真实 CUDA 推理，没有重新安装 PyTorch，也没有训练或
+微调模型。新增 `run_sam2_boundary_worker.py`，复用候选级文件协议、Policy A 物理门和
+逐候选回退。
+
+分子筛 3 个候选产生 24 个 proposal，1 个通过、2 个因拓扑改变局部回退；ZrO₂ 使用
+16 个成对晶域 prompts 形成 8 个界面 proposal，因物理核心召回仅 `0.593` 且拓扑改变
+而回退。两次 worker 推理分别为 `9.92 s` 和 `8.53 s`，GPU 峰值均约 `1.31 GiB`。
+这证明了真实模型路径和安全回退，不是准确率声明，因为两张图目前都没有独立 Gold 边界。
+实例六列图、环境、DINO frozen 流程和复现命令见
+[`sam2_live_and_dino_frozen_validation_zh.md`](sam2_live_and_dino_frozen_validation_zh.md)。
+当前完整自动回归为 120 项通过。
+
+## 2026-07-29：SAM 3 候选级物理约束边界层完成
+
+平台已把 SAM 3 接成“可拒绝的几何提案器”，而不是新的物理 detector。当前实现包括：
+
+- `stage2/sam3_refine.py`：候选级 point/box/coarse-mask ensemble、共识图和接受门；
+- Policy A 硬约束：某候选核心召回 `<0.95` 时 proposal 保留供诊断，只回退该候选；
+- v2 SHA-256 文件协议：worker 保存 candidate/role/ensemble 独立 proposal，不再整图 OR；
+- 两相/孪晶界使用 domain A/domain B → shared boundary，不把界面当填充区域；
+- stable core、possible extent、boundary uncertainty、最终几何和六面板报告；
+- `final_geometry_mask` 已接入候选表、主 overlay、expert review 和 Boundary
+  F1/HD95/ASSD 比较入口；
+- live worker 记录 runtime/peak RSS/peak device memory，assisted/blinded review 可统计
+  几何修正率和专家时间；
+- 仅对 `amorphous_region`、`phase_boundary` 开放，默认关闭；
+- 11 项 SAM 定向测试、5 项边界评估测试和两类 prepare-only 端到端运行。
+
+参考非晶图产生 3 个 coarse 候选和 24 组物理 prompts；公开 ZrO₂ 图产生 1 个 coarse
+界面候选和 16 组 paired-domain prompts。数字孪生门控验证为 1 个候选通过、1 个候选
+局部回退，Boundary F1 从 0.584 提升到 1.000。因本机没有隔离 SAM 3 环境与授权
+checkpoint，真实图状态如实保持 `proposal_pending`，该数字孪生结果没有被声称为真实
+SAM 精度。实现、输出解释和未完成的 Gold 边界校准见
+[`sam3_boundary_refinement_zh.md`](sam3_boundary_refinement_zh.md)。
+当前完整自动回归为 116 项通过。
+
+## 2026-07-29：公开实验 4D-STEM 第二波完成准入
+
+当前生产 registry 已升级为 v6：313 个资产全部通过 SHA-256，分区为
+`train=280`、`development_test=32`、`locked_external_test=1`、`calibration=0`。
+逐资产接口已升级为
+[`sample_manifest_v7.jsonl`](../datasets/standardized/sample_manifest_v7.jsonl)：
+155 个读取 adapter ready、141 个可直接进入 detector，3 个需显式选择、2 个需派生
+4D 物理图、7 个仍需来源专用 adapter。
+NMC/LGPS、WSe₂ raw 1657 + 作者坐标、SrTiO₃ 原子分辨正常对照、辐照 Al + calibration
+和聚合物室温 4D-STEM 已完成下载、固定校验和、acquisition-safe sealed intake 和容器
+清单。TiO₂/NMC 两个 acquisition 已共同完成无训练界面 smoke test。
+加入 SAM 3 边界层之前的完整自动回归为 103 项通过。
+
+新增数据扩展了原子缺陷、界面、正常/OOD、辐照和取向物理覆盖，但没有改变
+`calibration=0` 的投稿阻塞；原始 MIB/DM4/WSe₂ reconstruction 仍需各自流式 adapter，
+不能把“已下载”写成“二维 detector 已验证”。详见
+[`public_stem_dataset_expansion_2026_07_29_zh.md`](public_stem_dataset_expansion_2026_07_29_zh.md)。
 
 ## 2026-07-28：Class1 群关系任务完成
 
@@ -39,9 +96,9 @@ Dennler 标签此前已经揭盲，以上只能称为 post-hoc diagnostic，不�
 
 本节覆盖本文后续较早的状态描述。当前已新增：
 
-- `partition_registry_v4.yaml`：291 个校验资产，SuperScan 和 Al Σ3 已从 staging
-  升为正式 development assets，EMSeek 16 场景均衡子集也已纳管；
-- `sample_manifest_v3.jsonl`：逐资产格式、shape/dtype、EMD channel、stack selection
+- `partition_registry_v5.yaml`：298 个校验资产；SuperScan、Al Σ3、EMSeek
+  16 场景均衡子集和首个实验 4D-STEM acquisition 均已纳管；
+- `sample_manifest_v4.jsonl`：逐资产格式、shape/dtype、EMD/HDF5 channel/axes、stack selection
   与直接可运行任务；
 - 正式 `detect-atomic-consensus` 入口：lattice residual 与 periodic counterfactual
   共识候选为 Silver，单教师分歧保留为 unresolved；
@@ -66,7 +123,7 @@ physics-teacher → evidence-student → active-review → calibration/release �
 
 ```text
 软件协议与安全门禁：已完成
-自动测试：97 项通过（本文后续的 79 项是新增模块前的历史快照）
+自动测试：116 项通过（本文后续的 79 项是新增模块前的历史快照）
 四任务冻结性能保留：100%
 证据学生合成消融：通过（IoU +0.061）
 WSe₂ 双物理教师开发域：site F1 0.7633（不是独立外测）
@@ -250,6 +307,13 @@ test 之前，不能用同组作者标签完成“训练—调参—证明提升
 - 同一 reviewer 对同一 candidate 的重复投票自动拒绝；
 - disagreement 自动保留为 Unresolved；
 - cycle 状态机禁止跳过标注、校准、评估直接发布。
+
+当前公开二维 STEM 队列另已实现正式在线入口：200 个已有像素标签样本被硬排除；354 个
+无标签平面合并为 154 个病例；全部病例主视图和354个平面都有预计算预测。Streamlit 支持
+六类结论和 point/line/interface/region 几何，SQLite 以“一个当前结果＋完整不可变历史”
+持久化，支持断点续审、当前/历史 JSONL 下载和 expert-verified Silver 训练导出。真实账本
+仍为0条，平台完成不等于专家工作完成。详见
+[`expert_review_platform_2d_zh.md`](expert_review_platform_2d_zh.md)。
 
 基于 WSe₂ 双教师结果，平台已经 label-blind 地抽取并封存 100 个候选，覆盖 69 张图：
 25 个共识点、25 个 periodic-only、25 个 legacy-only 和 25 个随机 sham prompts。

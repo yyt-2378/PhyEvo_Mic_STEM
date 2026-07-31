@@ -2,6 +2,23 @@
 
 审计日期：2026-07-27
 
+> 2026-07-29 更新：当前权威入口为
+> [`partition_registry_v6.yaml`](../datasets/partition_registry_v6.yaml)（313 个资产）、
+> [`sample_manifest_v7.jsonl`](../datasets/standardized/sample_manifest_v7.jsonl) 和
+> [`public_dataset_operational_status_v6.json`](../datasets/intake/public_dataset_operational_status_v6.json)。
+> v7 为每个资产增加了非破坏式 `tfree-data-interface-v1`；当前数据总表、接口状态和
+> adapter 队列见
+> [当前数据资产总结与统一接口](data_collection_and_interface_standardization_zh.md)。
+> NMC/LGPS、WSe₂ raw 1657、SrTiO₃、辐照 Al 和聚合物 4D-STEM 的实际下载、容器清单、
+> 标准化和测试见
+> [第二波公开实验 STEM 报告](public_stem_dataset_expansion_2026_07_29_zh.md)。
+
+> 2026-07-28 更新：最新权威入口已经升级为
+> [`partition_registry_v5.yaml`](../datasets/partition_registry_v5.yaml)（298 个资产）和
+> [`sample_manifest_v4.jsonl`](../datasets/standardized/sample_manifest_v4.jsonl)。
+> 新增实验 4D-STEM、WSe₂ 三维坐标、21 来源检索和实际测试结果见
+> [公开实验 STEM 数据扩展报告](public_stem_dataset_expansion_2026_07_28_zh.md)。
+
 > 最新覆盖说明（同日 v0.4 收口）：本文后半部分保留了 registry v2 时点的历史审计，
 > 其中“SuperScan/Σ3 尚未 admit”“EMD channel 未解析”“没有逐样本 manifest”已经过时。
 > 当前权威入口是

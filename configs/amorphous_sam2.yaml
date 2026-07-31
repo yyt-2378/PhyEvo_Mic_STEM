@@ -1,0 +1,45 @@
+task: amorphous_region
+
+stage2:
+  enabled: false
+  sam3:
+    enabled: true
+    backend: sam2
+    supported_tasks:
+      - amorphous_region
+      - phase_boundary
+    inference_mode: isolated_process
+    exchange_directory: null
+    # Replace only these two paths when the existing SAM environment or
+    # checkpoint lives elsewhere. The worker requires CUDA in this profile.
+    worker_python: /home/aiprogram/anaconda3/envs/sam/bin/python
+    worker_script: scripts/run_sam2_boundary_worker.py
+    checkpoint_path: /home/aiprogram/project/yaotian/sam2/checkpoints/sam2.1_hiera_large.pt
+    model_variant: sam2.1_hiera_large
+    device: cuda
+    timeout_seconds: 600
+    ensemble_size: 8
+    positive_points_per_candidate: 3
+    negative_points_per_candidate: 8
+    box_padding_pixels: 24
+    box_padding_lattice_cells: 2.0
+    use_coarse_mask_prompt: true
+    core_score_quantile: 0.75
+    stable_core_threshold: 0.80
+    selection_threshold: 0.50
+    possible_extent_threshold: 0.20
+    minimum_seed_core_recall: 0.95
+    maximum_negative_leakage: 0.05
+    minimum_area_ratio: 0.50
+    maximum_area_ratio: 2.00
+    minimum_physics_contrast: 0.0
+    minimum_prompt_stability: 0.50
+    minimum_boundary_evidence_alignment: 0.05
+    allow_component_merging: false
+    preserve_candidate_topology: true
+    interface_geometry_mode: paired_domains
+    interface_max_gap_pixels: 8
+    interface_half_width_pixels: 5
+    boundary_tolerance_pixels: 2.0
+    fallback_to_coarse: true
+    random_seed: 31

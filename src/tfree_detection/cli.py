@@ -7,6 +7,9 @@ import json
 from pathlib import Path
 from typing import Sequence
 
+import numpy as np
+from skimage.io import imread
+
 from .config import load_config
 from .atomic_consensus import detect_atomic_consensus
 from .dataset_label_adapter import (
@@ -15,6 +18,7 @@ from .dataset_label_adapter import (
     default_label_adapter_registry,
 )
 from .evidence import ontology_manifest
+from .evaluation import boundary_refinement_comparison
 from .framework import TrainingFreeDetectionFramework
 from .governance import DataPartition, DataRegistry
 from .preprocessing import list_emd_datasets
@@ -138,7 +142,40 @@ def build_parser() -> argparse.ArgumentParser:
     temporal.add_argument("--dataset-path", default=None)
     temporal.add_argument("--max-frames", type=int, default=9)
     temporal.add_argument("--atomic-consensus", action="store_true")
+    boundary = subparsers.add_parser(
+        "evaluate-boundary-refinement",
+        help="compare coarse and final geometry against one Gold boundary mask",
+    )
+    boundary.add_argument("--coarse", required=True)
+    boundary.add_argument("--final", required=True)
+    boundary.add_argument("--truth", required=True)
+    boundary.add_argument("--physics-core", default=None)
+    boundary.add_argument("--negative-reference", default=None)
+    boundary.add_argument("--tolerance-pixels", type=float, default=2.0)
+    boundary.add_argument("--fallback-used", action="store_true")
+    boundary.add_argument(
+        "--output",
+        default=None,
+        help="optional new JSON file; existing files are never overwritten",
+    )
     return parser
+
+
+def _load_binary_mask(path: str | Path) -> np.ndarray:
+    source = Path(path)
+    values = (
+        np.load(source, allow_pickle=False)
+        if source.suffix.lower() == ".npy"
+        else imread(source)
+    )
+    array = np.asarray(values)
+    if array.ndim == 3:
+        array = np.max(array, axis=-1)
+    if array.ndim != 2:
+        raise ValueError(f"Boundary mask must be 2-D: {source}")
+    if not np.all(np.isfinite(array)):
+        raise ValueError(f"Boundary mask contains non-finite values: {source}")
+    return np.asarray(array > 0, dtype=bool)
 
 
 def main(argv: Sequence[str] | None = None) -> None:
@@ -154,6 +191,11 @@ def main(argv: Sequence[str] | None = None) -> None:
             projection=args.projection,
             dataset_path=args.dataset_path,
             line_topology=args.line_topology,
+            sam3_exchange_directory=(
+                Path(args.output) / "sam3_exchange"
+                if config.stage2.sam3.exchange_directory is None
+                else None
+            ),
         )
         artifacts = save_result(result, config, args.output)
         payload = result.summary()
@@ -267,6 +309,35 @@ def main(argv: Sequence[str] | None = None) -> None:
                 indent=2,
             )
         )
+    elif args.command == "evaluate-boundary-refinement":
+        report = boundary_refinement_comparison(
+            _load_binary_mask(args.coarse),
+            _load_binary_mask(args.final),
+            _load_binary_mask(args.truth),
+            tolerance_pixels=args.tolerance_pixels,
+            physics_core=(
+                _load_binary_mask(args.physics_core)
+                if args.physics_core
+                else None
+            ),
+            negative_reference=(
+                _load_binary_mask(args.negative_reference)
+                if args.negative_reference
+                else None
+            ),
+            fallback_used=args.fallback_used,
+        )
+        if args.output is not None:
+            target = Path(args.output)
+            if target.exists():
+                raise FileExistsError(
+                    f"Refusing to overwrite boundary report: {target}"
+                )
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open("x", encoding="utf-8") as stream:
+                json.dump(report, stream, ensure_ascii=False, indent=2)
+                stream.write("\n")
+        print(json.dumps(report, ensure_ascii=False, indent=2))
     elif args.command == "assess-temporal-support":
         config = load_config(args.config)
         if args.atomic_consensus:

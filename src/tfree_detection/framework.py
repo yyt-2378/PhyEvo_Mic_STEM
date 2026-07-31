@@ -16,6 +16,7 @@ from .models import DetectionResult
 from .line_topology import attach_line_topology
 from .preprocessing import load_grayscale, robust_normalize
 from .resolver import ResolverPolicy, attach_hypothesis_resolutions
+from .stage2.sam3_refine import refine_detection_result_with_sam3
 from .tasks import (
     AmorphousRegionTask,
     AtomicPointDefectTask,
@@ -60,6 +61,7 @@ class TrainingFreeDetectionFramework:
         projection: str | None = None,
         dataset_path: str | None = None,
         line_topology: bool = False,
+        sam3_exchange_directory: str | Path | None = None,
     ) -> DetectionResult:
         if isinstance(source, (str, Path)):
             raw_image = load_grayscale(
@@ -140,6 +142,12 @@ class TrainingFreeDetectionFramework:
             ) from error
         task = task_class()
         result = task.run(normalized, self.config, metadata, context)
+        if self.config.stage2.sam3.enabled:
+            result = refine_detection_result_with_sam3(
+                result,
+                self.config.stage2.sam3,
+                sam3_exchange_directory,
+            )
         if line_topology:
             result = attach_line_topology(result)
         protocol = self.config.evidence_protocol

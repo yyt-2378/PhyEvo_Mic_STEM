@@ -1,0 +1,743 @@
+{
+  "status_format": "tfree-public-dataset-operational-status-v1",
+  "catalog_version": "1.2.0",
+  "registry_version": "6.0.0",
+  "registry_sha256": "48befa710cc2a2fadd5c845ff7ceee6b422ba5274152809854bf5a1f41010b0c",
+  "source_count": 23,
+  "effective_state_counts": {
+    "admitted": 5,
+    "admitted_complete_published_record": 1,
+    "admitted_raw_1657_with_coordinate_archive": 1,
+    "candidate": 3,
+    "candidate_large": 7,
+    "consumed_locked_external_test": 1,
+    "partially_admitted_remote_scope_frozen": 1,
+    "quarantine_license": 4
+  },
+  "sources": [
+    {
+      "source_id": "emseek_huggingface",
+      "title": "EMSeek",
+      "catalog_status_v1": "partially_ingested",
+      "effective_state": "partially_admitted_remote_scope_frozen",
+      "license": {
+        "spdx": "Apache-2.0",
+        "verified": true,
+        "applies_to_data": "stated_on_dataset_card"
+      },
+      "registry_dataset_asset_counts": {
+        "emseek_wse2_atomic_defects": 215,
+        "emseek_remaining_v1": 65
+      },
+      "registered_asset_count": 280,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/emseek_wse2_train_v1.sealed.yaml",
+          "plan_id": "emseek-wse2-train-v1",
+          "dataset_id": "emseek_wse2_atomic_defects",
+          "admission_state": "training_only",
+          "group_count": 1,
+          "file_count": 215,
+          "local_file_count": 215,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "6bb2a95e35bce5ae500a19a735996bb14b1a77d819018efc593d837351cdb1dd"
+        },
+        {
+          "path": "datasets/intake/emseek_balanced_subset_train_v1.sealed.yaml",
+          "plan_id": "emseek-balanced-subset-train-v1",
+          "dataset_id": "emseek_remaining_v1",
+          "admission_state": "training_only",
+          "group_count": 17,
+          "file_count": 65,
+          "local_file_count": 65,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "33860c0e683c68a76284815c429f787fa17b2e3fa9d2400f22c41431574752ca"
+        },
+        {
+          "path": "datasets/intake/emseek_remaining_train_v1.sealed.yaml",
+          "plan_id": "emseek-remaining-train-v1",
+          "dataset_id": "emseek_remaining_v1",
+          "admission_state": "training_only",
+          "group_count": 17,
+          "file_count": 28335,
+          "local_file_count": 65,
+          "all_files_local": false,
+          "all_local_files_verified": false,
+          "content_sha256": "84e824ce473c48f07daca2f9649eaeb61d371d3a33a1cda8bc61327b48e96701"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": false,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "author_curated_labels_are_not_expert_consensus_gold",
+        "acquisition_and_sample_grouping_need_source_audit",
+        "single_atom_catalyst_directory_is_a_placeholder_and_must_be_excluded"
+      ]
+    },
+    {
+      "source_id": "guo_2021_translational_invariance",
+      "title": "Data for Defect detection in atomic-resolution images via unsupervised learning with translational invariance",
+      "catalog_status_v1": "partially_ingested",
+      "effective_state": "admitted",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "guo_2021_atomic_defects": 3,
+        "guo_2021_superscan": 1
+      },
+      "registered_asset_count": 4,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/guo_superscan_development_v1.sealed.yaml",
+          "plan_id": "guo-superscan-development-v1",
+          "dataset_id": "guo_2021_superscan",
+          "admission_state": "development_candidate",
+          "group_count": 1,
+          "file_count": 1,
+          "local_file_count": 1,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "85e71a4d1f4c850b0b526a86d21268875da5862597b4f24e901e1acf8dae1096"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "no_consensus_pixel_gold",
+        "small_number_of_acquisitions"
+      ]
+    },
+    {
+      "source_id": "dennler_2021_hrstem_defects",
+      "title": "TEMDefectClassification HRSTEM defects archive",
+      "catalog_status_v1": "consumed_locked_external_test",
+      "effective_state": "consumed_locked_external_test",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "dennler_2021_hrstem_defects": 1
+      },
+      "registered_asset_count": 1,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "locked_test_has_already_been_consumed",
+        "class_2_is_a_composite_of_blur_amorphous_and_beam_related_appearance"
+      ]
+    },
+    {
+      "source_id": "warwick_electron_microscopy_dataset",
+      "title": "Warwick Electron Microscopy Dataset",
+      "catalog_status_v1": "candidate",
+      "effective_state": "candidate",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "data_descriptor_and_public_repository"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "no_defect_masks",
+        "scientific_metadata_and_independent_grouping_are_limited",
+        "must_not_mix_simulated_and_experimental_assets_without_provenance"
+      ]
+    },
+    {
+      "source_id": "tem_imagenet_v1_3",
+      "title": "TEM ImageNet v1.3",
+      "catalog_status_v1": "quarantine_license",
+      "effective_state": "quarantine_license",
+      "license": {
+        "spdx": "NOASSERTION",
+        "verified": false,
+        "applies_to_data": "not_declared_on_repository_as_of_audit"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": false,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "data_reuse_license_not_verified",
+        "simulated_truth_must_be_reported_separately_from_experimental_gold"
+      ]
+    },
+    {
+      "source_id": "stemgym",
+      "title": "STEMGym",
+      "catalog_status_v1": "candidate",
+      "effective_state": "candidate",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "stated_on_dataset_card"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "simulated_only",
+        "benchmark_is_new_and_requires_independent_validation"
+      ]
+    },
+    {
+      "source_id": "ornl_graphene_stem_standard",
+      "title": "Graphene STEM Standard Dataset",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record_4885132"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "no_consensus_defect_masks",
+        "large_single_numpy_asset"
+      ]
+    },
+    {
+      "source_id": "ornl_sm_bfo_stem",
+      "title": "Sm-BFO STEM Datasets",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record_4876786"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "coordinates_are_not_defect_consensus_gold",
+        "large_single_numpy_asset"
+      ]
+    },
+    {
+      "source_id": "al_sigma3_twin_boundaries",
+      "title": "Microstates and defects of incoherent Sigma3 [111] twin boundaries in aluminum",
+      "catalog_status_v1": "candidate",
+      "effective_state": "admitted",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "al_sigma3_twin_boundaries": 5
+      },
+      "registered_asset_count": 5,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/al_sigma3_development_v1.sealed.yaml",
+          "plan_id": "al-sigma3-development-v1",
+          "dataset_id": "al_sigma3_twin_boundaries",
+          "admission_state": "development_candidate",
+          "group_count": 5,
+          "file_count": 5,
+          "local_file_count": 5,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "b35496c32c6c0ba830bf0eb26d7b6e3de6c601ac6b9c1b23d3083232d2912031"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "no_ready_consensus_pixel_mask"
+      ]
+    },
+    {
+      "source_id": "ayyubi_2026_defect_classification",
+      "title": "Unsupervised defect classification in atomic-resolution STEM images",
+      "catalog_status_v1": "quarantine_license",
+      "effective_state": "quarantine_license",
+      "license": {
+        "spdx": "NOASSERTION",
+        "verified": false,
+        "applies_to_data": "no_repository_license_detected_as_of_audit"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": false,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "license_requires_author_confirmation",
+        "manipulated_defects_must_not_be_reported_as_experimental_gold"
+      ]
+    },
+    {
+      "source_id": "fourdstem_point_defect_concentration",
+      "title": "Nanoscale mapping of point defect concentrations with 4D-STEM",
+      "catalog_status_v1": "compact_subset_ingested",
+      "effective_state": "admitted",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "mills_2022_irradiated_al_4dstem": 2
+      },
+      "registered_asset_count": 2,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/irradiated_al_4dstem_development_v1.sealed.yaml",
+          "plan_id": "irradiated-al-4dstem-development-v1",
+          "dataset_id": "mills_2022_irradiated_al_4dstem",
+          "admission_state": "development_candidate",
+          "group_count": 1,
+          "file_count": 2,
+          "local_file_count": 2,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "c96a5e113a2532266005072b9be55e8114994606efa26e0c3087d8641140124a"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "not_atomic_site_pixel_gold",
+        "very_large_archive"
+      ]
+    },
+    {
+      "source_id": "fast_4dstem_phase_mapping",
+      "title": "Fast 4D-STEM-based phase mapping for amorphous and mixed materials",
+      "catalog_status_v1": "fully_ingested",
+      "effective_state": "admitted_complete_published_record",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "werbrouck_2026_fast_4dstem_phase": 14
+      },
+      "registered_asset_count": 14,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/werbrouck_fast_4dstem_development_v3.sealed.yaml",
+          "plan_id": "werbrouck-fast-4dstem-development-v2",
+          "dataset_id": "werbrouck_2026_fast_4dstem_phase",
+          "admission_state": "development_candidate",
+          "group_count": 2,
+          "file_count": 2,
+          "local_file_count": 2,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "9f7c9d04c7ff89f0c90adc8dfd69e2a9368e0625d994a1fc759a3a8aee457cfc"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "published_phase_maps_are_not_automatically_consensus_gold"
+      ]
+    },
+    {
+      "source_id": "ws2_beam_induced_defect_tracking",
+      "title": "Deep learning analysis of defect and phase evolution during electron beam irradiation of WS2",
+      "catalog_status_v1": "quarantine_license",
+      "effective_state": "quarantine_license",
+      "license": {
+        "spdx": "NOASSERTION",
+        "verified": false,
+        "applies_to_data": "separate_repository_data_license_not_detected_as_of_audit"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": false,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "algorithmic_masks_are_not_expert_gold",
+        "data_reuse_terms_require_confirmation"
+      ]
+    },
+    {
+      "source_id": "high_resolution_4dstem_srtio3",
+      "title": "High-resolution 4D STEM dataset of SrTiO3 along the [100] axis",
+      "catalog_status_v1": "fully_ingested",
+      "effective_state": "admitted",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "strauch_2021_srtio3_high_resolution_4dstem": 2
+      },
+      "registered_asset_count": 2,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/srtio3_high_resolution_4dstem_development_v1.sealed.yaml",
+          "plan_id": "srtio3-high-resolution-4dstem-development-v1",
+          "dataset_id": "strauch_2021_srtio3_high_resolution_4dstem",
+          "admission_state": "development_candidate",
+          "group_count": 1,
+          "file_count": 2,
+          "local_file_count": 2,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "1edad677ad5530c555ed4704bb95916cee569b69f2cc2b1d17b4f891baf11d08"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "not_a_defect_labeled_dataset"
+      ]
+    },
+    {
+      "source_id": "sei_beam_artifact_controlled_dose",
+      "title": "Electron Beam-Induced Artifacts in SEI Characterization",
+      "catalog_status_v1": "candidate",
+      "effective_state": "candidate",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "not_atomic_resolution_site_label",
+        "large_archive"
+      ]
+    },
+    {
+      "source_id": "wide_field_orientation_mapping",
+      "title": "Wide field of view crystal orientation mapping of layered materials",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "very_large_archive",
+        "scale_differs_from_atomic_site_detection"
+      ]
+    },
+    {
+      "source_id": "merlinem_quad_4dstem",
+      "title": "MerlinEM quad 4D-STEM dataset",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "not_a_defect_labeled_dataset"
+      ]
+    },
+    {
+      "source_id": "metal_support_interface_ptychography",
+      "title": "Contact-induced restructuring of metal-support interface via adaptive propagator ptychography",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "requires_ptychography_adapter",
+        "no_ready_consensus_mask"
+      ]
+    },
+    {
+      "source_id": "gaa_transistor_3d_strain_roughness",
+      "title": "3D atomic-scale metrology of strain relaxation and roughness in gate-all-around transistors",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "very_large_archive",
+        "semiconductor_device_domain_shift"
+      ]
+    },
+    {
+      "source_id": "wse2_3d_defects_moire_ptychography",
+      "title": "3D Mapping of Defects and Moire Corrugations via Electron Ptychography Atomic Coordinate Retrieval",
+      "catalog_status_v1": "partially_ingested_raw_1657_and_coordinates",
+      "effective_state": "admitted_raw_1657_with_coordinate_archive",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "zhang_2026_wse2_3d_defects_coordinates": 3
+      },
+      "registered_asset_count": 3,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/wse2_3d_raw_1657_development_v2.sealed.yaml",
+          "plan_id": "wse2-3d-raw-1657-and-coordinates-development-v2",
+          "dataset_id": "zhang_2026_wse2_3d_defects_coordinates",
+          "admission_state": "development_candidate",
+          "group_count": 1,
+          "file_count": 3,
+          "local_file_count": 3,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "bdf171a407ed0a3ecdeac7cf406f98d0ea724f19529632260b13865f329b866a"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "raw_acquisitions_are_0.85_to_1.07_GB_each",
+        "coordinates_are_author_derived_not_two_expert_gold",
+        "ptychography_adapter_required"
+      ]
+    },
+    {
+      "source_id": "bright_mos2_mose2_strain_mapping",
+      "title": "Experimental and Simulated Datasets Used in Strain Mapping of Three-dimensionally Structured Two-dimensional Materials",
+      "catalog_status_v1": "candidate_large",
+      "effective_state": "candidate_large",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "experimental_raw_file_is_4.36_GB",
+        "no_two_expert_pixel_gold",
+        "simulation_and_experiment_metrics_must_remain_separate"
+      ]
+    },
+    {
+      "source_id": "polymer_lamellar_cluster_insitu_4dstem",
+      "title": "In-situ 4D-STEM Imaging of the Orientation of Lamellar Clusters in Polymer Crystallization",
+      "catalog_status_v1": "compact_subset_ingested",
+      "effective_state": "admitted",
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "verified": true,
+        "applies_to_data": "zenodo_record"
+      },
+      "registry_dataset_asset_counts": {
+        "wang_2026_polymer_lamella_4dstem_rt": 1
+      },
+      "registered_asset_count": 1,
+      "sealed_plans": [
+        {
+          "path": "datasets/intake/polymer_lamella_4dstem_rt_development_v1.sealed.yaml",
+          "plan_id": "polymer-lamella-4dstem-rt-development-v1",
+          "dataset_id": "wang_2026_polymer_lamella_4dstem_rt",
+          "admission_state": "development_candidate",
+          "group_count": 1,
+          "file_count": 1,
+          "local_file_count": 1,
+          "all_files_local": true,
+          "all_local_files_verified": true,
+          "content_sha256": "8490d83504f11e7127c318414cd0bcb8b770d65a61adcb0604bfdcd057d98e8f"
+        }
+      ],
+      "stage": {
+        "catalogued": true,
+        "license_verified": true,
+        "sealed": true,
+        "all_planned_files_local": true,
+        "admitted": true
+      },
+      "human_or_external_blockers": [
+        "not_an_atomic_defect_dataset",
+        "no_consensus_pixel_gold",
+        "temperature_archives_require_acquisition_safe_grouping"
+      ]
+    },
+    {
+      "source_id": "smc2021_graphene_topological_defects",
+      "title": "Smoky Mountains Data Challenge graphene topological-defect movie",
+      "catalog_status_v1": "quarantine_license",
+      "effective_state": "quarantine_license",
+      "license": {
+        "spdx": "NOASSERTION",
+        "verified": false,
+        "applies_to_data": "no_explicit_reuse_license_visible_on_primary_challenge_page"
+      },
+      "registry_dataset_asset_counts": {},
+      "registered_asset_count": 0,
+      "sealed_plans": [],
+      "stage": {
+        "catalogued": true,
+        "license_verified": false,
+        "sealed": false,
+        "all_planned_files_local": false,
+        "admitted": false
+      },
+      "human_or_external_blockers": [
+        "data_reuse_license_requires_confirmation",
+        "coordinate_dictionary_marks_some_objects_not_exhaustive_gold"
+      ]
+    }
+  ]
+}

@@ -7,7 +7,6 @@ from io import BytesIO
 from typing import Any, Mapping
 
 import numpy as np
-import streamlit as st
 from PIL import Image
 
 from .review_prediction import comparison_overlay
@@ -460,6 +459,16 @@ def review_geometry_canvas(
     key: str,
 ) -> dict[str, Any] | None:
     """Mount the interactive canvas and return source-pixel geometry."""
+
+    try:
+        import streamlit as st
+    except ModuleNotFoundError as error:
+        if error.name != "streamlit":
+            raise
+        raise RuntimeError(
+            "The expert review canvas requires the optional review dependencies; "
+            'install them with `python -m pip install -e ".[review]`.'
+        ) from error
 
     data = canvas_payload(
         image,

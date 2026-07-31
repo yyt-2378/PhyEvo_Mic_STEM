@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 import numpy as np
 
 from tfree_detection.review_canvas import (
@@ -5,6 +8,35 @@ from tfree_detection.review_canvas import (
     display_point_to_source,
     normalize_canvas_geometry,
 )
+
+
+def test_canvas_geometry_helpers_import_without_streamlit() -> None:
+    program = """
+import importlib.abc
+import sys
+
+class BlockStreamlit(importlib.abc.MetaPathFinder):
+    def find_spec(self, fullname, path=None, target=None):
+        if fullname == "streamlit" or fullname.startswith("streamlit."):
+            raise ModuleNotFoundError("streamlit intentionally unavailable")
+        return None
+
+sys.meta_path.insert(0, BlockStreamlit())
+from tfree_detection.review_canvas import display_point_to_source
+assert display_point_to_source(
+    (5.0, 5.0),
+    canvas_bounds_xywh=(0.0, 0.0, 10.0, 10.0),
+    border_ltrb=(0.0, 0.0, 0.0, 0.0),
+    image_shape=(10, 10),
+) == (5.0, 5.0)
+"""
+    completed = subprocess.run(
+        [sys.executable, "-c", program],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert completed.returncode == 0, completed.stderr
 
 
 def test_canvas_payload_embeds_real_overlay_and_geometry_contract() -> None:

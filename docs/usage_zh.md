@@ -259,7 +259,7 @@ Class1 重点测试：
 pytest -q tests/test_symmetry_group.py tests/test_symmetry_task.py
 ```
 
-当前完整回归为 150 项通过。第三方库的 NumPy deprecation warning 不影响测试结论。
+当前完整回归为 151 项通过。第三方库的 NumPy deprecation warning 不影响测试结论。
 
 二维专家审核平台另有资产门禁、SQLite重载、几何和真实Streamlit提交测试。启动、备份及
 训练标签导出见[154病例二维STEM在线专家审核平台](expert_review_platform_2d_zh.md)。

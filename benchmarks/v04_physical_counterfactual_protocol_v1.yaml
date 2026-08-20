@@ -1,0 +1,123 @@
+protocol_format: phyevo-mic-physical-counterfactual-audit-v1
+protocol_version: "1.0.0"
+protocol_id: dennler-v04-physical-counterfactual-audit-v1
+created_date: "2026-08-12"
+
+scientific_status: >-
+  Retrospective stress audit on the already consumed Dennler archive. This is
+  not a new locked test, an external-generalization estimate, or a substitute
+  for controlled microscope acquisitions.
+
+inputs:
+  archive_path: datasets/public/dennler_2021_hrstem_defects/hrstem_defects_dataset.zip
+  archive_sha256: abef46a0183ba08b925c64807d5e914cd97967444d9fd3e0799924896f0614ec
+  detector_implementation: src/tfree_detection/diagnostic_v4.py
+  detector_implementation_sha256: ff24b8e368b915560bf3f0ed83da9d1a35a8436b8b6f3ba2da97e918ce406187
+  detector_config_sha256: 1b4ba9063837e6f620a130e86fea72bca7342adab48a29ab233a64ccdcf53d6c
+  stored_prediction_manifest: outputs/dennler_posthoc_v4_diagnostic_v2/predictions/prediction_manifest.json
+  stored_prediction_manifest_sha256: 33652927a60b1be467c458cef86bb2a4dbac56ef1dc3d18436147743bfe83951
+
+label_isolation:
+  prediction_stage:
+    labels_read: false
+    permitted_inputs:
+      - source image bytes
+      - frozen v0.4 configuration and implementation
+      - stored unperturbed v0.4 masks and lattice-spacing estimates
+    forbidden_inputs:
+      - defective/labels
+      - target pixels
+      - per-image metric values
+  scoring_stage:
+    begins_only_after_prediction_manifest_and_arrays_are_sealed: true
+    label_mapping: global_sorted_black_gray_white
+
+scope:
+  nominal_all_archive:
+    image_selection: all_61_images_in_stored_manifest_order
+    perturbation_severity: nominal
+  severity_ladder_subset:
+    image_selection: every_fifth_image_in_stored_manifest_order_starting_at_zero
+    expected_count: 13
+    selection_uses_labels: false
+    additional_severities: [low, high]
+
+perturbations:
+  transfer_loss_proxy:
+    operator: isotropic_gaussian_blur
+    units: baseline_lattice_spacing
+    low: 0.05
+    nominal: 0.10
+    high: 0.20
+    claim_boundary: >-
+      A generic high-frequency-transfer-loss proxy. It is not a calibrated
+      defocus or aberration simulation because wavefield and CTF metadata are
+      unavailable.
+  count_noise_proxy:
+    operator: percentile_scaled_poisson_sampling
+    units: count_equivalents_at_unit_normalized_intensity
+    low: 200.0
+    nominal: 50.0
+    high: 12.5
+    deterministic_seed: sha256_image_id_variant
+    claim_boundary: >-
+      A relative count-noise proxy, not an absolute electron-dose estimate.
+  linear_drift_proxy:
+    operator: row_dependent_linear_horizontal_displacement
+    units: baseline_lattice_spacing_peak_displacement
+    low: 0.05
+    nominal: 0.10
+    high: 0.20
+    claim_boundary: deterministic geometric stress, not measured stage drift
+  scan_jitter_proxy:
+    operator: sinusoidal_row_displacement
+    period_lattice_spacings: 8.0
+    units: baseline_lattice_spacing_peak_displacement
+    low: 0.05
+    nominal: 0.10
+    high: 0.20
+    claim_boundary: deterministic line-scan stress, not a fitted scan model
+  field_edge_truncation:
+    operator: crop_from_top_field_edge_without_resizing
+    units: baseline_lattice_spacing
+    low: 0.50
+    nominal: 1.00
+    high: 2.00
+    claim_boundary: >-
+      Tests field-of-view dependence and candidate contact with a newly
+      introduced image edge; it is not an acquisition perturbation.
+
+frozen_metrics:
+  detector_output: coherence_loss_region
+  source_targets:
+    any_defect: [1, 2]
+    class_2_composite: [2]
+  performance:
+    - micro_iou
+    - micro_f1
+    - precision
+    - recall
+    - normal_positive_area_fraction
+    - normal_nonempty_fraction
+  mask_stability:
+    - aligned_iou_to_stored_unperturbed_mask
+    - aligned_f1_to_stored_unperturbed_mask
+    - positive_area_ratio_to_stored_unperturbed_mask
+  uncertainty:
+    method: whole_image_nonparametric_bootstrap
+    resamples: 20000
+    seed: 20260812
+    interval: percentile_95
+
+failure_policy:
+  - retain_every_failed_image_in_the_prediction_manifest
+  - no_variant_specific_threshold_change
+  - no_failed_variant_may_be_dropped_from_an_aggregate
+  - prediction_and_score_outputs_refuse_overwrite
+
+not_tested:
+  - calibrated_defocus_or_aberration
+  - specimen_thickness
+  - dynamical_diffraction
+  - absolute_electron_dose
+  - unseen_material_or_microscope_generalization

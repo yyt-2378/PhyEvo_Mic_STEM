@@ -123,3 +123,29 @@ label_tier == gold
 
 Conformal 输出仅在 calibration 与部署样本可交换时有覆盖意义。新材料、新仪器或新实验室
 必须先经过 OOD 检查，发生分布漂移后应重新校准，不能沿用固定覆盖保证。
+
+## 专家审核不会重写原始分区
+
+审核队列里的 `review_split` 只用于组织专家工作和开发期交叉检查，不能覆盖资产原有的
+`source_partition`。导出时，[`review_usage_policy()`](../src/tfree_detection/review_export.py)
+同时检查两个字段：只有 `source_partition=train` 且 `review_split=train`、并且审核动作能
+形成明确几何掩膜的记录，才会写成 `training_eligible=true`。
+
+因此：
+
+- `development_test` 即使为了分批审核显示为 `review_split=train`，也只能进入
+  `expert_review_audit`，不能进入学生训练；
+- `review_split=validation` 的记录保留修订和派生掩膜，但不能用于训练；
+- 单专家结果仍是 Silver，不能用于 Gold-only calibration 或 locked evaluation；
+- 多通道同一案例必须保持相同 `source_partition`、`split_group_id` 和 `review_split`，否则
+  导出直接失败。
+
+导出摘要分别记录 `compiled_mask_count`、`training_eligible_count`、原始分区计数和训练排除
+原因，避免把“专家已经画出掩膜”误写成“该掩膜允许训练”。自动测试覆盖了
+development-to-train 和 validation-to-train 两条禁止提升路径。每个导出记录和摘要还会
+固化案例清单、审核队列、源 2D review manifest、源 asset manifest 和源数据 registry 的
+SHA-256。导出不仅记录这些摘要，还逐样本验证 queue 内容与源 review manifest 完全一致，
+并把 `source_path`、`source_partition`、`split_group_id`、`acquisition_id`、`dataset_id` 和
+`material` 回查到 registry 派生的 asset manifest。若有人把 development 样本在 queue 中
+改成 train，即使重新计算 queue 哈希也会直接失败；审核修订若不是基于指定案例清单产生也
+同样拒绝导出。

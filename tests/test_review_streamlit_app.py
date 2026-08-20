@@ -11,6 +11,15 @@ from streamlit.testing.v1 import AppTest  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 APP = PROJECT_ROOT / "apps/review_dataset_viewer.py"
+SAFE_TEST_ROOT = PROJECT_ROOT / ".codex-tmp/pytest"
+
+
+def _project_tmp_path(tmp_path: Path) -> Path:
+    """Mirror pytest's unique name without writing outside the project."""
+
+    destination = SAFE_TEST_ROOT / tmp_path.parent.name / tmp_path.name
+    destination.mkdir(parents=True, exist_ok=False)
+    return destination
 
 
 def _widget(elements, label):
@@ -20,7 +29,7 @@ def _widget(elements, label):
 def test_real_app_loads_154_cases_and_persists_acceptance(
     tmp_path, monkeypatch
 ) -> None:
-    store_path = tmp_path / "review-store.sqlite3"
+    store_path = _project_tmp_path(tmp_path) / "review-store.sqlite3"
     monkeypatch.setenv("TFREE_REVIEWER_ID", "app-test-expert")
     monkeypatch.setenv("TFREE_REVIEW_STORE_PATH", str(store_path))
     app = AppTest.from_file(str(APP), default_timeout=60)
@@ -60,7 +69,7 @@ def test_real_app_loads_154_cases_and_persists_acceptance(
 def test_canvas_and_submit_buttons_share_form_transaction_boundary(
     tmp_path, monkeypatch
 ) -> None:
-    store_path = tmp_path / "canvas-store.sqlite3"
+    store_path = _project_tmp_path(tmp_path) / "canvas-store.sqlite3"
     monkeypatch.setenv("TFREE_REVIEWER_ID", "canvas-test-expert")
     monkeypatch.setenv("TFREE_REVIEW_STORE_PATH", str(store_path))
     app = AppTest.from_file(str(APP), default_timeout=60)

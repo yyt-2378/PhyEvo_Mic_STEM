@@ -1,0 +1,92 @@
+protocol_format: phyevo-mic-secondary-transfer-stress-v1
+protocol_version: "1.0.0"
+protocol_id: emseek-fecral-fixed-transfer-v1
+created_date: "2026-08-12"
+
+scientific_status: >-
+  Secondary fixed-method transfer stress test on two already local, public
+  EMSeek FeCrAl images. The pair belongs to one unresolved acquisition group,
+  is registered in the train partition, and carries author-curated composite
+  masks. It is not pristine external validation, experimental Gold, or an
+  acquisition-level generalization estimate.
+
+source:
+  dataset_id: emseek_remaining_v1
+  source_revision: 8f4a987c78af743098459e5d467f2c1b5f5c11b3
+  license: Apache-2.0
+  source_manifest: datasets/intake/emseek_balanced_subset_v1_source_manifest.json
+  source_manifest_sha256: 8320d48463583496e9e30988929c9dab5a47684244a84483b04f1adb8386d63d
+  partition_registry: datasets/partition_registry_v6.yaml
+  partition: train
+  split_group_id: emseek-metal-alloy-defects-fecral-single-conservative-group
+  acquisition_id: emseek-metal-alloy-defects-fecral-unresolved-acquisition
+  material: FeCrAl
+  image_assets:
+    - path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/image/148.png
+      sha256: dce375bd1a3d56b4f1a713ada34033de03a2b34795e02bac384e6da62eea77d4
+    - path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/image/46.png
+      sha256: 7a95df67c34fff594bb7d450eac3fd736638fa47a36fdf967373cf2cdf77e17a
+  annotation_assets:
+    - path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/label/148.png
+      sha256: 8df3cb0805899aa88db103cb82d1b6dda012ca7084289e2fb542fdd86e6507a0
+    - path: datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/label/46.png
+      sha256: 5f0f5ffdcf15075df5b290c31dd83f801602fb9b9684e65f628ed85fe19dbaa5
+
+label_isolation:
+  prediction_stage_reads_annotations: false
+  prediction_stage_permitted_paths:
+    - datasets/public/emseek_remaining_v1/metal_alloy_defects/FeCrAl/image
+  scoring_stage_begins_after_prediction_seal: true
+  composite_target: any_nonzero_author_mask_pixel
+  palette_subclass_semantics_inferred: false
+  annotation_qualification: author_curated_composite_not_gold
+
+frozen_methods:
+  v04_score_only:
+    implementation: src/tfree_detection/diagnostic_v4.py
+    implementation_sha256: ff24b8e368b915560bf3f0ed83da9d1a35a8436b8b6f3ba2da97e918ce406187
+    config_sha256: 1b4ba9063837e6f620a130e86fea72bca7342adab48a29ab233a64ccdcf53d6c
+    transferable_historical_union_used: false
+  carrier_contribution_only:
+    score: 0.68_times_carrier_loss
+    threshold_and_postprocessing: identical_to_v04
+  texture_contribution_only:
+    score: 0.32_times_texture_loss
+    threshold_and_postprocessing: identical_to_v04
+  fourier_bragg_port:
+    implementation: benchmarks/run_dennler_reference_baseline.py
+    output: class_2_amorphous_branch_only
+    role: repo_defined_compatibility_baseline
+
+frozen_outputs:
+  - binary_mask_per_method_per_image
+  - continuous_v04_score
+  - inferred_lattice_spacing_pixels
+  - runtime_seconds
+  - source_and_output_hashes
+
+frozen_metrics:
+  report_each_image_separately: true
+  aggregate_across_acquisition_groups: false
+  metrics:
+    - iou
+    - f1
+    - precision
+    - recall
+    - positive_area_fraction
+  palette_values_reported_without_semantic_names: [85, 170, 255]
+  confidence_interval_claimed: false
+
+failure_policy:
+  - retain_all_failures
+  - no_method_specific_threshold_change
+  - no_image_or_palette_value_may_be_dropped
+  - outputs_refuse_overwrite
+
+prohibited_claims:
+  - pristine_external_test
+  - experimental_gold
+  - independent_generalization
+  - amorphous_ground_truth
+  - two_independent_samples
+  - statistical_significance

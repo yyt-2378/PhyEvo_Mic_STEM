@@ -21,6 +21,7 @@ build/
 
 # Generated numerical artifacts, model weights, and raw microscopy data.
 outputs/
+real_data_test/
 datasets/public/
 vendor/
 *.npy
@@ -55,3 +56,31 @@ datasets/intake/emseek_remaining_train_v1.sealed.yaml
 datasets/expert_annotations/*.sqlite3
 datasets/expert_annotations/*.sqlite3-*
 datasets/expert_annotations/exports/
+
+# Local-only manuscript package. Manuscripts, figures, reviews, presentations,
+# builder support, and release ledgers are retained locally and are not pushed.
+paper/
+benchmarks/CURRENT_EVIDENCE.yaml
+
+# Local manuscript benchmark results and prediction products. Protocols and
+# executable analyzers remain trackable; generated JSON/arrays stay local.
+benchmarks/paper_baselines/
+benchmarks/archive/previous_results_and_scripts/
+benchmarks/emseek_fecral_fixed_transfer_v1/predictions/
+benchmarks/emseek_fecral_fixed_transfer_v1/score.json
+benchmarks/emseek_fecral_fixed_transfer_v1/score.seal.json
+
+# Local validations that require protected datasets, ignored prediction arrays,
+# or manuscript binaries. Data-independent unit tests remain trackable.
+tests/test_class1_null_semantic_v2.py
+tests/test_class1_run_provenance.py
+tests/test_dennler_nominal_calibration_v1.py
+tests/test_emseek_fecral_fixed_transfer_v1.py
+tests/test_paper_assets*.py
+tests/test_release_manifest*.py
+tests/test_retrospective_sensitivity_assets.py
+tests/test_v04_counterfactual_distributions.py
+tests/test_v04_physical_counterfactuals.py
+tests/test_v04_physical_diagnostics.py
+tests/test_v04_primary_failure_and_edge.py
+tests/test_v04_sensitivity_v2.py

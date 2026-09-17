@@ -1,0 +1,20 @@
+task: structure_guided_site
+
+structure_guided:
+  # target_free_reference is a declared negative control: interpreted candidates
+  # and positive evidence maps are forced to zero and no false-positive pool is kept.
+  sample_role: target_possible
+  minimum_delta_bic: 6.0
+  profile_sigma_pixels: 1.25
+  minimum_endpoint_separation_pixels: 4.0
+  border_pixels: 4.0
+  candidate_radius_pixels: 2.5
+
+evidence_protocol:
+  enabled: true
+  reliable_threshold: 0.60
+  invalid_threshold: 0.20
+  minimum_confirmed_evidence_groups: 1
+
+resolver:
+  enabled: true

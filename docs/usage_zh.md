@@ -19,7 +19,7 @@ python -m pip install -e ".[learning]"
 python -m pip install -e ".[fourdstem]"
 ```
 
-默认五个 physics teacher 不需要训练，也不需要下载神经网络权重。
+默认物理任务不需要训练，也不需要下载神经网络权重。
 
 ## 2. 最小示例
 
@@ -46,7 +46,7 @@ candidate_table.jsonl        逐候选证据与来源
 
 输出目录必须是新目录；CLI 不会静默覆盖既有结果。
 
-## 3. 五个任务
+## 3. 六个任务
 
 ### 局部非晶或失序区域
 
@@ -109,6 +109,22 @@ tfree-detect detect \
 - `dislocation_core_point`
 
 芯点输出是 Burgers-loop/curl 的拓扑代理，不是已确认的 Burgers vector。
+
+### 投影模板可选位点
+
+```bash
+tfree-detect detect \
+  --input image.tif \
+  --config configs/structure_guided_site.yaml \
+  --skeleton schemas/structure_guided_skeleton.example.json \
+  --output outputs/structure_guided_run
+```
+
+骨架必须给出像素基矢、`metadata.origin_xy`，以及由两个非可选端点连接的
+`optional: true` 位点。样品若是事先声明的无目标参考，应把
+`structure_guided.sample_role` 设为 `target_free_reference`；该角色不会保留中心模型评分，
+且候选数固定为 0。完整约定见
+[通用投影结构位点引擎](structure_guided_generalization_zh.md)。
 
 ### 可选 SAM2 真实边界细化
 

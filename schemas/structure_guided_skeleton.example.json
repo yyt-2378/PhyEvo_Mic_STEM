@@ -1,0 +1,42 @@
+{
+  "basis": [
+    [32.0, 0.0],
+    [0.0, 32.0]
+  ],
+  "nodes": [
+    {
+      "site_id": "left_endpoint",
+      "fractional_coordinate": [0.25, 0.5],
+      "sublattice": "framework"
+    },
+    {
+      "site_id": "right_endpoint",
+      "fractional_coordinate": [0.75, 0.5],
+      "sublattice": "framework"
+    },
+    {
+      "site_id": "optional_center",
+      "fractional_coordinate": [0.5, 0.5],
+      "sublattice": "optional_site",
+      "optional": true
+    }
+  ],
+  "edges": [
+    {
+      "source": "left_endpoint",
+      "target": "optional_center",
+      "kind": "profile_endpoint"
+    },
+    {
+      "source": "optional_center",
+      "target": "right_endpoint",
+      "kind": "profile_endpoint"
+    }
+  ],
+  "symmetries": ["identity"],
+  "metadata": {
+    "coordinate_unit": "pixel",
+    "origin_xy": [16.0, 16.0],
+    "description": "Replace the basis and origin with registered experimental values."
+  }
+}

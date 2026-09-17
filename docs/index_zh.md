@@ -5,7 +5,7 @@
 
 ## 快速上手
 
-- [安装、输入格式、五任务命令和 Python API](usage_zh.md)
+- [安装、输入格式、多任务命令和 Python API](usage_zh.md)
 - [源码、配置、测试、数据和输出目录说明](repository_structure_zh.md)
 - [当前效果、精选图、定量指标和科学边界](results_summary_zh.md)
 - [GitHub 公开范围、发布前检查和首次推送](publishing_zh.md)
@@ -18,6 +18,9 @@
 - [Class1 失败迭代与端点假高分审计](class1_failed_iterations_archive_zh.md)
 - [统一 EvidenceBundle 与开放世界 resolver](evidence_protocol_zh.md)
 - [周期反事实与双教师共识](periodic_counterfactual_and_consensus_zh.md)
+- [4D-STEM 三图晶格对齐与 O/Si/稀土原子位点清单](4dstem_atomic_site_inventory_zh.md)
+- [FAU z-stack：CIF 骨架约束下的稀土客体与 Y 参考畸变](fau_zstack_cif_analysis_zh.md)
+- [从 FAU v20 冻结流程拆分出的通用投影结构位点引擎](structure_guided_generalization_zh.md)
 - [开放世界 v0.4 实现](open_world_v0_4_implementation_zh.md)
 
 ## 数据与评估

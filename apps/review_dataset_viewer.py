@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hmac
 import os
 import re
 import time
@@ -12,7 +13,7 @@ from typing import Mapping
 import numpy as np
 import streamlit as st
 
-from tfree_detection.review_canvas import review_geometry_canvas
+from tfree_detection.review_canvas import review_image_canvas
 from tfree_detection.review_cases import ExpertReviewCase, load_review_cases
 from tfree_detection.review_dataset import (
     ReviewSample,
@@ -26,10 +27,8 @@ from tfree_detection.review_platform import (
 )
 from tfree_detection.review_prediction import (
     ReviewPrediction,
-    comparison_overlay,
     discover_review_predictions,
     load_prediction_mask,
-    normalize_for_display,
 )
 from tfree_detection.review_store import (
     REVIEW_PROJECT_ID,
@@ -52,6 +51,7 @@ DEFAULT_STORE = (
     PROJECT_ROOT / "datasets/expert_annotations/review_store_v1.sqlite3"
 )
 _REVIEWER_ID = re.compile(r"^[A-Za-z0-9_.@-]{1,64}$")
+_ACCESS_GRANTED_KEY = "expert-review-access-granted"
 
 ACTION_LABELS = {
     CaseReviewAction.ACCEPT_PREDICTION: "接受预测",
@@ -63,7 +63,7 @@ ACTION_LABELS = {
 }
 ACTION_GUIDANCE = {
     CaseReviewAction.ACCEPT_PREDICTION: (
-        "目标缺陷确实存在，而且右图橙色区域/青色边界的位置、范围和数量基本正确。"
+        "请打开“显示预测轮廓”，确认琥珀色轮廓的位置、范围和数量基本正确。"
         "允许极少量不影响结论的像素误差。"
     ),
     CaseReviewAction.CORRECT_GEOMETRY: (
@@ -87,7 +87,7 @@ ACTION_GUIDANCE = {
 }
 GEOMETRY_HELP = {
     "point": (
-        "逐个轻点异常原子柱中心；可连续点击多个位点，至少1个点。洋红点就是最终标注。"
+        "逐个轻点异常原子柱中心，至少1个点。青绿空心圈记录中心，不遮盖原子细节。"
     ),
     "line": (
         "从缺陷线一端开始，沿中心线依次点击控制点，到另一端结束；至少2个点。"
@@ -144,6 +144,13 @@ LABEL_DISPLAY = {
     "beam_damage_region": "束流损伤区域",
 }
 
+TASK_DISPLAY = {
+    "atomic_point_defect": "原子点缺陷",
+    "stacking_fault": "错层与线缺陷",
+    "phase_boundary": "相界面与晶界",
+    "amorphous_region": "非晶与损伤区域",
+}
+
 
 @st.cache_data(show_spinner=False)
 def _samples(path: str) -> list[ReviewSample]:
@@ -173,6 +180,33 @@ def _configured_store_path() -> Path:
     path = path.resolve()
     path.relative_to(PROJECT_ROOT)
     return path
+
+
+def _require_access_code() -> None:
+    """Stop before loading review assets unless the configured code matches."""
+
+    expected = os.environ.get("TFREE_REVIEW_ACCESS_CODE")
+    if expected is None:
+        return
+    if not expected:
+        st.error("服务器审核访问码配置为空，已拒绝加载审核数据。")
+        st.stop()
+    if st.session_state.get(_ACCESS_GRANTED_KEY) is True:
+        return
+
+    st.title("PhyEvo-Mic · 专家审核访问验证")
+    st.caption("请输入项目负责人提供的共享访问码，再进入正式审核队列。")
+    with st.form("expert-review-access-form", enter_to_submit=True):
+        supplied = st.text_input("审核访问码", type="password")
+        submitted = st.form_submit_button("进入审核", type="primary")
+    if submitted:
+        if hmac.compare_digest(
+            supplied.encode("utf-8"), expected.encode("utf-8")
+        ):
+            st.session_state[_ACCESS_GRANTED_KEY] = True
+            st.rerun()
+        st.error("访问码错误；病例、预测和审核数据库均未加载。")
+    st.stop()
 
 
 def _reviewer_id() -> str:
@@ -208,14 +242,14 @@ def _filtered_cases(
     datasets = sorted({item.dataset_id for item in cases})
     splits = sorted({item.review_split for item in cases})
     geometries = sorted({item.geometry_hint for item in cases})
-    selected_datasets = st.sidebar.multiselect(
-        "数据集", datasets, default=datasets
-    )
-    selected_splits = st.sidebar.multiselect("划分", splits, default=splits)
-    selected_geometries = st.sidebar.multiselect(
-        "标注几何", geometries, default=geometries
-    )
     only_remaining = st.sidebar.toggle("只看未完成", value=False)
+    with st.sidebar.expander("筛选病例", expanded=False):
+        selected_datasets = st.multiselect("数据集", datasets, default=datasets)
+        selected_splits = st.multiselect("划分", splits, default=splits)
+        selected_geometries = st.multiselect(
+            "标注几何", geometries, default=geometries,
+            format_func=lambda value: GEOMETRY_LABELS[value],
+        )
     return [
         item
         for item in cases
@@ -259,21 +293,26 @@ def main() -> None:
         page_icon="🔬",
         layout="wide",
     )
-    st.title("PhyEvo-Mic · STEM无标签病例专家审核")
-    st.caption(
-        "154个无像素标签病例；原图与training-free预测并排显示。"
-        "已有像素标签的200张只做自动评测，永远不会出现在本页面。"
-    )
-    with st.expander("第一次使用？展开查看3分钟审核说明", expanded=True):
+    _require_access_code()
+    st.html("""<style>
+      .stMainBlockContainer {max-width:1250px; padding-top:4rem;}
+      h1 {font-size:1.8rem !important;}
+      h2 {font-size:1.2rem !important;}
+      [data-testid="stSidebar"] h2 {font-size:1.15rem;}
+      [data-testid="stForm"] {border-radius:12px;}
+      [data-testid="stCaptionContainer"] {line-height:1.65;}
+      button, input, textarea {font-size:16px;}
+    </style>""")
+    st.title("PhyEvo-Mic · 专家审核")
+    st.caption("看原图 → 按需对照预测或修正 → 保存。可随时放大和全屏查看。")
+    with st.expander("操作说明与结论区别", expanded=False):
         st.markdown(
             """
-**每张图只做一件事：先独立看左图，再用右图检查模型是否把目标缺陷标对。**
-
-1. 先看左侧原图，判断目标缺陷是否真实存在；不要先被模型颜色引导。
-2. 再看右图：橙色是模型区域，青色是模型边界。
-3. 从六种结论中选一项。模型有少量可修正错误时选“修正几何”，不要选“接受”。
-4. “修正几何”会在下方展开绘图区；洋红色点/线/轮廓才是专家最终答案。
-5. 选定缺陷类型，必要时写备注，然后点击“保存并进入下一例”。不确定就选 unknown。
+1. 默认显示原图。点击“显示预测轮廓”后，琥珀细线表示预测，可调淡。
+2. 用“放大”“原始像素 1:1”“全屏看图”观察细节；拖动模式不增加标注。
+3. 选择“修正几何”后，在同一张图上点击或画轮廓，青绿空心标记是您的答案。
+4. 错点可单独删除，误操作可撤销、恢复。选好结论再绘制，保存后再换病例。
+5. 补充缺陷类型和备注，点击保存；绿色“已持久化第 X 版”表示成功。
 
 **关键区别：**“无缺陷”表示图里没有目标缺陷；“拒绝预测”表示模型整体错误且当前无法给出
 可靠替代标注；如果缺陷存在并且你能画出正确位置，应选择“修正几何”。
@@ -307,30 +346,26 @@ def main() -> None:
     progress = store.progress(
         [item.case_id for item in cases], reviewer_id=reviewer
     )
-    top = st.columns((1, 1, 1, 1, 1))
+    top = st.sidebar.columns(2)
     top[0].metric("总病例", len(cases))
     top[1].metric("已完成", progress["completed_count"])
-    top[2].metric("待完成", progress["remaining_count"])
-    top[3].metric("可用于训练", progress["training_ready_count"])
-    top[4].metric("Train / Validation", "131 / 23")
-    st.progress(progress["completion_fraction"])
+    st.sidebar.progress(progress["completion_fraction"])
+    st.sidebar.caption(f"还剩 {progress['remaining_count']} 例 · 疲劳时请暂停，已保存结果会保留。")
 
-    st.sidebar.download_button(
+    exports = st.sidebar.expander("导出我的审核记录")
+    exports.download_button(
         "下载当前有效审核 JSONL",
         data=revisions_jsonl(current_revisions),
         file_name=f"{reviewer}-current-reviews.jsonl",
         mime="application/x-ndjson",
         disabled=not current_revisions,
     )
-    st.sidebar.download_button(
+    exports.download_button(
         "下载完整修订历史 JSONL",
         data=revisions_jsonl(store.list_history(reviewer_id=reviewer)),
         file_name=f"{reviewer}-review-history.jsonl",
         mime="application/x-ndjson",
         disabled=not current_revisions,
-    )
-    st.sidebar.caption(
-        f"数据库：{_configured_store_path().relative_to(PROJECT_ROOT)}"
     )
 
     if "pending_case_id" in st.session_state:
@@ -338,17 +373,29 @@ def main() -> None:
         if pending in {item.case_id for item in queue}:
             st.session_state["case_selector"] = pending
     case_ids = [item.case_id for item in queue]
+    case_names = {
+        item.case_id: (
+            f"{index + 1:03d}/{len(queue):03d} · "
+            f"{'✓ ' if item.case_id in reviewed_case_ids else ''}"
+            f"{TASK_DISPLAY.get(sample_by_id[item.primary_sample_id].primary_task, item.annotation_target)}"
+            f" · {sample_by_id[item.primary_sample_id].material}"
+        )
+        for index, item in enumerate(queue)
+    }
+    if st.session_state.get("case_selector") not in case_ids:
+        st.session_state["case_selector"] = case_ids[0]
     selected_id = st.selectbox(
         "审核病例",
         case_ids,
+        index=case_ids.index(st.session_state["case_selector"]),
         key="case_selector",
-        format_func=lambda value: (
-            f"{case_ids.index(value) + 1:03d}/{len(case_ids):03d} · "
-            f"{'✓ ' if value in reviewed_case_ids else ''}{value}"
-        ),
+        format_func=lambda value: case_names[value],
     )
     case = queue[case_ids.index(selected_id)]
     current = current_by_case.get(case.case_id)
+    notice = st.session_state.get("review-save-message")
+    if notice is not None and notice["target_case_id"] == selected_id:
+        st.success(notice["message"])
 
     preferred_sample = (
         case.primary_sample_id
@@ -384,50 +431,13 @@ def main() -> None:
         else load_prediction_mask(prediction, PROJECT_ROOT)
     )
 
-    st.markdown(
-        f"`{case.case_id}` · `{sample.dataset_id}` · `{sample.review_split}` · "
-        f"`{sample.primary_task}` · `{sample.material}` · "
-        f"`{sample.channel_name or 'direct image'}` · "
-        f"scope: `{case.annotation_scope}`"
-    )
-    st.info(
-        f"本例任务：判断 `{sample.primary_task}`；专家输出应为"
-        f" **{GEOMETRY_LABELS[case.geometry_hint]}**。先判断物理缺陷，再对照模型。"
-    )
+    st.markdown(f"**本例：{TASK_DISPLAY.get(sample.primary_task, sample.primary_task)}**"
+                f" · {GEOMETRY_LABELS[case.geometry_hint]}")
     if current is not None:
         st.success(
             f"已保存：第{current.revision_number}版 · "
             f"{ACTION_LABELS[CaseReviewAction(current.action)]} · "
             f"{current.submitted_at_utc}"
-        )
-
-    original_column, prediction_column = st.columns(2)
-    original_column.image(
-        normalize_for_display(image),
-        caption="原始图像（不显示任何作者标签）",
-        width="stretch",
-    )
-    original_column.caption(f"source: `{sample.source_path}`")
-    if prediction_mask is None:
-        prediction_column.warning("该通道没有可用的training-free预测。")
-    else:
-        prediction_column.image(
-            comparison_overlay(
-                image, label=None, prediction_mask=prediction_mask
-            ),
-            caption=(
-                "training-free预测：橙色区域 / 青色边界"
-                + (
-                    ""
-                    if prediction.status == "completed"
-                    else f"（abstained: {prediction.abstention_reason}）"
-                )
-            ),
-            width="stretch",
-        )
-        prediction_column.caption(
-            f"prediction status: `{prediction.status}` · "
-            f"mask SHA-256: `{prediction.mask_sha256[:16]}…`"
         )
 
     default_action, default_labels, default_notes = _current_defaults(current)
@@ -454,12 +464,12 @@ def main() -> None:
         ),
         key=f"action-{reviewer}-{case.case_id}",
         format_func=lambda value: ACTION_LABELS[value],
-        placeholder="请先判断左图，再选择一项结论",
+        placeholder="先查看下方原图，再选择结论",
     )
     if action is None:
-        st.warning("尚未选择专家结论，本例不会被保存。")
+        st.caption("可先查看原图；选择结论后再标注和保存。")
     else:
-        st.info(f"**{ACTION_LABELS[action]}：** {ACTION_GUIDANCE[action]}")
+        st.caption(ACTION_GUIDANCE[action])
     started_key = f"review-started:{reviewer}:{case.case_id}"
     st.session_state.setdefault(started_key, time.monotonic())
     with st.form(
@@ -468,6 +478,31 @@ def main() -> None:
         enter_to_submit=False,
         border=False,
     ):
+        draft_key = f"geometry-draft:{reviewer}:{case.case_id}"
+        shown_key = f"prediction-shown:{reviewer}:{case.case_id}:{selected_sample_id}"
+        if draft_key not in st.session_state and current is not None:
+            stored_geometry = current.submission.get("geometry")
+            if stored_geometry is not None:
+                st.session_state[draft_key] = stored_geometry
+        draft_geometry = st.session_state.get(draft_key)
+        editing = action == CaseReviewAction.CORRECT_GEOMETRY
+        if editing:
+            st.subheader("专家几何编辑")
+            st.caption(GEOMETRY_HELP[case.geometry_hint])
+        if prediction_mask is None:
+            st.caption("此通道没有可用预测，可独立查看和标注。")
+        draft_geometry, assistance_shown = review_image_canvas(
+            image,
+            prediction_mask=prediction_mask,
+            geometry_hint=case.geometry_hint,
+            existing_geometry=draft_geometry,
+            key=f"geometry-editor-{reviewer}-{case.case_id}-{selected_sample_id}",
+            read_only=not editing,
+            prediction_shown=st.session_state.get(shown_key, False),
+        )
+        st.session_state[draft_key] = draft_geometry
+        st.session_state[shown_key] = assistance_shown
+
         if action in {
             CaseReviewAction.ACCEPT_PREDICTION,
             CaseReviewAction.CORRECT_GEOMETRY,
@@ -492,50 +527,6 @@ def main() -> None:
         else:
             defect_labels = ()
 
-        draft_key = f"geometry-draft:{reviewer}:{case.case_id}"
-        if draft_key not in st.session_state and current is not None:
-            stored_geometry = current.submission.get("geometry")
-            if stored_geometry is not None:
-                st.session_state[draft_key] = stored_geometry
-        draft_geometry = st.session_state.get(draft_key)
-        if action == CaseReviewAction.CORRECT_GEOMETRY:
-            st.subheader("专家几何编辑")
-            st.info(
-                "**纠正操作：** "
-                + GEOMETRY_HELP[case.geometry_hint]
-                + " 青色预测仅供参考；洋红色几何才会保存。"
-            )
-            if case.geometry_hint == "region":
-                st.caption(
-                    "当前工具：套索。按住鼠标沿区域外缘绕一圈并松开。"
-                )
-            else:
-                st.caption(
-                    "当前工具：顺序控制点。轻点图中位置添加点；不要拖出矩形。"
-                    "点错可用“撤销最后一点”，整条错误可“清空并重画”。"
-                )
-            returned_geometry = review_geometry_canvas(
-                image,
-                prediction_mask=prediction_mask,
-                geometry_hint=case.geometry_hint,
-                existing_geometry=draft_geometry,
-                key=(
-                    f"geometry-editor-{reviewer}-{case.case_id}-"
-                    f"{selected_sample_id}"
-                ),
-            )
-            if returned_geometry is None:
-                st.session_state.pop(draft_key, None)
-            else:
-                st.session_state[draft_key] = returned_geometry
-            draft_geometry = returned_geometry
-            st.caption(
-                "绘制期间以Canvas工具栏的实时点数和“可以提交”提示为准；"
-                "页面不会逐点刷新，点击保存时统一校验。"
-            )
-            with st.expander("查看上次已提交到表单的坐标"):
-                st.json(draft_geometry or {})
-
         notes = st.text_area(
             "备注（拒绝、artifact或unknown时建议说明原因）",
             value=default_notes,
@@ -558,6 +549,11 @@ def main() -> None:
         try:
             if action is None:
                 raise ValueError("请先选择专家结论")
+            if action in {
+                CaseReviewAction.ACCEPT_PREDICTION,
+                CaseReviewAction.REJECT_PREDICTION,
+            } and not assistance_shown:
+                raise ValueError("请先打开图上方的“显示预测轮廓”进行对照，再接受或拒绝预测。")
             submission = ReviewSubmission(
                 project_id=REVIEW_PROJECT_ID,
                 reviewer_id=reviewer,
@@ -572,7 +568,7 @@ def main() -> None:
                 action=action,
                 defect_labels=defect_labels,
                 geometry=geometry,
-                model_assistance_shown=prediction_mask is not None,
+                model_assistance_shown=assistance_shown,
                 prediction_sha256=(
                     None if prediction is None else prediction.mask_sha256
                 ),
@@ -593,11 +589,22 @@ def main() -> None:
             )
             if submit_next:
                 completed = reviewed_case_ids | {case.case_id}
-                st.session_state["pending_case_id"] = _next_case_id(
-                    cases, case.case_id, completed
-                )
+                next_id = _next_case_id(queue, case.case_id, completed)
+                st.session_state["review-save-message"] = {
+                    "target_case_id": next_id,
+                    "message": f"上一例已持久化第{saved.revision_number}版；"
+                    + ("当前已进入下一例。" if next_id != case.case_id else "当前筛选范围已完成。"),
+                }
+                st.session_state["pending_case_id"] = next_id
                 st.rerun()
 
+    with st.expander("病例来源与技术信息", expanded=False):
+        st.caption(f"source: `{sample.source_path}`")
+        st.caption(f"病例：{case.case_id} · 数据集：{sample.dataset_id} · {sample.review_split}")
+        if prediction is not None:
+            st.caption(f"prediction status: `{prediction.status}` · mask SHA-256: `{prediction.mask_sha256}`")
+        if draft_geometry:
+            st.json(draft_geometry)
     history = store.history(reviewer, case.case_id)
     if history:
         with st.expander(f"本病例完整修订历史（{len(history)}版）"):

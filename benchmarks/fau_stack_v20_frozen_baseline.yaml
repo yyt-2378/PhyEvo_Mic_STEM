@@ -1,0 +1,67 @@
+schema: phyevo-frozen-workflow-v1
+baseline:
+  id: fau-stack-v20-all-structural-positives
+  frozen_on: "2026-09-17"
+  immutable: true
+  source: src/tfree_detection/fau_stack_analysis.py
+  sha256: a8c0b0c15e3aff7a9949801d95f8614f2ab8b7fc8adefefe453975434caa69f4
+  public_entrypoints:
+    - FAUStackConfig
+    - analyze_fau_stacks
+    - save_fau_stack_analysis
+
+behavior_contract:
+  reference_role: declared_rare_earth_free_negative_control
+  candidate_owner: fixed_delta_bic_structure_first
+  minimum_delta_bic: 6.0
+  within_image_top_quantile_gate: false
+  local_brightness_gate: false
+  brightness_role: audit_only
+  gpa_role: posthoc_spatial_audit_only
+  reference_interpreted_candidate_count: 0
+
+local_release:
+  manifest: real_data_test/4D数据计算晶格变化_0901/CURRENT_RELEASE.yaml
+  result_directory: >-
+    real_data_test/4D数据计算晶格变化_0901/
+    fau_stack_analysis_101_v20_all_structural_positives_no_brightness_gate
+  note: >-
+    The local release and microscopy inputs are intentionally not required by
+    the source-only freeze test. Their hashes remain in CURRENT_RELEASE.yaml.
+
+migration_policy:
+  - Do not edit or rename the frozen source while the generalized engine is
+    being developed.
+  - Add material-independent contracts and algorithms in new modules.
+  - Compare a FAU adapter against this baseline before changing the legacy
+    CLI entry point or retiring any frozen implementation.
+  - A deliberate baseline revision requires a new baseline id, a new result
+    directory, and explicit hash updates; never silently replace v20.
+
+generic_adapter_parity:
+  checked_on: "2026-09-17"
+  generic_code:
+    - src/tfree_detection/structure_guided/model_selection.py
+    - src/tfree_detection/structure_guided/analyzer.py
+    - src/tfree_detection/structure_guided/adapters/fau.py
+  local_input: >-
+    real_data_test/4D数据计算晶格变化_0901/
+    fau_stack_analysis_101_v20_all_structural_positives_no_brightness_gate/
+    analysis_arrays.npz
+  target_possible_samples:
+    RA:
+      valid_probe_count: 34
+      frozen_candidate_count: 32
+      generic_candidate_count: 32
+      maximum_absolute_delta_bic_difference: 5.684341886080802e-14
+    H2:
+      valid_probe_count: 72
+      frozen_candidate_count: 71
+      generic_candidate_count: 71
+      maximum_absolute_delta_bic_difference: 8.526512829121202e-14
+  target_free_reference:
+    label: Y
+    legacy_valid_probe_count: 173
+    retained_model_score_count: 0
+    generic_candidate_count: 0
+    false_positive_audit_retained: false

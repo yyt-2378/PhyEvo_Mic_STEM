@@ -102,8 +102,30 @@ PYTHONPATH=src streamlit run apps/review_dataset_viewer.py \
   --server.address 0.0.0.0 --server.port 8501
 ```
 
-专家先输入唯一的 `Reviewer ID`。主页面并排显示原图和 training-free 预测；模型区域为
-橙色、边界为青色，专家修正几何为洋红色。支持六种结论：接受预测、修正几何、拒绝预测、
+不使用自有域名、通过 HTTPS 隧道向受邀专家开放时，必须设置非空共享访问码，并让
+Streamlit 只监听回环地址：
+
+```bash
+TFREE_REVIEW_ACCESS_CODE='<strong-shared-code>' \
+  PYTHONPATH=src streamlit run apps/review_dataset_viewer.py \
+  --server.address 127.0.0.1 --server.port 8502 --server.headless true
+
+tailscale funnel --bg 8502
+```
+
+当前阶段性审核使用 Tailscale Funnel，固定公网入口为
+`https://phyevo-review.tailf74731.ts.net/`。当前 tailnet 使用 Personal 免费方案，没有购买
+域名或付费资源。项目本地守护器会监控并重启 Tailscale 与 Streamlit 子进程；服务器必须
+保持开机、联网且不能重启。服务器重启、上游网络故障或 Tailscale 服务异常仍会造成中断，
+因此这不是带可用性 SLA 的托管服务。
+
+共享访问码在任何病例、预测或 SQLite 加载之前校验；缺失、空值或错误都会立即停止应用。
+访问码只通过运行进程的环境变量注入，不得写入仓库、文档或命令脚本。负责人应定期检查
+`.codex-tmp/public-review-runtime-status.json`、公网健康端点和守护事件日志；若页面无法访问，
+先确认服务器仍在线，再恢复项目本地守护器。
+
+专家先输入唯一的 `Reviewer ID`。主页面使用单张可缩放大图，默认隐藏预测；按需打开的
+模型轮廓为琥珀细线，专家几何为青绿空心点/细线。支持六种结论：接受预测、修正几何、拒绝预测、
 无缺陷、artifact 和 unknown。
 
 可直接发给专家的一页说明见
@@ -112,7 +134,10 @@ PYTHONPATH=src streamlit run apps/review_dataset_viewer.py \
 点缺陷直接点击位点；线缺陷、位错、相界面和晶界使用顺序控制点；非晶区域在专用 Canvas
 上按住鼠标沿外缘连续拖动。Canvas 会把浏览器坐标换算成源像素坐标；绘图、撤销和清空在
 `st.form` 内暂存，不触发全页重运行。专家点击两个保存按钮之一时，几何、缺陷类型和备注才
-作为同一次表单事务回传。Canvas 工具栏可以撤销最后一个点或清空重画。
+作为同一次表单事务回传。Canvas 工具栏支持缩放、全屏、拖动查看、删除单点、撤销/恢复
+和清空。屏幕亮度、轮廓浓度与深浅配色只影响显示，不改变图像或源坐标。页面记录的是
+预测层实际被显示过的状态；未查看预测时无法提交接受/拒绝预测。“保存并进入下一例”
+的成功提示在跳转后仍显示。
 
 权威账本默认是
 `datasets/expert_annotations/review_store_v1.sqlite3`。Streamlit 页面重运行、刷新或浏览器
@@ -120,8 +145,10 @@ PYTHONPATH=src streamlit run apps/review_dataset_viewer.py \
 新的不可变修订，重复点击或相同内容重试不会增加版本。界面可分别下载当前结果和完整历史
 JSONL。数据库及 `-wal`/`-shm` 文件属于不可删除数据资产，部署时必须备份。
 
-当前入口只适合可信局域网。`Reviewer ID` 是记录身份，不是互联网认证；若向公网开放，必须
-在 Streamlit 前增加机构登录、TLS 和访问控制。
+`Reviewer ID` 是记录身份，不是互联网认证。共享访问码加 HTTPS Funnel 只适合
+封闭、受邀专家组的阶段性审核：它阻止未持码者加载数据，但不提供个人撤权、MFA 或机构级
+身份认证。若访问码泄露，应精确停止当前 Funnel 和 Streamlit 进程，换码后重启；长期或更高
+敏感度部署仍应使用具备独立账号策略的访问代理。
 
 ## 资产门禁与审核导出
 

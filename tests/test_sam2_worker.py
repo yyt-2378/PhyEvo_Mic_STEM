@@ -163,8 +163,15 @@ def test_exchange_request_preserves_sam2_worker_identity(tmp_path: Path):
     )
     plan = build_physics_prompt_plan(coarse, score, {}, config)
 
+    exchange_path = (
+        PROJECT_ROOT
+        / ".codex-tmp/pytest"
+        / tmp_path.parent.name
+        / tmp_path.name
+    )
+    exchange_path.mkdir(parents=True, exist_ok=False)
     _, request = prepare_sam3_exchange(
-        tmp_path,
+        exchange_path,
         image,
         coarse,
         score,
@@ -181,6 +188,26 @@ def test_exchange_request_preserves_sam2_worker_identity(tmp_path: Path):
     }
     assert request["geometry_kind"] == "region"
     assert len(request["prompts"]) == 2
+
+
+def test_exchange_request_rejects_path_outside_project():
+    shape = (8, 8)
+    image = np.zeros(shape, dtype=np.float32)
+    coarse = np.zeros(shape, dtype=bool)
+    coarse[2:6, 2:6] = True
+    score = coarse.astype(np.float32)
+    config = SAM3RefinementConfig(ensemble_size=1)
+    plan = build_physics_prompt_plan(coarse, score, {}, config)
+
+    with pytest.raises(ValueError, match="inside the project root"):
+        prepare_sam3_exchange(
+            PROJECT_ROOT.parent / "sam-exchange-outside-project-must-not-be-created",
+            image,
+            coarse,
+            score,
+            plan,
+            config,
+        )
 
 
 def test_sam2_worker_emits_v2_protocol_consumed_by_existing_gate(

@@ -5,8 +5,9 @@
 ```text
 PhyEvo_Mic_STEM/
 ├── src/tfree_detection/       核心 Python 包
-│   ├── tasks/                 非晶、点缺陷、相位线、界面任务
+│   ├── tasks/                 非晶、点缺陷、相位线、界面和结构引导任务
 │   ├── symmetry/              Class1 群作用、参考选择、多几何任务
+│   ├── structure_guided/      通用投影探针、双模型比较与材料适配器
 │   ├── features/              Fourier、倒易晶格、复载波特征
 │   ├── stage2/                GPA、冻结 DINO 与物理约束 SAM 3 proposal 门控
 │   ├── evidence.py            EvidenceBundle 和物理证据本体
@@ -14,7 +15,7 @@ PhyEvo_Mic_STEM/
 │   ├── student.py             证据保持学生模型接口
 │   ├── active_learning.py     分歧驱动主动学习
 │   └── cli.py                 tfree-detect 命令入口
-├── configs/                   五任务可复现 YAML 配置
+├── configs/                   多任务可复现 YAML 配置
 ├── tests/                     单元、合成、协议和回归测试
 ├── scripts/                   数据登记、评估、可视化和审阅脚本
 ├── environments/sam3/         独立 Python 3.12 SAM 3 环境定义

@@ -1,9 +1,21 @@
 # FAU z-stack：第 4/10 类 site-I 的固定结构门候选
 
+## 冻结基线与通用化边界
+
+当前 v20 流程是可审计的 FAU 专用基线，不再原地拆改。其源文件、SHA-256、公开
+入口和候选规则由
+`benchmarks/fau_stack_v20_frozen_baseline.yaml` 及
+`tests/test_fau_stack_frozen_baseline.py` 共同锁定。后续材料无关的结构投影、探针建模、
+证据解释和负对照策略必须在新模块中实现；在 FAU 适配器完成与该基线的语义
+等价验证之前，不替换现有 CLI，也不删除这份专用实现。
+
 > 当前权威实测结果：
 > `real_data_test/4D数据计算晶格变化_0901/fau_stack_analysis_101_v20_all_structural_positives_no_brightness_gate/`。
 > 首选说明文件为该目录的 `RESULTS_zh.md`。Y 是已知不含稀土的
 > 标准结构和负对照；RA/H2 是尺寸与视野不同的独立图像；纯 SiO2 FAU.cif 不含稀土坐标。
+> 面向阅读和汇报的精简中文标注版位于该目录的
+> `curated_annotated_v1/FAU_v20_Y_RA_H2_完整结果解读_中文标注.pdf`；其图页不改动
+> 原始显微像素，仅叠加确定性中文说明。
 
 ## 当前算法所有权
 
@@ -46,14 +58,13 @@ Y 的结构模型也会产生统计尾部，但 Y 已知不含稀土，因此只
 
 GPA 使用当前 TIFF 的 Y/RA/H2 代表焦面 `5/4/6`（从 0 开始），复用
 `TrainingFreeDetectionFramework` 和 `compare_to_reference`。去除刚体旋转及未知等向倍率
-后，RA 主形状应变为 `-0.482% / +0.482%`，H2 为 `-1.894% / +1.894%`。最大剪应变
+后，RA 主形状应变为 `-1.370% / +1.370%`，H2 为 `-1.922% / +1.922%`。最大剪应变
 只是无量纲应力热点代理；没有弹性张量、厚度模型和独立像素标定时不能换算成 Pa/GPa。
 
 ## 当前关键输出
 
 - `17_FAU_CIF_101_site_I_search_template.png`：纯物理骨架与 12 个 site-I 搜索位置；
 - `18_skeleton_first_site_I_candidates.png`：模型不可用位置、模型阴性位置和全部结构候选总览；
-- `19_skeleton_first_site_I_zoom_audit.png`：按 ΔBIC 展示最强 24 个位置，仅用于可读性，不改变候选；
 - `rare_earth_candidates.csv`：RA 32 个、H2 71 个完整结构候选；
 - `skeleton_first_site_I_all_probes.csv`：全部理论探针、模型状态、ΔBIC 和连续局部 z 审计量；
 - `summary.json`：输入 TIFF 哈希、固定 ΔBIC 门槛、明确关闭的两个门和全部计数。

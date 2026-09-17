@@ -32,6 +32,7 @@
 | `stacking_fault` | line | 双载波相位跳变、曲率、剪切/旋转 |
 | `phase_boundary` | interface | 局部倒易签名分域与界面追踪 |
 | `symmetry_relation` | region/interface/line/point | 多参考群对齐与五教师共识 |
+| `structure_guided_site` | point | 投影模板可选位点、端点模型与中心成分的 ΔBIC 比较 |
 
 ```bash
 python -m pip install -e ".[dev]"
@@ -110,6 +111,23 @@ python -m tfree_detection.cli detect-atomic-consensus \
   --input image.png --config configs/atomic_point_defect.yaml \
   --output outputs/atomic_consensus_run
 
+# 将不同视野统一到参考晶格方向/像素尺度，再按已声明的
+# O < Si < 稀土亮度顺序检测全部原子柱
+python -m tfree_detection.cli map-atomic-sites \
+  --reference Y.png --moving RA.png H2.png \
+  --config configs/atomic_point_defect.yaml \
+  --output outputs/atomic_site_inventory
+
+# 完整 QYX z-stack：在 FAU #4/#10 型 site-I 比较“两 O”与“两 O＋中心”模型；
+# 保留全部有效且 ΔBIC>=6 的正中心结构候选，不使用最高20%或局部亮度门；
+# Y 已知无稀土时作为零解释候选的负对照
+python -m tfree_detection.cli analyze-fau-zstacks \
+  --cif FAU.cif --reference-stack Y/stack.tif \
+  --reference-is-rare-earth-free \
+  --moving-stack RA/stack.tif H2/stack.tif \
+  --zone-axis 1 0 1 \
+  --output outputs/fau_stack_analysis
+
 # 对线或界面候选增加骨架、端点、分叉与线性度；不改变检测 mask
 python -m tfree_detection.cli detect \
   --input image.tif --config configs/phase_boundary.yaml \
@@ -128,8 +146,8 @@ python -m tfree_detection.cli assess-temporal-support \
 > 不把自然图像大模型当作物理判据，而是先度量“正常周期结构能否解释局部观测”，
 > 再用多个独立证据做鲁棒融合。
 
-当前已经注册五个可运行的候选生成任务：局部非晶/失序、原子位点异常、相滑移线、
-domain-signature 界面和群关系 Class1。它们共享输入、配置、结果、可视化和评估协议，
+当前已经注册六个可运行的候选生成任务：局部非晶/失序、原子位点异常、相滑移线、
+domain-signature 界面、群关系 Class1 和投影模板可选位点。它们共享输入、配置、结果、可视化和评估协议，
 但使用不同物理证据。
 任务分支不再直接决定最终物理亚型；resolver 会同时比较 vacancy/替位/位移、层错/位错/
 弯曲、异相/孪晶以及失焦/相干性伪影，并允许输出 `artifact` 或 `unresolved`。
@@ -155,6 +173,7 @@ v2 协议与 prepare-only 参考图已验证，但本机尚未执行授权 check
 | `stacking_fault` | 层错、部分位错、相位滑移线 | 两条倒易载波复解调、相位突变、曲率、剪切/旋转和相干度 |
 | `phase_boundary` | 两相、孪晶、晶畴界面 | 局部极坐标 Fourier 签名、鲁棒双原型分域、界面追踪 |
 | `symmetry_relation` | 平移/孪晶/镜像域、界面、相位线、芯点代理 | 多参考 motif 群对齐 + 五教师共识 + 四种几何 |
+| `structure_guided_site` | 模板可选/理论空位点的额外投影成分 | 两端点模板与“两端点 + 中心成分”嵌套模型的 ΔBIC |
 
 真实/公开案例已经整理成统一的[可视化总览](docs/assets/multitask_overview.png)；
 颜色、轮廓、六面板详图和逐任务物理解释见
@@ -586,7 +605,10 @@ tfree-detect detect \
 [`schemas/skeleton.example.json`](schemas/skeleton.example.json)。当前
 `amorphous_region`、`stacking_fault` 和 `phase_boundary` 不强制依赖骨架。
 `atomic_point_defect` 会实际读取骨架的像素基矢、必需节点、子晶格名称和相对强度；
-没有骨架时才退回自动子晶格推断。新任务仍可在 `src/tfree_detection/tasks/` 中注册
+没有骨架时才退回自动子晶格推断。`structure_guided_site` 要求骨架至少包含一个
+`optional: true` 节点，且该节点恰好连接两个非可选端点；详见
+[`schemas/structure_guided_skeleton.example.json`](schemas/structure_guided_skeleton.example.json)
+和[`docs/structure_guided_generalization_zh.md`](docs/structure_guided_generalization_zh.md)。新任务仍可在 `src/tfree_detection/tasks/` 中注册
 `DetectionTask`，复用现有预处理、结果协议、报告和 CLI。
 
 DINO 是可选第二阶段验证分支，不是基础检测的强制依赖。SAM 更适合在已有连续热图和

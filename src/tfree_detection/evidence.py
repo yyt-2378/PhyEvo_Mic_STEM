@@ -872,6 +872,45 @@ _MAPPINGS: Dict[str, tuple[_LegacyMapping, ...]] = {
     ),
 }
 
+_MAPPINGS["structure_guided_site"] = (
+    _LegacyMapping(
+        "group_structural_model_gain",
+        _descriptor(
+            "node.template_model_gain",
+            EvidenceScale.NODE,
+            ViolationType.OCCUPANCY,
+            EvidenceRole.ANOMALY,
+            EvidenceDirection.HIGHER_IS_MORE_ABNORMAL,
+            "BIC gain of an endpoint-plus-center model over the template-only model.",
+            "delta_bic",
+        ),
+    ),
+    _LegacyMapping(
+        "group_center_component",
+        _descriptor(
+            "node.extra_center_component",
+            EvidenceScale.NODE,
+            ViolationType.CHEMICAL_CONTRAST,
+            EvidenceRole.ANOMALY,
+            EvidenceDirection.HIGHER_IS_MORE_ABNORMAL,
+            "Positive fitted component at an optional projected template site.",
+            "robust_amplitude",
+        ),
+    ),
+    _LegacyMapping(
+        "structure_probe_support",
+        _descriptor(
+            "node.projected_template_support",
+            EvidenceScale.NODE,
+            ViolationType.OCCUPANCY,
+            EvidenceRole.STRUCTURE,
+            EvidenceDirection.DIAGNOSTIC_ONLY,
+            "Sites where the projected structural probe is geometrically valid.",
+            "binary",
+        ),
+    ),
+)
+
 
 DEFAULT_HYPOTHESES: Dict[str, DefectHypothesis] = {
     "amorphous_region": DefectHypothesis(
@@ -959,6 +998,25 @@ DEFAULT_HYPOTHESES: Dict[str, DefectHypothesis] = {
         resolution_kind="fallback",
     ),
 }
+
+DEFAULT_HYPOTHESES["structure_guided_site"] = DefectHypothesis(
+    name="unexpected_template_site_occupancy",
+    violation_types=(
+        ViolationType.OCCUPANCY,
+        ViolationType.CHEMICAL_CONTRAST,
+    ),
+    spatial_support=SpatialSupport.POINT,
+    evidence_weights={
+        "node.template_model_gain": 1.0,
+        "node.extra_center_component": 0.7,
+    },
+    minimum_supported_fields=1,
+    description=(
+        "An optional or nominally empty projected template site is better "
+        "explained by an added center component."
+    ),
+    family="projected_structure_site_anomaly",
+)
 
 
 OPEN_WORLD_HYPOTHESES: Dict[str, tuple[DefectHypothesis, ...]] = {
@@ -1271,6 +1329,10 @@ OPEN_WORLD_HYPOTHESES: Dict[str, tuple[DefectHypothesis, ...]] = {
     ),
 }
 
+OPEN_WORLD_HYPOTHESES["structure_guided_site"] = (
+    DEFAULT_HYPOTHESES["structure_guided_site"],
+)
+
 
 def hypotheses_for_task(task: str) -> tuple[DefectHypothesis, ...]:
     try:
@@ -1316,6 +1378,12 @@ def _task_reliability(
             reliability = _clip01(registration)
             explicit_valid = reliability > 0
             sources.append("registration_reliability")
+    elif task == "structure_guided_site":
+        probe_reliability = evidence_maps.get("structure_probe_reliability")
+        if probe_reliability is not None:
+            reliability = _clip01(probe_reliability)
+            explicit_valid = reliability > 0
+            sources.append("structure_probe_reliability")
     elif task == "stacking_fault":
         validity = evidence_maps.get("phase_slip_validity")
         coherence = evidence_maps.get("lattice_coherence")
@@ -1532,6 +1600,11 @@ def _region_violations(defect_type: str) -> list[str]:
         "interstitial_or_extra_column",
     }:
         return [ViolationType.OCCUPANCY.value]
+    if defect_type == "unexpected_template_site_occupancy":
+        return [
+            ViolationType.OCCUPANCY.value,
+            ViolationType.CHEMICAL_CONTRAST.value,
+        ]
     if defect_type == "stacking_fault_or_dislocation_line":
         return [
             ViolationType.PHASE_SLIP.value,

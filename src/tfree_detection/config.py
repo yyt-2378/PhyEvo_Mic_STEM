@@ -237,6 +237,18 @@ class SymmetryRelationConfig:
 
 
 @dataclass
+class StructureGuidedConfig:
+    """Optional projected-site model-selection parameters."""
+
+    sample_role: str = "target_possible"
+    minimum_delta_bic: float = 6.0
+    profile_sigma_pixels: float = 1.25
+    minimum_endpoint_separation_pixels: float = 4.0
+    border_pixels: float = 4.0
+    candidate_radius_pixels: float = 2.5
+
+
+@dataclass
 class DetectorConfig:
     task: str = "amorphous_region"
     preprocess: PreprocessConfig = field(default_factory=PreprocessConfig)
@@ -259,6 +271,9 @@ class DetectorConfig:
     symmetry_relation: SymmetryRelationConfig = field(
         default_factory=SymmetryRelationConfig
     )
+    structure_guided: StructureGuidedConfig = field(
+        default_factory=StructureGuidedConfig
+    )
 
     def validate(self) -> None:
         supported_tasks = {
@@ -267,6 +282,7 @@ class DetectorConfig:
             "stacking_fault",
             "phase_boundary",
             "symmetry_relation",
+            "structure_guided_site",
         }
         if self.task not in supported_tasks:
             raise ValueError(
@@ -554,6 +570,36 @@ class DetectorConfig:
         if not 0 <= symmetry.artifact_competition_weight <= 1:
             raise ValueError(
                 "symmetry_relation.artifact_competition_weight must be in [0, 1]"
+            )
+        structure = self.structure_guided
+        if structure.sample_role not in {
+            "target_possible",
+            "target_free_reference",
+        }:
+            raise ValueError(
+                "structure_guided.sample_role must be target_possible or "
+                "target_free_reference"
+            )
+        if structure.minimum_delta_bic < 0:
+            raise ValueError(
+                "structure_guided.minimum_delta_bic cannot be negative"
+            )
+        if structure.profile_sigma_pixels <= 0:
+            raise ValueError(
+                "structure_guided.profile_sigma_pixels must be positive"
+            )
+        if structure.minimum_endpoint_separation_pixels <= 0:
+            raise ValueError(
+                "structure_guided.minimum_endpoint_separation_pixels must "
+                "be positive"
+            )
+        if structure.border_pixels < 0:
+            raise ValueError(
+                "structure_guided.border_pixels cannot be negative"
+            )
+        if structure.candidate_radius_pixels <= 0:
+            raise ValueError(
+                "structure_guided.candidate_radius_pixels must be positive"
             )
 
     def to_dict(self) -> Dict[str, Any]:

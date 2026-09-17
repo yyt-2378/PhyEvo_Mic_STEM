@@ -30,17 +30,19 @@ def test_all_multitask_configs_load() -> None:
         ("atomic_point_defect.yaml", "atomic_point_defect"),
         ("stacking_fault.yaml", "stacking_fault"),
         ("phase_boundary.yaml", "phase_boundary"),
+        ("structure_guided_site.yaml", "structure_guided_site"),
     ]:
         assert load_config(root / "configs" / filename).task == task
 
 
-def test_framework_registers_five_physical_tasks() -> None:
+def test_framework_registers_six_physical_tasks() -> None:
     framework = TrainingFreeDetectionFramework(DetectorConfig())
     assert framework.available_tasks == (
         "amorphous_region",
         "atomic_point_defect",
         "phase_boundary",
         "stacking_fault",
+        "structure_guided_site",
         "symmetry_relation",
     )
 

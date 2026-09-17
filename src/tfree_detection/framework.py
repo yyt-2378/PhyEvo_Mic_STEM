@@ -23,6 +23,7 @@ from .tasks import (
     DetectionTask,
     PhaseBoundaryTask,
     StackingFaultTask,
+    StructureGuidedSiteTask,
     SymmetryRelationTask,
 )
 
@@ -37,6 +38,7 @@ class TrainingFreeDetectionFramework:
             AtomicPointDefectTask.name: AtomicPointDefectTask,
             StackingFaultTask.name: StackingFaultTask,
             PhaseBoundaryTask.name: PhaseBoundaryTask,
+            StructureGuidedSiteTask.name: StructureGuidedSiteTask,
             SymmetryRelationTask.name: SymmetryRelationTask,
         }
 

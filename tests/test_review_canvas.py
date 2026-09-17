@@ -1,13 +1,18 @@
 import subprocess
 import sys
+import base64
+from io import BytesIO
 
 import numpy as np
+from PIL import Image
+import pytest
 
 from tfree_detection.review_canvas import (
     canvas_payload,
     display_point_to_source,
     normalize_canvas_geometry,
 )
+from tfree_detection.review_prediction import normalize_for_display
 
 
 def test_canvas_geometry_helpers_import_without_streamlit() -> None:
@@ -54,6 +59,23 @@ def test_canvas_payload_embeds_real_overlay_and_geometry_contract() -> None:
     assert payload["imageHeight"] == 32
     assert payload["geometryType"] == "boundary_trace"
     assert payload["minimumPoints"] == 2
+    raw = np.asarray(Image.open(BytesIO(base64.b64decode(payload["imageDataUrl"].split(",")[1]))))
+    layer = np.asarray(Image.open(BytesIO(base64.b64decode(payload["predictionDataUrl"].split(",")[1]))))
+    # Prediction visibility/opacity must never alter the scientific base image.
+    np.testing.assert_array_equal(raw, normalize_for_display(image))
+    assert layer[8, 12].tolist() == [223, 183, 115, 255]
+    assert layer[10, 15, 3] == 0  # no filled regions obscuring interior pixels
+    assert layer[0, 0, 3] == 0
+    assert payload["predictionShown"] is False
+
+
+def test_canvas_rejects_misaligned_prediction_and_handles_no_prediction() -> None:
+    image = np.zeros((32, 48))
+    with pytest.raises(ValueError, match="shape"):
+        canvas_payload(image, prediction_mask=np.zeros((48, 32)), geometry_hint="point", existing_geometry=None)
+    payload = canvas_payload(image, prediction_mask=None, geometry_hint="point", existing_geometry=None, read_only=True)
+    assert payload["predictionDataUrl"] is None
+    assert payload["readOnly"] is True
 
 
 def test_canvas_geometry_is_source_pixel_clipped_and_validated() -> None:

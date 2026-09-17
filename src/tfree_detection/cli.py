@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 from pathlib import Path
 from typing import Sequence
@@ -12,6 +13,10 @@ from skimage.io import imread
 
 from .config import load_config
 from .atomic_consensus import detect_atomic_consensus
+from .atomic_site_inventory import (
+    analyze_atomic_site_inventory,
+    save_atomic_site_inventory,
+)
 from .dataset_label_adapter import (
     ExternalLabel,
     adapter_manifest,
@@ -19,10 +24,15 @@ from .dataset_label_adapter import (
 )
 from .evidence import ontology_manifest
 from .evaluation import boundary_refinement_comparison
+from .fau_stack_analysis import analyze_fau_stacks, save_fau_stack_analysis
 from .framework import TrainingFreeDetectionFramework
 from .governance import DataPartition, DataRegistry
 from .preprocessing import list_emd_datasets
 from .reporting import save_result
+from .reference_deformation import (
+    compare_to_reference,
+    save_reference_comparison,
+)
 from .temporal_support import (
     TemporalSupportConfig,
     analyze_temporal_support,
@@ -157,6 +167,89 @@ def build_parser() -> argparse.ArgumentParser:
         "--output",
         default=None,
         help="optional new JSON file; existing files are never overwritten",
+    )
+    reference = subparsers.add_parser(
+        "compare-reference",
+        help="compare moving-image lattice deformation against one reference",
+    )
+    reference.add_argument(
+        "--reference", required=True, help="fixed reference/template image"
+    )
+    reference.add_argument(
+        "--moving",
+        required=True,
+        nargs="+",
+        help="one or more images to compare against the reference",
+    )
+    reference.add_argument(
+        "--config", required=True, help="GPA-enabled detector configuration"
+    )
+    reference.add_argument(
+        "--output", required=True, help="new output directory"
+    )
+    atomic_sites = subparsers.add_parser(
+        "map-atomic-sites",
+        help=(
+            "align images to one reference lattice and map O/Si/rare-earth "
+            "sites by declared 4D-STEM brightness order"
+        ),
+    )
+    atomic_sites.add_argument(
+        "--reference", required=True, help="reference/template image"
+    )
+    atomic_sites.add_argument(
+        "--moving",
+        required=True,
+        nargs="+",
+        help="one or more images to align and map",
+    )
+    atomic_sites.add_argument(
+        "--config",
+        required=True,
+        help="detector YAML supplying preprocessing and spectral policy",
+    )
+    atomic_sites.add_argument(
+        "--output", required=True, help="new output directory"
+    )
+    fau_stacks = subparsers.add_parser(
+        "analyze-fau-zstacks",
+        help=(
+            "retain fixed-delta-BIC site-I structural candidates and compare "
+            "the Si/O FAU framework against a guest-free CIF"
+        ),
+    )
+    fau_stacks.add_argument(
+        "--cif", required=True, help="guest-free Si/O framework CIF"
+    )
+    fau_stacks.add_argument(
+        "--reference-stack",
+        required=True,
+        help="Y reference QYX TIFF stack",
+    )
+    fau_stacks.add_argument(
+        "--reference-is-rare-earth-free",
+        action="store_true",
+        help=(
+            "declare the reference as a normalized false-positive control with "
+            "no rare-earth atoms"
+        ),
+    )
+    fau_stacks.add_argument(
+        "--moving-stack",
+        required=True,
+        nargs="+",
+        help="one or more moving QYX TIFF stacks (labels use parent names)",
+    )
+    fau_stacks.add_argument(
+        "--zone-axis",
+        required=True,
+        nargs=3,
+        type=int,
+        metavar=("H", "K", "L"),
+        help="known crystallographic projection direction, e.g. 1 0 1",
+    )
+    fau_stacks.add_argument(
+        "--output", required=True, help="new output directory"
     )
     return parser
 
@@ -370,6 +463,119 @@ def main(argv: Sequence[str] | None = None) -> None:
             json.dumps(
                 {
                     **report.summary(),
+                    "artifacts": artifacts,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    elif args.command == "compare-reference":
+        config = load_config(args.config)
+        if not config.stage2.enabled or not config.stage2.phase.enabled:
+            raise ValueError(
+                "compare-reference requires stage2.phase.enabled in the config"
+            )
+        # Frozen-DINO verification does not contribute to the cross-image GPA
+        # tensor.  Disable it for this command to avoid redundant inference.
+        comparison_config = copy.deepcopy(config)
+        comparison_config.stage2.dino.enabled = False
+        comparison_config.stage2.sam3.enabled = False
+        framework = TrainingFreeDetectionFramework(comparison_config)
+        reference_path = Path(args.reference)
+        reference_result = framework.detect(reference_path)
+        comparisons = []
+        for moving_name in args.moving:
+            moving_path = Path(moving_name)
+            moving_result = framework.detect(moving_path)
+            comparisons.append(
+                compare_to_reference(
+                    reference_result,
+                    moving_result,
+                    reference_label=reference_path.stem,
+                    moving_label=moving_path.stem,
+                )
+            )
+        artifacts = save_reference_comparison(
+            reference_result,
+            comparisons,
+            reference_label=reference_path.stem,
+            output_directory=args.output,
+            dpi=config.output.figure_dpi,
+        )
+        print(
+            json.dumps(
+                {
+                    "reference": str(reference_path.resolve()),
+                    "moving": [str(Path(item).resolve()) for item in args.moving],
+                    "dino_used": False,
+                    "comparisons": [item.summary for item in comparisons],
+                    "artifacts": artifacts,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    elif args.command == "map-atomic-sites":
+        config = load_config(args.config)
+        inventory = analyze_atomic_site_inventory(
+            Path(args.reference),
+            [Path(item) for item in args.moving],
+            config,
+        )
+        artifacts = save_atomic_site_inventory(
+            inventory,
+            args.output,
+            dpi=config.output.figure_dpi,
+        )
+        print(
+            json.dumps(
+                {
+                    "reference": inventory.reference_label,
+                    "common_canvas_shape": list(
+                        inventory.common_canvas_shape
+                    ),
+                    "site_counts": {
+                        image.label: int(len(image.species))
+                        for image in inventory.images
+                    },
+                    "artifacts": artifacts,
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    elif args.command == "analyze-fau-zstacks":
+        reference_path = Path(args.reference_stack)
+        moving_paths = [Path(item) for item in args.moving_stack]
+        reference_label = reference_path.parent.name
+        stacks = {reference_label: reference_path}
+        for path in moving_paths:
+            label = path.parent.name
+            if label in stacks:
+                raise ValueError(
+                    "Stack parent directories must provide unique labels"
+                )
+            stacks[label] = path
+        analysis = analyze_fau_stacks(
+            args.cif,
+            stacks,
+            reference_label=reference_label,
+            reference_is_rare_earth_free=args.reference_is_rare_earth_free,
+            zone_axis=args.zone_axis,
+        )
+        artifacts = save_fau_stack_analysis(
+            analysis,
+            args.output,
+        )
+        print(
+            json.dumps(
+                {
+                    "reference": reference_label,
+                    "images": list(stacks),
+                    "zone_axes": {
+                        item.label: list(item.template_fit.zone_axis)
+                        for item in analysis.images
+                    },
                     "artifacts": artifacts,
                 },
                 ensure_ascii=False,

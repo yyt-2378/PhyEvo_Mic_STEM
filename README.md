@@ -1,21 +1,44 @@
-# PhyEvo_Mic_STEM / PhyEvo-Mic
+# PhyEvo-Mic · 物理证据驱动的 RSI 电镜分析框架
 
-**以训练自由物理分析为基线，通过专家监督学生、能力分工和证据门禁进行受控持续改进的 STEM 分析平台。**
+**从定位显微结构异常，到用专家反馈改进分析能力，再到执行、评价和继承改进方案。**
 
-当前源码主线是“物理分析与专家反馈 → 可执行改进提案 → 隔离执行与固定协议评价 →
-整个系统的更新准入 → 下一轮实际继承”。进化状态包括分析能力库、学生状态、采用规则和研究经验，
-不是仅选择一个学生权重。最新程序级实现见
-[RSI 模块与入口](experiments/rsi_program_evolution_v1/README.md)。原物理默认行为保持不变。
+PhyEvo-Mic 将训练自由物理分析、结构模板、专家审核和学生学习放在同一套证据协议下，
+通过程序级 RSI（Recursive Self-Improvement，递归自改进）组织方法更新。
+改进对象不仅是神经网络权重，还包括**分析能力库、学生状态、能力采用规则和研究经验**。
 
-本次为 **2026-10-19 源码整理快照**：包版本仍为 `0.4.0`，具体源码以功能分支的 Git commit
-固定，不改写历史实验的代码哈希，不重新训练或修改 `outputs/`。
-[发布检查](docs/publishing_zh.md)将源码回归与本地科学证据核验分开；测试通过不等同于重跑论文实验。
+项目重点解决三个问题：异常在哪里、依据是什么，以及新方法如何接入系统而不丢失已有能力。
 
-当前版本为 v0.4。冻结的 v0.2 training-free 检测器仍是独立 physics teacher；其上已经
-搭建 EvidenceBundle v2、多假设 resolver、公开数据标签适配、数据治理、证据保持学生、
-主动学习、专家共识、校准/OOD、反事实数字孪生和非退化发布门禁。
+- **物理分析**：晶格、频谱、相位、对称性与结构投影，生成点、线、界面和区域候选及解释。
+- **专家与学生协同**：保存专家修正，将审核反馈用于学生训练和研究诊断；不要求每次重新标注。
+- **框架级 RSI**：提出可执行机制与采用条件，隔离执行，按固定协议评价，接受或拒绝更新并继承状态。
 
-![PhyEvo-Mic architecture](docs/assets/architecture.svg)
+## 当前整体框架
+
+![PhyEvo-Mic 当前框架：物理分析、专家反馈与程序级 RSI 的状态继承闭环](docs/assets/phyevo_mic_rsi_framework.svg)
+
+[打开高清矢量图](docs/assets/phyevo_mic_rsi_framework.svg) ·
+[当前工作流](docs/current_workflows_zh.md) ·
+[RSI 实现与模块对应](experiments/rsi_program_evolution_v1/README.md)
+
+图中上层是分析与专家反馈，下层是程序级改进循环；通过准入的能力与采用规则一起继承，
+未通过的更新不会直接替换当前系统。学生训练是可选研究动作，不是每轮必做步骤。
+原物理检测仍可独立运行，RSI 研究入口不会静默替换默认检测器。
+图示说明源码关系，不代替实验效果证据；模型生成仍通过现有请求／回复中转接入。
+
+## 当前版本与保存方式
+
+**2026-10-19 主分支源码发布，包版本 `0.4.0`。** 最新整理版包含 PhyEvo-Mic 主框架、
+程序级 RSI、迭代执行与审计脚本；具体版本以 Git commit 固定。
+
+| 内容 | 保存位置 |
+| --- | --- |
+| 当前检测、审核、学生与 RSI 入口 | `main` 中的 `src/`、`apps/`、`scripts/phyevo.py`、`experiments/rsi_program_evolution_v1/` |
+| 本次发布前已验收的源码重构 | [`4a41736`](https://github.com/yyt-2378/PhyEvo_Mic_STEM/commit/4a417366d6dc8e6c54a87e935bdcf8a2f07bbd08) |
+| 精简前源码及已移除的历史报告脚本 | [`56fc212`](https://github.com/yyt-2378/PhyEvo_Mic_STEM/tree/56fc212771392265c157812b50dd882c15eaf323) |
+| 实验输入、专家标注、权重、逐轮产物和稿件 | 本地资产，不随源码发布；Git 代码快照不等于实验资产备份 |
+
+`rsi_program_evolution_v1` 是保留的模块路径，不是“只含第一版”的版本标签。
+新运行使用显式配置；历史实验仍绑定其原始代码和协议，不修改旧 seal 来适配新代码。
 
 ## 从这里开始
 
@@ -30,7 +53,7 @@
 | 查看当前效果、指标与限制 | [结果总览](docs/results_summary_zh.md) |
 | 使用物理约束 SAM 3 细化边界 | [SAM 3 边界细化](docs/sam3_boundary_refinement_zh.md) |
 | 浏览全部研究文档 | [文档导航](docs/index_zh.md) |
-| 检查源码、固定提交并推送功能分支 | [发布说明](docs/publishing_zh.md) |
+| 检查源码、固定提交与主分支发布 | [发布说明](docs/publishing_zh.md) |
 | 理解最新 Class1 群关系方法 | [Class1 最终报告](docs/class1_symmetry_relation_final_zh.md) |
 | 使用已完成的专家标注训练学生、查看真实 GPU 对照结果 | [专家标注学习闭环](docs/expert_learning_cycle_zh.md) |
 | 比较物理与学生能力、理解协同和非退化门禁 | [RSI 能力框架](docs/rsi_framework_zh.md) |
@@ -52,7 +75,37 @@
 位置配置模板见 `configs/rsi_composition.example.json`。历史脚本删除进度与保留理由见
 [当前工作流](docs/current_workflows_zh.md)；配置模板不是已准备好的实验数据包。
 
-## 历史实验导航（不是本次源码验收结果）
+## RSI 怎样更新整个框架
+
+1. **诊断**：读取开发侧观测、专家反馈和历史经验，定位当前能力的缺口。
+2. **提出操作**：生成分析程序、候选区域策略、能力采用规则或学生训练方案。
+3. **隔离执行**：在声明的输入、运行环境和预算内执行程序，记录父版本与程序／状态绑定。
+4. **整体评价**：比较改进收益与旧能力保留；开发选择与封存后评价分开。
+5. **继承或拒绝**：通过则保留能力及调用条件，供下一轮实际调用；未通过则保留原系统并记录反馈。
+
+对应模块为 `composition_study`、`composition_runtime`、`system_state`、
+`retained_portfolio` 和 `composition_*audit`。启动研究需要已准备的输入和父系统状态，
+详细前提见[当前工作流](docs/current_workflows_zh.md)。
+
+## 源码验收
+
+2026-10-19 的 `4a41736` 已按精确 Git 暂存源码完成隔离回归：
+
+| 范围 | 通过 | 跳过 | 显式排除 |
+| --- | ---: | ---: | ---: |
+| 核心代码与脚本 | 616 | 12 | 2 |
+| 当前程序级 RSI | 200 | 4 | 0 |
+| 专家审核与界面 | 45 | 0 | 0 |
+
+各范围部分重叠，不相加。跳过／排除涉及可选依赖、外部资产和未启用 GPU 测试；
+这是本地源码回归，不是远端 CI 状态，也不是新一轮论文实验。命令与范围见[发布检查](docs/publishing_zh.md)。
+
+## 历史实验与本地材料
+
+<details>
+<summary>展开历史训练轮次和稿件导航（本地路径不随 GitHub 发布）</summary>
+
+以下是历史阶段记录，不代表当前框架仅完成这些步骤，也不是本次源码验收结果。
 
 ### 训练改进轮次（2026-10-14）
 
@@ -95,6 +148,8 @@ ORII 界面由 41.01% 到 47.62%。这些是开发观察，不能当作自动路
 仓库只跟踪源码、配置、测试、协议、轻量元数据和精选图示。原始数据、下载权重、完整运行
 数组、审阅私钥及本地缓存均由 `.gitignore` 排除；它们仍保留在本地工作区，不会被删除。
 
+</details>
+
 ## 当前可运行任务
 
 | 任务 | 输出几何 | 主要物理证据 |
@@ -117,7 +172,16 @@ tfree-detect detect \
   --output outputs/quickstart_amorphous
 ```
 
-核心链路是：
+## 早期实施与案例记录
+
+<details>
+<summary>展开早期物理框架、样例参数与历史实验（不作为最新 RSI 发布状态）</summary>
+
+以下保留早期实施记录及其当时的结果、限制和本地路径。当前入口、版本与源码验收以上文为准；
+干净克隆不包含文中 `outputs/` 或 `paper/` 指向的本地资产。
+早期图示另见 [原物理架构图](docs/assets/architecture.svg)。
+
+早期核心链路是：
 
 ```text
 physics teacher
@@ -787,3 +851,5 @@ PYTHONPATH=src python benchmarks/run_multitask_benchmark.py
   相似信号，应结合原始采集元数据复核。
 - 两相任务输出的是当前图像中的域编号，不是化学相名称；真空/颗粒表面通过局部晶体
   对比度屏蔽，域原型仍需要衍射、成分或结构模型才能赋予材料学标签。
+
+</details>

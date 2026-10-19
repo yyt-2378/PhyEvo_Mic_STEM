@@ -22,7 +22,7 @@ PhyEvo_Mic_STEM/
 ├── experiments/rsi_program_evolution_v1/
 │   ├── controller.py           程序提案、执行、评价与继承
 │   ├── composition_runtime.py  组合能力及父节点状态的实际调用
-│   ├── composition_study.py    最新组合继承实验编排（含本机路径）
+│   ├── composition_study.py    最新组合继承实验编排（显式运行配置）
 │   └── composition_*audit.py   整体保留检查与封存后评价
 ├── environments/sam3/         独立 Python 3.12 SAM 3 环境定义
 ├── benchmarks/                冻结协议与轻量指标摘要

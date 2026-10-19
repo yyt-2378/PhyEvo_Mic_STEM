@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200" role="img" aria-labelledby="title desc">
+  <title id="title">PhyEvo-Mic：物理证据、专家反馈与程序级 RSI</title>
+  <desc id="desc">显微图像经物理分析输出多几何候选和证据，专家反馈进入研究诊断。系统提出程序与采用条件，在沙盒中执行，按固定协议评价并接受或拒绝更新。能力库、学生状态、采用规则与研究经验一起保存，供后续研究和显式启用的分析使用。学生训练为可选动作，原物理检测可独立运行。</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto-start-reverse" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10Z" fill="#54738f"/></marker>
+    <marker id="teal-arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0 0 L10 5 L0 10Z" fill="#087f80"/></marker>
+    <style>
+      text{font-family:Arial,"Noto Sans CJK SC","Microsoft YaHei",sans-serif;fill:#18344d}
+      .title{font-size:38px;font-weight:700}
+      .subtitle{font-size:22px;fill:#516779}
+      .lane{font-size:24px;font-weight:700;fill:#126d78}
+      .head{font-size:24px;font-weight:700}
+      .body{font-size:21px}
+      .small{font-size:18px;fill:#516779}
+      .mono{font-family:Arial,sans-serif;font-size:17px;fill:#54738f}
+      .flow{fill:none;stroke:#54738f;stroke-width:3;marker-end:url(#arrow);stroke-linejoin:round}
+      .loop{fill:none;stroke:#087f80;stroke-width:3;marker-end:url(#teal-arrow);stroke-linejoin:round}
+      .dash{stroke-dasharray:9 6}
+      .card{fill:white;stroke:#c5d5e0;stroke-width:1.5}
+    </style>
+  </defs>
+  <rect width="1600" height="1200" fill="#ffffff"/>
+  <rect x="50" y="35" width="8" height="68" rx="4" fill="#087f80"/>
+  <text x="78" y="65" class="title">PhyEvo-Mic：物理证据驱动的 RSI 电镜分析框架</text>
+  <text x="78" y="102" class="subtitle">从发现异常，到提出改进，再到执行、评价与继承</text>
+
+  <rect x="44" y="132" width="1512" height="308" rx="20" fill="#f1f6fa"/>
+  <text x="70" y="171" class="lane">01　分析与专家反馈</text>
+  <text x="1510" y="170" text-anchor="end" class="small">原物理基线可独立运行；新能力按配置显式接入</text>
+
+  <rect x="70" y="194" width="300" height="216" rx="14" class="card"/>
+  <text x="94" y="234" class="head">显微输入与参考</text>
+  <text x="94" y="274" class="body">图像／栈与采集元信息</text>
+  <text x="94" y="307" class="body">可选参考图、CIF 模板</text>
+  <text x="94" y="340" class="body">归一化、配准与尺度记录</text>
+  <text x="94" y="383" class="small">保留输入来源与空间坐标</text>
+  <path d="M370 300 H410" class="flow"/>
+
+  <rect x="420" y="194" width="360" height="216" rx="14" class="card"/>
+  <text x="444" y="234" class="head">物理分析与可选能力</text>
+  <text x="444" y="274" class="body">晶格、频谱、相位与对称性</text>
+  <text x="444" y="307" class="body">结构模板、位点与局部畸变</text>
+  <text x="444" y="340" class="body">可选预训练特征／学生协同</text>
+  <text x="444" y="383" class="small">物理证据与能力采用条件共同约束</text>
+  <path d="M780 300 H820" class="flow"/>
+
+  <rect x="830" y="194" width="300" height="216" rx="14" class="card"/>
+  <text x="854" y="234" class="head">可解释分析结果</text>
+  <text x="854" y="274" class="body">点／线／界面／区域候选</text>
+  <text x="854" y="307" class="body">证据、有效区域与可靠性</text>
+  <text x="854" y="340" class="body">诊断图与分支分歧</text>
+  <text x="854" y="383" class="small">候选不自动等同于材料学真值</text>
+  <path d="M1130 300 H1170" class="flow"/>
+
+  <rect x="1180" y="194" width="350" height="216" rx="14" fill="#fff6eb" stroke="#e2b480" stroke-width="1.5"/>
+  <text x="1204" y="234" class="head">专家审核与监督</text>
+  <text x="1204" y="274" class="body">接受、修正、拒绝与不确定</text>
+  <text x="1204" y="307" class="body">标注版本保存／恢复／导出</text>
+  <text x="1204" y="340" class="body">供学生学习与研究诊断使用</text>
+  <text x="1204" y="383" class="small">沿用已保存反馈，无须每轮重标</text>
+
+  <text x="500" y="495" class="small">开发侧观测、专家修正和历史实验反馈</text>
+
+  <rect x="44" y="502" width="1512" height="338" rx="20" fill="#eff8f6"/>
+  <path d="M1355 410 V472 H55 V548 H195 V550" class="flow"/>
+  <text x="70" y="537" class="lane">02　程序级 RSI：改进算法，也改进能力采用规则</text>
+
+  <rect x="70" y="558" width="250" height="246" rx="14" class="card"/>
+  <text x="90" y="599" class="head">① 研究诊断</text>
+  <text x="90" y="641" class="body">定位误差与能力缺口</text>
+  <text x="90" y="674" class="body">读取父系统与经验</text>
+  <text x="90" y="707" class="body">形成下一轮研究上下文</text>
+  <text x="90" y="778" class="mono">diagnose / request</text>
+  <path d="M320 681 H352" class="flow"/>
+
+  <rect x="362" y="558" width="250" height="246" rx="14" class="card"/>
+  <text x="382" y="599" class="head">② 可执行提案</text>
+  <text x="382" y="641" class="body">分析／候选／协同策略</text>
+  <text x="382" y="674" class="body">新增或组合能力分支</text>
+  <text x="382" y="707" class="body">提出采用条件</text>
+  <text x="382" y="740" class="body">或选择训练学生</text>
+  <text x="382" y="778" class="mono">provider / broker</text>
+  <path d="M612 681 H644" class="flow"/>
+
+  <rect x="654" y="558" width="250" height="246" rx="14" class="card"/>
+  <text x="674" y="599" class="head">③ 隔离执行</text>
+  <text x="674" y="641" class="body">执行生成或复用的程序</text>
+  <text x="674" y="674" class="body">按方案训练／推理</text>
+  <text x="674" y="707" class="body">绑定代码、输入与状态</text>
+  <text x="674" y="740" class="body">限制资源与产物存储</text>
+  <text x="674" y="778" class="mono">sandbox / executor</text>
+  <path d="M904 681 H936" class="flow"/>
+
+  <rect x="946" y="558" width="250" height="246" rx="14" class="card"/>
+  <text x="966" y="599" class="head">④ 固定协议评价</text>
+  <text x="966" y="641" class="body">同输入条件、同预算</text>
+  <text x="966" y="674" class="body">新收益与旧能力保留</text>
+  <text x="966" y="707" class="body">评价组合后的系统</text>
+  <text x="966" y="740" class="body">选择与最终评价分离</text>
+  <text x="966" y="778" class="mono">evaluation / audits</text>
+  <path d="M1196 681 H1228" class="flow"/>
+
+  <rect x="1238" y="558" width="292" height="246" rx="14" fill="#e1f3eb" stroke="#72a992" stroke-width="1.5"/>
+  <text x="1258" y="599" class="head">⑤ 整体准入与继承</text>
+  <text x="1258" y="641" class="body">通过：纳入能力与规则</text>
+  <text x="1258" y="674" class="body">拒绝：保留原系统与反馈</text>
+  <text x="1258" y="707" class="body">导出／回放已接纳组合</text>
+  <text x="1258" y="740" class="body">检查后续实际调用</text>
+  <text x="1258" y="778" class="mono">retained_portfolio / retention</text>
+
+  <path d="M1384 804 V900" class="loop"/>
+  <text x="940" y="878" class="small">更新状态与反馈记录；不默认用新分支覆盖所有旧能力</text>
+  <rect x="70" y="910" width="1460" height="174" rx="18" fill="#183c52"/>
+  <text x="96" y="950" font-size="25" font-weight="700" style="fill:white">03　继承的是整个系统状态，而不只是一个模型权重</text>
+  <rect x="96" y="974" width="324" height="78" rx="12" fill="#285568"/>
+  <rect x="442" y="974" width="324" height="78" rx="12" fill="#285568"/>
+  <rect x="788" y="974" width="324" height="78" rx="12" fill="#285568"/>
+  <rect x="1134" y="974" width="370" height="78" rx="12" fill="#285568"/>
+  <text x="258" y="1007" text-anchor="middle" font-size="23" font-weight="700" style="fill:white">分析能力库</text>
+  <text x="258" y="1036" text-anchor="middle" font-size="19" style="fill:#d1e9ed">旧能力保留，新能力按需组合</text>
+  <text x="604" y="1007" text-anchor="middle" font-size="23" font-weight="700" style="fill:white">学生模型状态</text>
+  <text x="604" y="1036" text-anchor="middle" font-size="19" style="fill:#d1e9ed">程序与 checkpoint 绑定</text>
+  <text x="950" y="1007" text-anchor="middle" font-size="23" font-weight="700" style="fill:white">能力采用规则</text>
+  <text x="950" y="1036" text-anchor="middle" font-size="19" style="fill:#d1e9ed">基于可观测证据选择与调用</text>
+  <text x="1319" y="1007" text-anchor="middle" font-size="23" font-weight="700" style="fill:white">研究经验与版本关系</text>
+  <text x="1319" y="1036" text-anchor="middle" font-size="19" style="fill:#d1e9ed">提案、实测反馈、父子关系与回执</text>
+
+  <path d="M70 1013 H24 V857 H195 V813" class="loop"/>
+  <text x="250" y="878" class="small">下一轮读取继承状态，再诊断与改进</text>
+  <path d="M1530 1013 H1578 V456 H805 V365 H790" class="loop dash"/>
+  <text x="1518" y="1130" text-anchor="end" class="small">虚线：经显式配置调用已接纳能力；不自动改变默认检测</text>
+  <text x="70" y="1130" class="small">实线：分析、反馈、执行和状态继承</text>
+  <text x="70" y="1170" class="small">源码架构示意 · 2026-10-19 · 模型生成使用请求／回复中转；不是实验结果图，也不表示独立常驻服务</text>
+</svg>

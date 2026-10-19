@@ -5,10 +5,12 @@
 
 ## 快速上手
 
+- [当前统一入口：检测、审核、学生、RSI 与评测](current_workflows_zh.md)
+- [当前 PhyEvo-Mic + RSI 整体框架图](assets/phyevo_mic_rsi_framework.svg)
 - [安装、输入格式、多任务命令和 Python API](usage_zh.md)
 - [源码、配置、测试、数据和输出目录说明](repository_structure_zh.md)
 - [当前效果、精选图、定量指标和科学边界](results_summary_zh.md)
-- [GitHub 公开范围、隔离源码检查和功能分支推送](publishing_zh.md)
+- [GitHub 公开范围、隔离源码检查与主分支发布](publishing_zh.md)
 
 ## 当前方法
 

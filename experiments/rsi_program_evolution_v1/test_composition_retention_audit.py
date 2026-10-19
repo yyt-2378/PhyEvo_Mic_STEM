@@ -74,7 +74,8 @@ def test_domain_provenance_requires_bound_physical_array_not_arbitrary_labels(tm
     write_new(fields / 'dataset.json', {'samples': [
         {'key': 'case-001', 'physical_sha256': file_hash(p)}]})
     sample = SimpleNamespace(key='case-001', fields={'domain_labels': labels.copy()})
-    assert domain_field_provenance({'fields': 'fields'}, [sample])['cases_checked'] == 1
+    config = {'fields': 'fields', 'run_configuration': {'physical_source': str(physical.relative_to(tmp_path))}}
+    assert domain_field_provenance(config, [sample])['cases_checked'] == 1
     sample.fields['domain_labels'][0, 0] = 1
     with pytest.raises(ValueError, match='does not reproduce'):
-        domain_field_provenance({'fields': 'fields'}, [sample])
+        domain_field_provenance(config, [sample])

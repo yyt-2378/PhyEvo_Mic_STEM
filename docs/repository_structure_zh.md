@@ -110,22 +110,23 @@ symmetry/task.py
 
 ## 脚本分层与精简原则
 
-2026-10-19 整理只调整脚本导航与源码验证，不修改检测算法、数据、专家标注、权重或 `outputs/`。
+2026-10-19 第一轮完成源码冻结；后续整理抽出了公共逻辑、统一了入口并配置化运行位置，
+仍不修改检测算法、数据、专家标注、权重或 `outputs/`。实际使用见 [当前工作流](current_workflows_zh.md)。
 包版本 `0.4.0` 与源码快照日期是不同概念；发布用 Git commit 固定，不能用目录名称代替代码版本。
 
 | 层次 | 保留内容 | 使用方式 |
 | --- | --- | --- |
-| 日常入口 | `tfree-detect`、审核应用、`run_expert_learning_cycle.py`、`run_interface_detection.py` | 根据任务选择，不默认启动训练或服务 |
+| 日常入口 | `scripts/phyevo.py` | detect / review / train / rsi / benchmark / check；无操作参数时只显示帮助 |
 | 最新 RSI | `controller`、`composition_study`、`composition_runtime`、`composition_*audit`、`retained_portfolio` | 能力库＋学生状态＋采用规则＋经验；接口见 RSI README |
-| 当前依赖 | `real_study`、`meta_study`、`learning_study`、`active_study`、`frontier_study` 等 | 最新组合入口仍复用其函数，名称旧不代表可删 |
+| 抽出的公共依赖 | `study_io`、`training_trace`、`configured_sandbox` | 当前入口直接使用，不加载旧实验编排；旧 API 兼容转发 |
 | 历史研究 | `run_rsi_nested/refinement/continual`、`*_report.py`、早期 `*_study.py` | 复现或解释已有协议；不作为最新统一运行入口 |
 | 存储迁移与续跑 | `*_continuation.py`、存储池模块 | 不自动执行；部分用于绑定旧实验，不能因名字相近合并 |
 | 源码验收 | `check_source_release.py` | 分为语法、核心、审核、最新 RSI 四个检查范围 |
 
-最新 RSI 主要入口的静态依赖闭包包含 35 个模块（含 `__init__`）。
-测试夹具和历史报告还可能使用闭包外模块。因此精简优先减少用户需要选择的入口，
-不会将所有闭包外源码判为无用，也不批量删除版本号较旧的文件。
-源码删除须逐项确认；被保留的历史脚本不应在后台自动执行。
+新回归测试会检查当前 RSI 不依赖 real/meta/learning/active/frontier 等历史编排。
+公共归档、执行器、动态 worker、能力库及测试仍有用途，不能按文件名中的 v1 判为旧代码。
+首批可移除报告脚本的路径、哈希和历史提交见 [删除清单](source_cleanup_plan.json)。
+清单状态为 pending 时尚未删除；其余历史依赖按组处理，不能留下失效 import。
 
 `check_source_release.py` 仅复制 Git 可见源码及已公开测试夹具到全新的 `.codex-tmp/source-release-*`。
 它不复制或挂载 `outputs/`、`paper/`、原始数据、真实审核数据库和第三方下载目录；

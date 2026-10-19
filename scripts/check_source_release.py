@@ -23,7 +23,7 @@ RSI_TESTS = (
     "active_study", "frontier_study", "system_state", "stability_state",
     "stability_diagnostics", "expansion", "field_storage", "prediction_storage",
     "storage_budget", "composition", "composition_continuation",
-    "composition_final_audit", "composition_retention_audit", "retained_portfolio",
+    "composition_final_audit", "composition_retention_audit", "retained_portfolio", "current_entrypoints",
 )
 DESELECT = {
     "tests/test_author_pretrained.py::test_native_postprocessing_matches_published_functions":
@@ -51,6 +51,8 @@ def checked(relative):
 def source_files(staged=False):
     tracked = git_paths("--cached")
     available = tracked if staged else tracked | git_paths("--others", "--exclude-standard")
+    if not staged:
+        available -= git_paths("--deleted")
     prefixes = ("src/", "scripts/", "tests/", "apps/", "configs/", "schemas/", RSI + "/")
     result = {p for p in available if p.startswith(prefixes)
               and Path(p).suffix in {".py", ".yaml", ".yml", ".json", ".html", ".js", ".css", ".md"}}

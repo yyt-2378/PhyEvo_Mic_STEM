@@ -1,6 +1,6 @@
-"""Prospective bounded whole-program RSI from the verified retained system.
+"""Prospective bounded whole-program RSI from an explicitly configured system.
 
-Only new files in the declared v5 scope; no candidate imports in the controller.
+Only new files in the declared scope; no candidate imports in the controller.
 The scientific proposal comes from an independent model, not this harness.
 """
 import argparse
@@ -19,18 +19,56 @@ from .expansion_state import expansion_admission
 from .field_storage import ArrayPool, exact_child
 from .prediction_storage import PredictionPool
 from .prediction_storage_runtime import SharedPredictionSandbox
-from .real_study import load_study
+from .study_io import load_study
 from .stability_diagnostics import transform_array
 from .stability_state import stability_admission
 
 ROOT = Path(__file__).resolve().parents[2]
-SCOPE = ROOT / 'outputs/rsi_capacity_expansion_20261018_v5'
-SOURCE = Path('/data2/yaotian/phyevo_mic_rsi_runs/rsi_stable_expansion_20261017_v4')
-ALIASES = {'sigma3-orientation-ii': 'D0', 'guo_2021_zro2_twin_acquisition': 'D1',
-           'sigma3-orientation-i': 'D2'}
+SCOPE = None
+SOURCE = None
+ALIASES = {}
+RUN_CONFIGURATION = None
 ENTRY = "import sys\nsys.path.insert(0, '/program')\nfrom capabilities import predict, fit\n"
 FIELDS = ('image', 'base', 'support', 'valid', 'physics', 'student', 'physics_valid',
           'variation', 'domain_labels')
+
+
+def configure_run(path):
+    """Resolve locations only; never create a directory or load experiment assets."""
+    global SCOPE, SOURCE, ALIASES, RUN_CONFIGURATION
+    path = exact_child(ROOT, Path(path) if Path(path).is_absolute() else ROOT / path)
+    value = json.loads(path.read_text())
+    required = {'scope', 'source', 'source_diagnostics', 'physical_source', 'runtime', 'source_aliases'}
+    if not isinstance(value, dict) or set(value) != required:
+        raise ValueError('Run configuration requires exactly: ' + ', '.join(sorted(required)))
+    resolved = {}
+    for key in required - {'source_aliases'}:
+        if not isinstance(value[key], str) or not value[key].strip():
+            raise ValueError('Explicit run path required: ' + key)
+        raw = Path(value[key])
+        resolved[key] = exact_child(ROOT, raw if raw.is_absolute() else ROOT / raw)
+    scope = resolved['scope']
+    for key, input_path in resolved.items():
+        if key != 'scope' and (scope == input_path or scope.is_relative_to(input_path)
+                               or input_path.is_relative_to(scope)):
+            raise ValueError('Run scope must be separate from input and runtime paths')
+    aliases = value['source_aliases']
+    if (not isinstance(aliases, dict) or len(aliases) != 3
+            or any(not isinstance(k, str) or not k for k in aliases)
+            or set(aliases.values()) != {'D0', 'D1', 'D2'}):
+        raise ValueError('Declare three unique source aliases D0, D1, D2')
+    # Assign only after every field passed, so a failed configuration is atomic.
+    RUN_CONFIGURATION = {key: str(p.relative_to(ROOT)) for key, p in resolved.items()}
+    RUN_CONFIGURATION['source_aliases'] = dict(aliases)
+    SCOPE, SOURCE, ALIASES = scope, resolved['source'], dict(aliases)
+    return dict(RUN_CONFIGURATION)
+
+
+def workflow_binding():
+    names = ('study_io.py', 'training_trace.py', 'configured_sandbox.py',
+             'composition_study.py', 'composition_continuation.py',
+             'composition_retention_audit.py', 'composition_final_audit.py')
+    return {name: file_hash(Path(__file__).with_name(name)) for name in names}
 
 
 def read(path):
@@ -47,7 +85,7 @@ def samples_for(config, transform=None):
     fields = exact_child(ROOT, ROOT / config['fields'])
     if file_hash(fields / 'dataset.json') != config['fields_manifest_sha256']:
         raise ValueError('Input manifest changed')
-    _, _, samples = load_study(fields)
+    _, _, samples = load_study(fields, root=ROOT)
     order = [r['case'] for r in read(SCOPE / 'parent_replay_verified_v2.json')['rows']
              if r['mode'] == 'original']
     by_key = {s.key: s for s in samples}
@@ -81,18 +119,22 @@ def measure(folder, samples, protocol, branch='composed'):
 
 
 def prepare():
+    if RUN_CONFIGURATION is None:
+        raise ValueError('Explicit --run-config required; no historical run is selected by default')
     exact_child(ROOT, SCOPE)
     receipt = read(SCOPE / 'parent_replay_verified_v2.json')
     if receipt['status'] != 'verified_parent_ready_for_new_study':
         raise ValueError('Actually verified parent required')
     source_protocol = read(SOURCE / 'protocol.json')
-    old_request = read(SOURCE / 'full-s41/requests/r10/request.json')['context']
+    diagnostic_path = ROOT / RUN_CONFIGURATION['source_diagnostics']
+    old_request = read(diagnostic_path)['context']
     config = {k: source_protocol[k] for k in ('evaluation', 'fields', 'fields_manifest_sha256',
                                             'development_transforms', 'held_back_transforms')}
     config.update(format='whole-program-composition-study-v1', seeds=[23, 41, 67],
         arms=['full', 'route'], rounds_per_arm=12, model='gpt-5.6-sol', reasoning_effort='xhigh',
         new_blind_dataset=False, source_protocol_sha256=file_hash(SOURCE / 'protocol.json'),
-        source_diagnostics_sha256=file_hash(SOURCE / 'full-s41/requests/r10/request.json'),
+        source_diagnostics_sha256=file_hash(diagnostic_path),
+        run_configuration=RUN_CONFIGURATION, workflow_binding=workflow_binding(),
         parent_verification_sha256=file_hash(SCOPE / 'parent_replay_verified_v2.json'),
         engine_fingerprint=engine_fingerprint(),
         api_sha256=file_hash(Path(__file__).with_name('composition_runtime.py')),
@@ -140,7 +182,12 @@ def prepare():
 
 
 def validate_study():
+    if RUN_CONFIGURATION is None:
+        raise ValueError('Explicit --run-config required; no historical run is selected by default')
     config = read(SCOPE / 'prospective_protocol.json')
+    if (config.get('run_configuration') != RUN_CONFIGURATION
+            or config.get('workflow_binding') != workflow_binding()):
+        raise ValueError('Workflow/configuration changed; historical sealed runs use frozen commit 56fc212')
     if (engine_fingerprint() != config['engine_fingerprint']
             or file_hash(Path(__file__).with_name('composition_runtime.py')) != config['api_sha256']
             or file_hash(SCOPE / 'parent_replay_verified_v2.json') != config['parent_verification_sha256']):
@@ -410,7 +457,7 @@ def execute(arm, seed, number, gpu=None):
         pool=ArrayPool(ROOT,SCOPE/'field_pool',max_pool_bytes=256*1024**2,minimum_free_bytes=8*1024**3)
         prediction_pool=PredictionPool(ROOT,SCOPE/'prediction_pool',
             max_pool_bytes=config['maximum_prediction_pool_bytes'],minimum_free_bytes=8*1024**3)
-        sandbox=SharedPredictionSandbox(ROOT,ROOT/'.venvs/sam2',timeout=900,gpu=gpu,
+        sandbox=SharedPredictionSandbox(ROOT,ROOT/config['run_configuration']['runtime'],timeout=900,gpu=gpu,
             prediction_pool=prediction_pool,max_written_prediction_bytes=64*1024**2)
         state=None
         device='cuda' if gpu is not None else 'cpu'
@@ -707,19 +754,31 @@ def report():
          'accepted':[t['accepted_updates'] for t in trajectories],'storage':value['storage']}),flush=True)
 
 
-def main():
-    parser=argparse.ArgumentParser()
-    parser.add_argument('command',choices=('prepare','request','execute','diagnose','report'))
+def main(argv=None):
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('command',choices=('prepare','request','execute','diagnose','report',
+                                          'continue','retention','seal','audit'))
+    parser.add_argument('--run-config',required=True,help='Explicit workspace-local JSON; see configs/rsi_composition.example.json')
     parser.add_argument('--arm',choices=('full','route'),default='full')
     parser.add_argument('--seed',type=int,default=41)
     parser.add_argument('--round',type=int,default=1)
     parser.add_argument('--gpu',type=int)
-    args=parser.parse_args()
+    args=parser.parse_args(argv)
+    configure_run(args.run_config)
     if args.command=='prepare':prepare()
     elif args.command=='request':request(args.arm,args.seed)
     elif args.command=='execute':execute(args.arm,args.seed,args.round,args.gpu)
     elif args.command=='diagnose':diagnose(args.arm,args.seed,args.round)
-    else:report()
+    elif args.command=='report':report()
+    elif args.command=='continue':
+        from .composition_continuation import register
+        register(args.arm,args.seed)
+    elif args.command=='retention':
+        from .composition_retention_audit import audit
+        audit()
+    else:
+        from . import composition_final_audit
+        (composition_final_audit.seal if args.command=='seal' else composition_final_audit.execute)()
 
 
 if __name__=='__main__':

@@ -21,6 +21,7 @@ from .controller import Controller
 from .executor import Executor, Sample, sample_fingerprint
 from .provider import FileExchangeModel, publish_response
 from .sandbox import Sandbox
+from .study_io import load_study as _load_study
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -167,20 +168,8 @@ def prepare(destination, *, job_index=6, rounds=3):
 
 
 def load_study(directory):
-    directory = inside(ROOT, directory)
-    protocol = Protocol(**{k: tuple(v) if k.endswith("_groups") or k == "seeds" else v
-                           for k, v in read(directory / "protocol.json").items()})
-    if protocol.engine_version != engine_fingerprint():
-        raise ValueError("Study engine changed: do not resume under changed execution/evaluation code")
-    dataset = read(directory / "dataset.json")
-    samples = []
-    for entry in dataset["samples"]:
-        values = arrays(checked(directory / entry["file"], entry["sha256"]))
-        supervision = {k: values.pop(k) for k in ("human", "known", "points_xy")}
-        samples.append(Sample(entry["key"], entry["group"], entry["geometry"], values, **supervision))
-    if sample_fingerprint(samples) != protocol.data_version:
-        raise ValueError("Prepared input data changed")
-    return directory, protocol, samples
+    # Historical callers retain this API; current callers import study_io directly.
+    return _load_study(directory, root=ROOT)
 
 
 def loop(directory, arm, *, gpu=None):

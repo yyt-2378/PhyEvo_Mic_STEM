@@ -1,0 +1,84 @@
+{
+  "status": "deleted_after_explicit_authorization",
+  "authorization": "User confirmed: 同意，仅删除这 9 个文件 (2026-10-19)",
+  "historical_commit": "56fc212771392265c157812b50dd882c15eaf323",
+  "scope": "source only; no outputs, datasets, annotations, weights, manuscript files",
+  "file_count": 9,
+  "bytes": 99692,
+  "items": [
+    {
+      "path": "experiments/rsi_program_evolution_v1/active_report.py",
+      "sha256": "db33449809116900b9f5f7747e7c5779caf00c0517905e4aadd70b90cd34a449",
+      "bytes": 19092,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": []
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/expansion_report.py",
+      "sha256": "335e7e57dd7b23cc740c1c55d7b9c367ff9fce153ac024380faef62b6b8e8d77",
+      "bytes": 16337,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": []
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/final_report.py",
+      "sha256": "77ef165e5fdeebcab3bd9f25e8ce12df244abb06249962bc0cb85563e363688e",
+      "bytes": 26104,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": [
+        "experiments/rsi_program_evolution_v1/README.md",
+        "experiments/rsi_program_evolution_v1/test_final_report.py"
+      ]
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/meta_report.py",
+      "sha256": "3429a5a49d05d7e9f60810f9b8b95b94af4c6ce4b6ccce87083287d42538e491",
+      "bytes": 7224,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": [
+        "experiments/rsi_program_evolution_v1/README.md",
+        "experiments/rsi_program_evolution_v1/final_report.py",
+        "experiments/rsi_program_evolution_v1/test_meta_report.py"
+      ]
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/study_report.py",
+      "sha256": "bdcf9b9e0b72dc15817092dd431a607cd04267d1913f709450b4218d066ecaef",
+      "bytes": 7728,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": [
+        "experiments/rsi_program_evolution_v1/README.md",
+        "experiments/rsi_program_evolution_v1/final_report.py",
+        "experiments/rsi_program_evolution_v1/test_study_report.py"
+      ]
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/system_report.py",
+      "sha256": "ac400ffeeae08fc6f6e1e2d1bdd23cafcfa410ff868354f63a6c2850945061e6",
+      "bytes": 17121,
+      "reason": "historical report builder; not a current workflow or scientific algorithm",
+      "remaining_references": []
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/test_final_report.py",
+      "sha256": "b26c85838c0487fc748c5b0c41ae5ea8a1e55b476e96de895ccad87d3a43f6ee",
+      "bytes": 2481,
+      "reason": "historical report-only test",
+      "remaining_references": []
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/test_meta_report.py",
+      "sha256": "cb199b6a6f848c9cf60846fb591d8186481d45f3e16a11003b533494e9bcfe32",
+      "bytes": 2645,
+      "reason": "historical report-only test",
+      "remaining_references": []
+    },
+    {
+      "path": "experiments/rsi_program_evolution_v1/test_study_report.py",
+      "sha256": "01258f51434ec33949f5bda6e2802c85221b02614deb107b382987d7264d7145",
+      "bytes": 960,
+      "reason": "historical report-only test",
+      "remaining_references": []
+    }
+  ]
+}

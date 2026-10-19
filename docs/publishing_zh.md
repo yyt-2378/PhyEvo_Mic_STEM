@@ -42,7 +42,7 @@ PYTHONDONTWRITEBYTECODE=1 python scripts/check_source_release.py --profile revie
 ```
 
 `core` 使用 Git 可见的 `tests/test_*.py`，不收集已被忽略的稿件／本地结果检查。
-`rsi` 显式运行最新引擎及其关键依赖的 20 个测试文件；不声称覆盖全部历史编排。
+`rsi` 显式运行最新引擎及其关键依赖的 21 个测试文件（含当前入口回归）；不声称覆盖全部历史编排。
 两个依赖官方下载源码的对照测试（其中一个另需 OpenCV）被明确排除并记入回执；
 其他可选依赖缺失会在 pytest 的 skip 汇总中显示。发布时必须报告这些排除与跳过。
 
@@ -92,7 +92,7 @@ git push -u origin codex/framework-source-freeze-20261019
 若认证失败，保留本地提交并报告失败，不重设远端或强制推送。
 源码删除需另外列出精确文件并获得确认；保留代码依赖比按版本号批量删文件更重要。
 
-## 2026-10-19 源码整理验收
+## 2026-10-19 第一轮冻结验收（56fc212，历史记录）
 
 | 范围 | 通过 | 跳过 | 显式排除 | 失败／错误 |
 | --- | ---: | ---: | ---: | ---: |
@@ -111,6 +111,19 @@ git push -u origin codex/framework-source-freeze-20261019
 经逐项授权，仅删除了 `experiments/rsi_program_evolution_v1/route_probe.py` 和
 `experiments/rsi_program_evolution_v1/storage_preflight.py` 两个一次性旧脚本。
 历史依赖与其他源文件保留；`outputs/`、专家标注、稿件和权重没有被修改或清理。
+
+## 后续脚本重构验收
+
+当前入口为 `scripts/phyevo.py`，配置模板为 `configs/rsi_composition.example.json`。
+公共数据加载、训练记录检查、沙盒配置已从历史实验模块中分离。
+本轮基础执行与评价引擎保持原字节；工作流与配置另行绑定哈希，旧实验须使用原冻结源码复现，
+不能为兼容新入口而改写旧 seal。
+
+删除后工作树回归：核心 616 passed / 12 skipped / 2 deselected；RSI 200 passed / 4 skipped；审核 45 passed。
+新增测试涵盖当前入口与历史编排解耦、显式配置、配置漂移拒绝、输入哈希和调度不执行模式。
+同时验证了真实公共加载器驱动的合成 prepare → 协议绑定 → request 流程。
+这些计数不代表远端 CI 已通过，也没有重跑论文实验。
+精确删除目标及授权状态见 [source_cleanup_plan.json](source_cleanup_plan.json)。
 
 ## 发布后检查
 

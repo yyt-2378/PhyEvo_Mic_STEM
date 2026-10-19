@@ -9,7 +9,7 @@ import numpy as np
 from .contracts import file_hash, protected_snapshot, verify_snapshot, write_new
 from .field_storage import ArrayPool, allocated_bytes, exact_child
 from .field_storage_runtime import FieldStorageSandbox
-from .real_study import load_study
+from .study_io import load_study
 from .retained_portfolio import ROOT, AUTHORIZED_SOURCE, ACCEPTED_HASH, export
 from .stability_diagnostics import transform_array
 

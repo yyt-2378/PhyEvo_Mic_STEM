@@ -18,7 +18,7 @@ import numpy as np
 from .contracts import Proposal, canonical, digest, file_hash, inside, write_new
 from .controller import BASELINE_POLICY
 from .evaluation import compare, evaluate, summarize
-from .learning_study import trace_check
+from .training_trace import trace_check
 
 
 RAW_PIPELINE = "def predict(sample,state,context):\n    return {'score':sample['base'],'support':sample['support']}\n"

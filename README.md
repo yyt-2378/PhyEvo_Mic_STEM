@@ -19,6 +19,10 @@
 
 ## 从这里开始
 
+日常使用先看 **[当前工作流](docs/current_workflows_zh.md)**：检测、审核、训练、RSI、评测
+统一由 `python scripts/phyevo.py ...` 进入，不需要从历轮 `run_*` 中猜选版本。
+历史完整研发快照保留在 Git 提交 `56fc212`；当前脚本整理不覆盖任何历史实验结果。
+
 | 目标 | 文档 |
 |---|---|
 | 五分钟安装并跑通一张图 | [使用说明](docs/usage_zh.md) |
@@ -37,16 +41,16 @@
 
 | 层次 | 主要入口 | 作用 |
 | --- | --- | --- |
-| 原图分析 | `tfree-detect` / `src/tfree_detection/cli.py` | 六类物理任务与显式启用的可选分支 |
-| 专家审核 | `apps/review_dataset_viewer.py` | 审核、保存、恢复进度；真实数据库不随源码发布 |
-| 专家监督学生 | `scripts/run_expert_learning_cycle.py` | 监督转换、分组训练和可选推理 |
-| 程序级 RSI | `experiments/rsi_program_evolution_v1/controller.py` | 提案、执行、评价、接受或拒绝、经验继承 |
-| 最新组合继承 | 同目录 `composition_study.py`、`composition_runtime.py` | 新能力调用已保留父能力及其状态 |
-| 整体准入核验 | 同目录 `composition_retention_audit.py`、`composition_final_audit.py` | 后续实际调用、旧能力保留、封存后的只推理评价 |
-| 源码发布检查 | `scripts/check_source_release.py` | 无原图、无标注、无 outputs 的只读源码副本测试 |
+| 原图分析 | `python scripts/phyevo.py detect --help` | 原物理检测；完整工具仍见 `tfree-detect --help` |
+| 专家审核 | `python scripts/phyevo.py review --help` | 原审核应用、持久化与恢复；不另建数据库 |
+| 专家监督学生 | `python scripts/phyevo.py train --help` | 监督转换、分组训练和断点恢复 |
+| 最新组合 RSI | `python scripts/phyevo.py rsi --help` | 提案、执行、诊断、继承、准入；要求 `--run-config` |
+| 论文评测 | `python scripts/phyevo.py benchmark --help` | locked / fair / author，按各自协议运行 |
+| 源码发布检查 | `python scripts/phyevo.py check --help` | 无原图、无标注、无 outputs 的隔离源码测试 |
 
-实验编排脚本与通用引擎不同：部分历史 `*_study.py` 绑定本机实验路径，不能直接当作新数据的一键入口。
-入口依赖及保留理由见[仓库结构](docs/repository_structure_zh.md)。
+当前 RSI 的数据加载、训练记录检查和沙盒配置已从历史编排中抽出；旧脚本不再是当前运行依赖。
+位置配置模板见 `configs/rsi_composition.example.json`。历史脚本删除进度与保留理由见
+[当前工作流](docs/current_workflows_zh.md)；配置模板不是已准备好的实验数据包。
 
 ## 历史实验导航（不是本次源码验收结果）
 

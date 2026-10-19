@@ -10,14 +10,15 @@ import numpy as np
 
 from .contracts import file_hash, inside, write_new
 from .field_storage import ArrayPool, exact_child
-from .runtime_compat import ConfiguredSandbox
+from .configured_sandbox import ConfiguredSandbox
 from .stability_state import StabilitySystemExecutor
 
 
 def storage_binding():
     folder = Path(__file__).parent
     return {name: file_hash(folder / name) for name in
-            ('field_storage.py', 'field_storage_worker.py', 'field_storage_runtime.py', 'worker.py')}
+            ('field_storage.py', 'field_storage_worker.py', 'field_storage_runtime.py',
+             'configured_sandbox.py', 'worker.py')}
 
 
 class FieldStorageSandbox(ConfiguredSandbox):

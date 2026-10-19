@@ -106,7 +106,9 @@ def register(arm, seed):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('--run-config', required=True)
     parser.add_argument('--arm', choices=('full', 'route'), default='full')
     parser.add_argument('--seed', type=int, required=True)
     args = parser.parse_args()
+    study.configure_run(args.run_config)
     register(args.arm, args.seed)

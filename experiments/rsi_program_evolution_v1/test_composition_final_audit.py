@@ -93,7 +93,8 @@ def test_final_driver_uses_actual_sandbox_predictions_without_fit_or_cherry_pick
     protocol = Protocol(('C',), ('A', 'B'), ('held-A',), seeds=(23, 41))
     config = {'seeds': [23, 41], 'held_back_transforms': ['flip_lr', 'rot180'],
               'minimum_free_bytes': 0, 'maximum_prediction_pool_bytes': 4*1024**2,
-              'success': {'independent_full_trajectories': 2}}
+              'success': {'independent_full_trajectories': 2},
+              'run_configuration': {'runtime': '.venvs/sam2'}}
     image = np.arange(20, dtype=np.float32).reshape(4, 5)
     valid = np.ones(image.shape, bool)
     human = image >= 18

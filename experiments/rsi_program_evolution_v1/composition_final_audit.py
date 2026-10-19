@@ -154,7 +154,7 @@ def execute():
         max_pool_bytes=256*1024**2, minimum_free_bytes=config['minimum_free_bytes'])
     predictions = PredictionPool(study.ROOT, study.SCOPE / 'prediction_pool',
         max_pool_bytes=config['maximum_prediction_pool_bytes'], minimum_free_bytes=config['minimum_free_bytes'])
-    sandbox = SharedPredictionSandbox(study.ROOT, study.ROOT / '.venvs/sam2', timeout=900,
+    sandbox = SharedPredictionSandbox(study.ROOT, study.ROOT / config['run_configuration']['runtime'], timeout=900,
         prediction_pool=predictions, max_written_prediction_bytes=64*1024**2)
     results, measured, failures = [], 0, []
     for seed in config['seeds']:
@@ -211,5 +211,7 @@ def execute():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('command', choices=('seal', 'execute'))
+    parser.add_argument('--run-config', required=True)
     args = parser.parse_args()
+    study.configure_run(args.run_config)
     seal() if args.command == 'seal' else execute()

@@ -16,7 +16,8 @@ from .stability_state import stability_admission
 
 def domain_field_provenance(config, samples):
     """Match input domain IDs to the pre-existing image-only physical output."""
-    physical = study.ROOT / 'outputs/interface_improvement_20261015_v1'
+    from .field_storage import exact_child
+    physical = exact_child(study.ROOT, study.ROOT / config['run_configuration']['physical_source'])
     manifest = study.read(physical / 'physical_audit.json')
     generators = ('scripts/run_interface_improvement.py', 'src/tfree_detection/tasks/interface.py')
     for name in generators:
@@ -24,7 +25,7 @@ def domain_field_provenance(config, samples):
             raise ValueError('Physical domain generator differs from its original manifest')
     entries = {r['key']: r for r in study.read(study.ROOT / config['fields'] / 'dataset.json')['samples']}
     for sample in samples:
-        original = physical / 'physical' / (sample.key + '.npz')
+        original = exact_child(study.ROOT, physical / 'physical' / (sample.key + '.npz'))
         if file_hash(original) != entries[sample.key]['physical_sha256']:
             raise ValueError('Bound physical input changed')
         with np.load(original, allow_pickle=False) as values:
@@ -186,4 +187,9 @@ def audit():
 
 
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--run-config', required=True)
+    args = parser.parse_args()
+    study.configure_run(args.run_config)
     audit()

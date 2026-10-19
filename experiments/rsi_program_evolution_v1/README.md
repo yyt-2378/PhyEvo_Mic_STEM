@@ -6,6 +6,12 @@
 新方案不默认替代旧框架，而是通过固定预算、逐来源保留和后续实际调用检查后纳入系统。
 目录名 `v1` 是实现包路径，不能理解成只包含第一轮实验；保留路径可避免破坏旧协议和 import。
 
+日常只需使用 `python scripts/phyevo.py rsi --help`；`prepare/request/execute/diagnose/report/continue/retention/seal/audit`
+统一由同一个入口调度。必须显式提供 `--run-config`，位置模板见
+[`configs/rsi_composition.example.json`](../../configs/rsi_composition.example.json)。
+公共逻辑已拆为 `study_io.py`、`training_trace.py`、`configured_sandbox.py`，
+当前运行链不再依赖历史 real/meta/learning/active/frontier 编排。
+
 | 目的 | 当前模块 |
 | --- | --- |
 | 通用提案、归档与研究循环 | `contracts.py`、`archive.py`、`controller.py` |
@@ -25,8 +31,8 @@
 继承能力／状态／规则／经验 ← 整体接受或拒绝 ← 固定协议评价
 ```
 
-`composition_study.py` 是当前本地实验的编排器，仍含固定实验目录及外部归档来源；
-它不是任意新数据的一键运行命令。现有封存目录不能继续追加搜索。
+`composition_study.py` 使用显式运行位置，仍要求已准备的父系统、输入和协议；
+配置模板不是任意原图的一键分析命令。现有封存目录不能继续追加搜索。
 本次源码整理不读取或修改这些结果，不把历史文件组合当作一次新的执行。
 新的研究运行应另行授权输入、声明协议并指定新的输出范围；当前默认检测入口不因此改变。
 
@@ -38,13 +44,19 @@
 PYTHONDONTWRITEBYTECODE=1 .venvs/sam2/bin/python scripts/check_source_release.py --profile rsi
 ```
 
-此范围包含 20 个明确列出的测试文件：实际隔离执行、标签隔离、固定预算、准入、
+此范围包含 21 个明确列出的测试文件：实际隔离执行、标签隔离、固定预算、准入、
 学生状态继承、组合父节点调用、存储约束和最终封存。全部使用合成输入，
 不挂载 `outputs/` 或真实标注。历史编排及本地证据检查不是该范围的一部分。
 准确的测试数量、跳过与失败以该次 XML/日志为准，不能沿用旧文档的“52 项通过”。
 测试定义见 `scripts/check_source_release.py` 中的 `RSI_TESTS`；不会重新训练科学模型或调用付费模型。
 
 ## 历史记录：2026-10-16 首轮程序级实验
+
+**以下仅说明旧版本，所列历史命令对应 Git 提交 `56fc212`，不是当前运行菜单。**
+首批 6 个旧报告生成器及 3 个专属测试已经授权移除；精确路径见
+[`docs/source_cleanup_plan.json`](../../docs/source_cleanup_plan.json)。
+需要重建旧报告时从 [冻结源码](https://github.com/yyt-2378/PhyEvo_Mic_STEM/tree/56fc212771392265c157812b50dd882c15eaf323)
+恢复独立复现目录，不在当前目录覆盖代码或改写旧 seal。
 
 本目录是 `RSI_iterate.md` 的新增实验实现，不替换现有 `src/`、生产配置、最佳发布或专家标注。
 历史运行目录是 `outputs/rsi_program_evolution_20261016_v1/`；资产是否仍在本机以既有清理记录为准。

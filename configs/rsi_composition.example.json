@@ -1,0 +1,12 @@
+{
+  "scope": "outputs/my_new_composition_run",
+  "source": "local_inputs/retained_research",
+  "source_diagnostics": "local_inputs/retained_research/development_request.json",
+  "physical_source": "local_inputs/physical_analysis",
+  "runtime": ".venvs/sam2",
+  "source_aliases": {
+    "training-source": "D0",
+    "development-source-1": "D1",
+    "development-source-2": "D2"
+  }
+}

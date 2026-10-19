@@ -1,0 +1,6 @@
+# Additional packages only, in existing project-local .venvs/sam2.
+# Existing torch==2.6.0+cu124 and numpy==1.26.4 are preserved.
+# torchvision uses https://download.pytorch.org/whl/cu124 .
+torchvision==0.21.0+cu124
+opencv-python-headless==4.11.0.86
+imagecodecs==2024.6.1

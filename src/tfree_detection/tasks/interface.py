@@ -19,6 +19,7 @@ from skimage.transform import resize
 from ..config import DetectorConfig
 from ..context import DetectionContext
 from ..models import DetectionResult
+from ..interface_geometry import interpret_domain_geometry
 from .base import DetectionTask
 from .common import probability_from_threshold, regions_from_mask
 
@@ -293,6 +294,14 @@ class PhaseBoundaryTask(DetectionTask):
         mask = raw_boundary & valid if genuine_two_phase else np.zeros(
             image_shape, dtype=bool
         )
+        geometry_receipt = {"hypothesis": "legacy_two_domain_boundary"}
+        if boundary_config.geometry_interpretation == "auto":
+            interior, geometry_receipt = interpret_domain_geometry(
+                domain_label, valid, separated=bool(genuine_two_phase)
+            )
+            if geometry_receipt["hypothesis"] == "enclosed_texture_band":
+                score = separation * interior / max(float(interior.max()), 1e-12)
+                mask = (score >= threshold) & valid
         if boundary_config.minimum_region_area > 0:
             mask = remove_small_objects(
                 mask,
@@ -329,6 +338,17 @@ class PhaseBoundaryTask(DetectionTask):
             ).astype(np.float32),
             "boundary_validity": valid.astype(np.float32),
         }
+        if boundary_config.geometry_interpretation == "auto":
+            # Descriptor gradients remain available even if a hard two-phase
+            # clustering fails. These are texture-change proxies, not labels.
+            variation = np.zeros(signatures.shape[:2], np.float32)
+            for axis in (0, 1):
+                if signatures.shape[axis] > 1:
+                    variation += np.linalg.norm(np.gradient(signatures, axis=axis), axis=-1)
+            evidence_maps["reciprocal_signature_variation"] = resize(
+                variation, image_shape, order=1, mode="edge", anti_aliasing=False,
+                preserve_range=True,
+            ).astype(np.float32)
         regions = regions_from_mask(
             mask,
             np.asarray(score, dtype=np.float32),
@@ -357,6 +377,7 @@ class PhaseBoundaryTask(DetectionTask):
                 boundary_config.minimum_signature_separation
             ),
             "genuine_two_phase": bool(genuine_two_phase),
+            "geometry_interpretation": geometry_receipt,
             "valid_border_margin_pixels": border,
             "prototypes_standardized": prototypes.tolist(),
             "interpretation": (

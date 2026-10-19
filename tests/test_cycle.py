@@ -73,3 +73,19 @@ def test_locked_test_cannot_change_during_evaluation() -> None:
                 "locked_test_hash": "changed",
             },
         )
+
+
+def test_exploratory_silver_cycle_cannot_promote_production_release():
+    cycle = _cycle()
+    for stage, artifacts in [
+        (CycleStage.TEACHER_COMPLETED, {"candidate_table": "a", "teacher_manifest": "b"}),
+        (CycleStage.ACQUISITION_FROZEN, {"acquisition_plan": "c", "train_partition_hash": "d"}),
+        (CycleStage.EXPERT_REVIEW_COMPLETED, {"annotation_ledger": "e", "review_time_report": "f"}),
+        (CycleStage.STUDENT_TRAINED, {"student_checkpoint": "g", "training_manifest": "h"}),
+        (CycleStage.EXPLORATORY_EVALUATED, {"evaluation_report": "i", "held_out_groups_manifest": "j"}),
+    ]:
+        cycle.advance(stage, artifact_hashes=artifacts)
+    with pytest.raises(ValueError, match="Invalid cycle transition"):
+        cycle.advance(CycleStage.RELEASE_ACCEPTED, artifact_hashes={"release_decision": "a", "model_lineage": "b"})
+    cycle.advance(CycleStage.RELEASE_REJECTED, artifact_hashes={"release_decision": "a", "model_lineage": "b"})
+    assert cycle.stage == CycleStage.RELEASE_REJECTED

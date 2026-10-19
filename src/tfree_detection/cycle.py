@@ -21,6 +21,7 @@ class CycleStage(_StringEnum):
     EXPERT_REVIEW_COMPLETED = "expert_review_completed"
     STUDENT_TRAINED = "student_trained"
     CALIBRATED = "calibrated"
+    EXPLORATORY_EVALUATED = "exploratory_evaluated"
     EVALUATED = "evaluated"
     RELEASE_ACCEPTED = "release_accepted"
     RELEASE_REJECTED = "release_rejected"
@@ -31,8 +32,11 @@ _ALLOWED_NEXT = {
     CycleStage.TEACHER_COMPLETED: {CycleStage.ACQUISITION_FROZEN},
     CycleStage.ACQUISITION_FROZEN: {CycleStage.EXPERT_REVIEW_COMPLETED},
     CycleStage.EXPERT_REVIEW_COMPLETED: {CycleStage.STUDENT_TRAINED},
-    CycleStage.STUDENT_TRAINED: {CycleStage.CALIBRATED},
+    CycleStage.STUDENT_TRAINED: {CycleStage.CALIBRATED, CycleStage.EXPLORATORY_EVALUATED},
     CycleStage.CALIBRATED: {CycleStage.EVALUATED},
+    # Single-assisted expert labels may close an exploratory cycle, but cannot
+    # take the Gold-calibrated production-release path.
+    CycleStage.EXPLORATORY_EVALUATED: {CycleStage.RELEASE_REJECTED},
     CycleStage.EVALUATED: {
         CycleStage.RELEASE_ACCEPTED,
         CycleStage.RELEASE_REJECTED,
@@ -50,6 +54,7 @@ _REQUIRED_ARTIFACTS = {
     },
     CycleStage.STUDENT_TRAINED: {"student_checkpoint", "training_manifest"},
     CycleStage.CALIBRATED: {"calibrator", "calibration_report"},
+    CycleStage.EXPLORATORY_EVALUATED: {"evaluation_report", "held_out_groups_manifest"},
     CycleStage.EVALUATED: {"evaluation_report", "locked_test_hash"},
     CycleStage.RELEASE_ACCEPTED: {"release_decision", "model_lineage"},
     CycleStage.RELEASE_REJECTED: {"release_decision", "model_lineage"},
@@ -142,6 +147,7 @@ class SelfImprovementCycle:
                 "locked_test_active_learning_allowed": False,
                 "teacher_updated_by_student": False,
                 "release_requires_non_regression_gate": True,
+                "exploratory_evaluation_can_accept_production_release": False,
             },
         }
 

@@ -1,6 +1,15 @@
 # PhyEvo_Mic_STEM / PhyEvo-Mic
 
-**Training-free、物理证据驱动的原子分辨 STEM 开放世界缺陷分析平台。**
+**以训练自由物理分析为基线，通过专家监督学生、能力分工和证据门禁进行受控持续改进的 STEM 分析平台。**
+
+当前源码主线是“物理分析与专家反馈 → 可执行改进提案 → 隔离执行与固定协议评价 →
+整个系统的更新准入 → 下一轮实际继承”。进化状态包括分析能力库、学生状态、采用规则和研究经验，
+不是仅选择一个学生权重。最新程序级实现见
+[RSI 模块与入口](experiments/rsi_program_evolution_v1/README.md)。原物理默认行为保持不变。
+
+本次为 **2026-10-19 源码整理快照**：包版本仍为 `0.4.0`，具体源码以功能分支的 Git commit
+固定，不改写历史实验的代码哈希，不重新训练或修改 `outputs/`。
+[发布检查](docs/publishing_zh.md)将源码回归与本地科学证据核验分开；测试通过不等同于重跑论文实验。
 
 当前版本为 v0.4。冻结的 v0.2 training-free 检测器仍是独立 physics teacher；其上已经
 搭建 EvidenceBundle v2、多假设 resolver、公开数据标签适配、数据治理、证据保持学生、
@@ -17,8 +26,67 @@
 | 查看当前效果、指标与限制 | [结果总览](docs/results_summary_zh.md) |
 | 使用物理约束 SAM 3 细化边界 | [SAM 3 边界细化](docs/sam3_boundary_refinement_zh.md) |
 | 浏览全部研究文档 | [文档导航](docs/index_zh.md) |
-| 了解公开范围与首次发布流程 | [发布说明](docs/publishing_zh.md) |
+| 检查源码、固定提交并推送功能分支 | [发布说明](docs/publishing_zh.md) |
 | 理解最新 Class1 群关系方法 | [Class1 最终报告](docs/class1_symmetry_relation_final_zh.md) |
+| 使用已完成的专家标注训练学生、查看真实 GPU 对照结果 | [专家标注学习闭环](docs/expert_learning_cycle_zh.md) |
+| 比较物理与学生能力、理解协同和非退化门禁 | [RSI 能力框架](docs/rsi_framework_zh.md) |
+| 理解最新程序级 RSI、状态继承和脚本分层 | [程序级 RSI](experiments/rsi_program_evolution_v1/README.md) |
+| 查看早期训练对照、模型反馈和本地复现入口 | [历史训练改进结果](docs/rsi_refinement_results_zh.md) |
+
+## 当前源码入口
+
+| 层次 | 主要入口 | 作用 |
+| --- | --- | --- |
+| 原图分析 | `tfree-detect` / `src/tfree_detection/cli.py` | 六类物理任务与显式启用的可选分支 |
+| 专家审核 | `apps/review_dataset_viewer.py` | 审核、保存、恢复进度；真实数据库不随源码发布 |
+| 专家监督学生 | `scripts/run_expert_learning_cycle.py` | 监督转换、分组训练和可选推理 |
+| 程序级 RSI | `experiments/rsi_program_evolution_v1/controller.py` | 提案、执行、评价、接受或拒绝、经验继承 |
+| 最新组合继承 | 同目录 `composition_study.py`、`composition_runtime.py` | 新能力调用已保留父能力及其状态 |
+| 整体准入核验 | 同目录 `composition_retention_audit.py`、`composition_final_audit.py` | 后续实际调用、旧能力保留、封存后的只推理评价 |
+| 源码发布检查 | `scripts/check_source_release.py` | 无原图、无标注、无 outputs 的只读源码副本测试 |
+
+实验编排脚本与通用引擎不同：部分历史 `*_study.py` 绑定本机实验路径，不能直接当作新数据的一键入口。
+入口依赖及保留理由见[仓库结构](docs/repository_structure_zh.md)。
+
+## 历史实验导航（不是本次源码验收结果）
+
+### 训练改进轮次（2026-10-14）
+
+六组策略、三个种子、三个检查点的来源隔离实验已完成。允许旧配置也选择最佳检查点后，
+SuperScan 点位的事后最佳覆盖由 16.09% 到 28.82%，ZrO₂ 界面由 12.77% 到 26.88%，
+ORII 界面由 41.01% 到 47.62%。这些是开发观察，不能当作自动路由或整体正确率。
+内层选择后的实际系统结果、纯 ORI→ORII 对照及自动选择的限制均另行报告。
+学生分数重排、同预算补漏和训练特征检索已接入可选原图推理；默认物理和专家标注不变。
+
+[结果说明](docs/rsi_refinement_results_zh.md) ·
+[中文 PDF](outputs/rsi_cycle_002/report_v1/PhyEvo_Mic_training_refinement_results_zh.pdf) ·
+[本地轮次入口](outputs/rsi_cycle_002/CURRENT_RSI_CYCLE.json)。既有 V22 稿件未随本轮结果改写。
+
+### 专家标注学习轮次（2026-10-13）
+
+已接通 154 例既有审核记录的封存、监督转换、整采集组验证、GPU 学生训练、断点恢复、
+可选推理与发布判断。5 个留出折 × 2 个学生训练分支 × 3 个随机种子，加上 3 个全标签
+影子模型，共完成 33 次训练；不要求专家重新标注。
+
+结果不支持默认替换原框架：ORII 的界面范围覆盖率由 9.4% 升至 24.6%，但其他来源有退化
+或明显随机种子波动。该比较是“仅学教师学生”与“教师＋专家学生”的开发性评估，
+不是完整检测准确率、Gold 校准或独立外部验证。原训练自由检测默认行为保留，
+学生须通过 `--student-checkpoint` 和 `--allow-experimental-student` 显式启用。
+指标、局限、命令及本地 PDF 入口见[说明](docs/expert_learning_cycle_zh.md)。
+
+### 本地投稿与汇报材料（不随 GitHub 源码发布）
+
+以下路径是本机历史导航，干净克隆不包含这些文件。稿件版本与本地科学结果不由本次源码整理更新。
+
+- 最新 V22 受控 RSI 稿：[PDF](paper/manuscript_rsi_v22_release/verified/PhyEvo_Mic_manuscript_v22_RSI.pdf)、[可编辑 Word](paper/manuscript_rsi_v22_release/verified/PhyEvo_Mic_manuscript_v22_RSI.docx)、[正文源](paper/revision_agent/manuscript_v22_rsi_candidate.md)。包括能力对照、嵌套协同、检查点回放、真实推理和未获生产准入的结果。
+- 五张新主图：[图目录](paper/figures_rsi_v22/)、[数据绑定清单](paper/figures_rsi_v22/figure_manifest.json)。显微图来自真实源图，统计图由结果文件计算，不使用生成式实验图像。
+- 本地完整轮次入口：[CURRENT_RSI_CYCLE.json](outputs/rsi_cycle_001/CURRENT_RSI_CYCLE.json)；代码→输入→结果→seal→测试→稿图映射：[RSI_EVIDENCE_v1.yaml](benchmarks/RSI_EVIDENCE_v1.yaml)。本地稿件、数据和权重不会随代码自动上传。
+- V5 审稿快照和 V21 原物理诊断稿继续保留，见[版本边界](paper/CURRENT_RELEASE.md)。V21 对应 Word v40、Figures v53 和 PPT v16，均不是新 RSI 实验的稿图。
+- 历史 V15 发布账本因早前中间文件清理而不完整，不能作为当前完整发布凭证；其中保留稿源/Word 的逐文件哈希仍可用于核验原稿未变。
+
+新稿报告的是既有专家修正集合上的开发性验证，不是全图检测准确率或独立外部安全认证。
+历史 61 图载波诊断另行保留：`0.6703` 是 v0.4 score-only 的回顾性 any-defect IoU，
+加入历史分支后的 stored union 为 `0.6186`；不能与学生的正例覆盖率混为同一指标。
 
 仓库只跟踪源码、配置、测试、协议、轻量元数据和精选图示。原始数据、下载权重、完整运行
 数组、审阅私钥及本地缓存均由 `.gitignore` 排除；它们仍保留在本地工作区，不会被删除。
@@ -36,7 +104,8 @@
 
 ```bash
 python -m pip install -e ".[dev]"
-pytest -q
+# 只读语法检查；完整 Linux 源码回归的依赖与命令见 docs/publishing_zh.md
+python scripts/check_source_release.py --profile syntax
 
 tfree-detect detect \
   --input reference_scale_radial_wiener.png \
@@ -62,10 +131,10 @@ Gold-only calibration + locked external evaluation
 non-regression release gate or audited rejection
 ```
 
-当前状态必须分成两层理解：
+以下保留早期物理框架的历史实施记录，不作为 2026-10-19 RSI 源码快照的验收结论：
 
-- 软件闭环已实现，116 项自动测试通过，四任务冻结基准的 IoU/precision/recall 均保留
-  100%；
+- 早期软件闭环记录了 116 项测试和四任务冻结基准的原指标保留；这属于历史版本验收，
+  不代表新学生的全任务准确率。当前 RSI 验证范围与逐项结果见本地轮次入口；
 - 新增的 WSe₂ train-domain 原子缺陷开发证据表明，互补双物理教师共识达到 site
   precision 0.8914、recall 0.6674、F1 0.7633；这 107 张图仍属于一个保守 train group，
   不是独立泛化结果；

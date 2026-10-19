@@ -1,0 +1,5 @@
+# Additional Keras loader for author H5 parity, only in project .venvs/sam2.
+# Keep the frozen student stack and NumPy ABI unchanged.
+keras==3.11.3
+numpy==1.26.4
+ml-dtypes==0.5.3

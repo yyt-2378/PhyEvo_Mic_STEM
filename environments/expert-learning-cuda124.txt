@@ -1,0 +1,12 @@
+# Existing project-local .venvs/sam2 runtime; no host/global installation.
+# Install torch from https://download.pytorch.org/whl/cu124 first.
+torch==2.6.0+cu124
+numpy==1.26.4
+scipy==1.14.1
+scikit-image==0.24.0
+matplotlib==3.9.4
+PyYAML==6.0.2
+h5py==3.12.1
+tifffile==2024.9.20
+Pillow==11.1.0
+pytest==8.3.5

@@ -56,11 +56,16 @@ datasets/intake/emseek_remaining_train_v1.sealed.yaml
 datasets/expert_annotations/*.sqlite3
 datasets/expert_annotations/*.sqlite3-*
 datasets/expert_annotations/exports/
+datasets/expert_annotations/backups/
 
 # Local-only manuscript package. Manuscripts, figures, reviews, presentations,
 # builder support, and release ledgers are retained locally and are not pushed.
 paper/
 benchmarks/CURRENT_EVIDENCE.yaml
+benchmarks/RSI_EVIDENCE_v1.yaml
+# These local validators depend on the ignored manuscript builders and sealed results.
+tests/test_manuscript_rsi_builder.py
+tests/test_rsi_figures.py
 
 # Local manuscript benchmark results and prediction products. Protocols and
 # executable analyzers remain trackable; generated JSON/arrays stay local.

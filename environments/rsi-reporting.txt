@@ -1,0 +1,6 @@
+# Additional manuscript-rendering dependencies in the project-local .venvs/sam2.
+# Core GPU/scientific versions are retained in expert-learning-cuda124.txt.
+# Do not install globally. No new dependency is needed by the default physics detector.
+python-docx==1.2.0
+lxml==6.0.2
+reportlab==4.4.3

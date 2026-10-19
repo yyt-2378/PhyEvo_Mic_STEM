@@ -23,6 +23,7 @@ learning = ["torch>=1.12"]
 fourdstem = ["h5py>=3.8", "tifffile>=2022.8"]
 review = ["streamlit>=1.58,<2", "plotly>=5", "Pillow>=9"]
 benchmark = ["tifffile>=2022.8", "Pillow>=9"]
+paper = ["python-docx>=1.2,<2", "python-pptx>=1.0,<2"]
 
 [project.scripts]
 tfree-detect = "tfree_detection.cli:main"

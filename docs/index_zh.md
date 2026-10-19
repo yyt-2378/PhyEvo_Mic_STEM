@@ -8,7 +8,7 @@
 - [安装、输入格式、多任务命令和 Python API](usage_zh.md)
 - [源码、配置、测试、数据和输出目录说明](repository_structure_zh.md)
 - [当前效果、精选图、定量指标和科学边界](results_summary_zh.md)
-- [GitHub 公开范围、发布前检查和首次推送](publishing_zh.md)
+- [GitHub 公开范围、隔离源码检查和功能分支推送](publishing_zh.md)
 
 ## 当前方法
 
@@ -25,6 +25,7 @@
 
 ## 数据与评估
 
+- [同数据完整模型比较、EMSeek/Dennler 与训练排除材料迁移](fair_baseline_results_zh.md)
 - [当前数据资产总结与统一接口](data_collection_and_interface_standardization_zh.md)
 - [2026-07-29 公开实验 STEM 第二波：下载、封存、标准化与测试](public_stem_dataset_expansion_2026_07_29_zh.md)
 - [2026-07-28 公开实验 STEM 数据扩展、4D 标准化与测试](public_stem_dataset_expansion_2026_07_28_zh.md)
@@ -37,6 +38,14 @@
 
 ## 平台与路线图
 
+- [当前程序级 RSI：组合继承、整体准入、最新与历史入口](../experiments/rsi_program_evolution_v1/README.md)
+- [脚本分层：当前入口、兼容依赖、历史研究编排](repository_structure_zh.md#脚本分层与精简原则)
+- [多轮错误反馈结果、版本选择失效与研究采用决定](rsi_continual_results_zh.md)
+- [四轮等步数反馈实验与内部控制协议](rsi_continual_protocol_zh.md)
+- [训练改进结果、模型反馈和当前能力边界](rsi_refinement_results_zh.md)
+- [六组训练对照、来源隔离和模型反馈实验协议](rsi_refinement_protocol_zh.md)
+- [RSI 能力对照、同预算协同、嵌套验证与版本保留](rsi_framework_zh.md)
+- [已完成专家标注的真实 GPU 学习闭环、结果与推理入口](expert_learning_cycle_zh.md)
 - [当前实施状态](implementation_status_zh.md)
 - [154病例二维STEM在线专家审核平台](expert_review_platform_2d_zh.md)
 - [二维STEM专家审核一页操作说明](expert_annotation_quick_guide_zh.md)

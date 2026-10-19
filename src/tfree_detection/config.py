@@ -208,6 +208,8 @@ class PhaseBoundaryConfig:
     minimum_region_area: int = 80
     minimum_boundary_length: float = 64.0
     clustering_iterations: int = 40
+    # Legacy default keeps frozen studies reproducible; opt in explicitly.
+    geometry_interpretation: str = "boundary"
 
 
 @dataclass
@@ -509,6 +511,8 @@ class DetectorConfig:
             )
         if self.phase_boundary.patch_size < 16:
             raise ValueError("phase_boundary.patch_size must be at least 16")
+        if self.phase_boundary.geometry_interpretation not in {"boundary", "auto"}:
+            raise ValueError("phase_boundary.geometry_interpretation must be boundary or auto")
         if self.phase_boundary.stride < 1:
             raise ValueError("phase_boundary.stride must be positive")
         if self.phase_boundary.radial_bins < 2:

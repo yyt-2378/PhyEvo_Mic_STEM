@@ -18,6 +18,12 @@ PhyEvo_Mic_STEM/
 ├── configs/                   多任务可复现 YAML 配置
 ├── tests/                     单元、合成、协议和回归测试
 ├── scripts/                   数据登记、评估、可视化和审阅脚本
+│   └── check_source_release.py 源码专用隔离验证；不挂载 outputs
+├── experiments/rsi_program_evolution_v1/
+│   ├── controller.py           程序提案、执行、评价与继承
+│   ├── composition_runtime.py  组合能力及父节点状态的实际调用
+│   ├── composition_study.py    最新组合继承实验编排（含本机路径）
+│   └── composition_*audit.py   整体保留检查与封存后评价
 ├── environments/sam3/         独立 Python 3.12 SAM 3 环境定义
 ├── benchmarks/                冻结协议与轻量指标摘要
 ├── schemas/                   数据、证据、审阅和骨架 schema
@@ -101,6 +107,30 @@ symmetry/task.py
 - `.env`、credential、secret、缓存和虚拟环境
 
 这条边界避免首次提交超过数 GB，也避免公开第三方数据、凭据或已封存审阅信息。
+
+## 脚本分层与精简原则
+
+2026-10-19 整理只调整脚本导航与源码验证，不修改检测算法、数据、专家标注、权重或 `outputs/`。
+包版本 `0.4.0` 与源码快照日期是不同概念；发布用 Git commit 固定，不能用目录名称代替代码版本。
+
+| 层次 | 保留内容 | 使用方式 |
+| --- | --- | --- |
+| 日常入口 | `tfree-detect`、审核应用、`run_expert_learning_cycle.py`、`run_interface_detection.py` | 根据任务选择，不默认启动训练或服务 |
+| 最新 RSI | `controller`、`composition_study`、`composition_runtime`、`composition_*audit`、`retained_portfolio` | 能力库＋学生状态＋采用规则＋经验；接口见 RSI README |
+| 当前依赖 | `real_study`、`meta_study`、`learning_study`、`active_study`、`frontier_study` 等 | 最新组合入口仍复用其函数，名称旧不代表可删 |
+| 历史研究 | `run_rsi_nested/refinement/continual`、`*_report.py`、早期 `*_study.py` | 复现或解释已有协议；不作为最新统一运行入口 |
+| 存储迁移与续跑 | `*_continuation.py`、存储池模块 | 不自动执行；部分用于绑定旧实验，不能因名字相近合并 |
+| 源码验收 | `check_source_release.py` | 分为语法、核心、审核、最新 RSI 四个检查范围 |
+
+最新 RSI 主要入口的静态依赖闭包包含 35 个模块（含 `__init__`）。
+测试夹具和历史报告还可能使用闭包外模块。因此精简优先减少用户需要选择的入口，
+不会将所有闭包外源码判为无用，也不批量删除版本号较旧的文件。
+源码删除须逐项确认；被保留的历史脚本不应在后台自动执行。
+
+`check_source_release.py` 仅复制 Git 可见源码及已公开测试夹具到全新的 `.codex-tmp/source-release-*`。
+它不复制或挂载 `outputs/`、`paper/`、原始数据、真实审核数据库和第三方下载目录；
+源码在 bubblewrap 内只读，写入限于本次临时目录，网络和 GPU 不开放。
+这让缺少本地论文材料的 GitHub 克隆也能明确区分代码测试与实验资产核验。
 
 ## 扩展一个新任务
 

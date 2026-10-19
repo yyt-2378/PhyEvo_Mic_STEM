@@ -89,6 +89,10 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="add skeleton/end-point/junction descriptors for line/interface tasks",
     )
+    detect.add_argument("--student-checkpoint", default=None, help="Optional expert student checkpoint directory; shadow output only")
+    detect.add_argument("--allow-experimental-student", action="store_true", help="Explicitly allow uncalibrated expert-student shadow inference")
+    detect.add_argument("--student-device", default="cpu")
+    detect.add_argument("--project-root", default=None, help="Project boundary for opt-in expert student artifacts")
     consensus = subparsers.add_parser(
         "detect-atomic-consensus",
         help="run lattice-residual and periodic-counterfactual teachers",
@@ -276,8 +280,7 @@ def main(argv: Sequence[str] | None = None) -> None:
     if args.command == "detect":
         config = load_config(args.config)
         framework = TrainingFreeDetectionFramework(config)
-        result = framework.detect(
-            Path(args.input),
+        detect_options = dict(
             skeleton=args.skeleton,
             exemplar=args.exemplar,
             frame_index=args.frame_index,
@@ -290,9 +293,38 @@ def main(argv: Sequence[str] | None = None) -> None:
                 else None
             ),
         )
+        assisted = None
+        if args.student_checkpoint:
+            from .expert_runtime import detect_with_expert_student
+            from .expert_supervision import contained_path
+            bounded_output = contained_path(Path(args.project_root or Path.cwd()), args.output)
+            if bounded_output.exists():
+                raise FileExistsError("Expert-student inference requires a new output directory")
+            assisted = detect_with_expert_student(
+                framework, Path(args.input), checkpoint=args.student_checkpoint,
+                project_root=args.project_root or Path.cwd(),
+                allow_experimental=args.allow_experimental_student,
+                student_device=args.student_device, **detect_options,
+            )
+            result = assisted.teacher
+        else:
+            result = framework.detect(Path(args.input), **detect_options)
         artifacts = save_result(result, config, args.output)
+        if assisted is not None and assisted.student is not None:
+            from .expert_runtime import save_shadow_prediction
+            artifacts.update(save_shadow_prediction(
+                assisted.student, Path(args.output) / "expert_student_shadow",
+                project_root=Path(args.project_root or Path.cwd()),
+            ))
         payload = result.summary()
         payload["artifacts"] = artifacts
+        if assisted is not None:
+            payload["expert_student_status"] = assisted.student_status
+            payload["neural_training_used_in_student_branch"] = assisted.student is not None
+            from .expert_supervision import write_new_json
+            combined_path = bounded_output / "expert_assisted_summary.json"
+            artifacts["expert_assisted_summary"] = str(combined_path)
+            write_new_json(combined_path, payload)
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     elif args.command == "validate-registry":
         registry = DataRegistry.from_yaml(args.registry)

@@ -1,4 +1,4 @@
-# PhyEvo_Mic_STEM 文档导航
+# PhyEvo-Mic-RSI 文档导航
 
 本页按“先使用、再理解、最后复现实验”的顺序组织文档。仓库主入口是
 [`README.md`](../README.md)。
@@ -6,6 +6,7 @@
 ## 快速上手
 
 - [当前统一入口：检测、审核、学生、RSI 与评测](current_workflows_zh.md)
+- [个人激活码、私有项目网页工作台与专家共享](platform_zh.md)
 - [当前 PhyEvo-Mic + RSI 整体框架图](assets/phyevo_mic_rsi_framework.svg)
 - [安装、输入格式、多任务命令和 Python API](usage_zh.md)
 - [源码、配置、测试、数据和输出目录说明](repository_structure_zh.md)

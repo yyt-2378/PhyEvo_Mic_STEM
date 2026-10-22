@@ -21,6 +21,7 @@ WORKFLOWS = {
     'detect': ['-m', 'tfree_detection', 'detect'],
     'interface': ['scripts/run_interface_detection.py'],
     'review': ['-m', 'streamlit', 'run', 'apps/review_dataset_viewer.py'],
+    'platform': ['scripts/serve_platform.py'],
     'train': ['scripts/run_expert_learning_cycle.py'],
     'rsi': ['-m', RSI],
     'check': ['scripts/check_source_release.py'],

@@ -89,3 +89,7 @@ tests/test_v04_physical_counterfactuals.py
 tests/test_v04_physical_diagnostics.py
 tests/test_v04_primary_failure_and_edge.py
 tests/test_v04_sensitivity_v2.py
+# Private web-platform uploads, identities, sessions and reviews (never publish).
+/local_platform/
+# Separate, protected FAU human review ledger. Never publish opinions/session state.
+/local_fau_review/

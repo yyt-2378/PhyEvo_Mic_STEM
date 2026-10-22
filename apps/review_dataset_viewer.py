@@ -294,6 +294,19 @@ def main() -> None:
         layout="wide",
     )
     _require_access_code()
+    # Independent FAU review, after authentication and before legacy assets/DB.
+    if st.query_params.get("view") == "fau-sites":
+        from tfree_detection import fau_site_review
+
+        # A long-lived server without file watching can retain the pre-recolor
+        # backend while reading fresh JS. Upgrade only that cached module, once;
+        # do not restart the shared service or change any stored review records.
+        if getattr(fau_site_review, "COLOR_ONLY_REVIEW_VERSION", 0) < 5:
+            from importlib import reload
+
+            reload(fau_site_review)
+        fau_site_review.render()
+        return
     st.html("""<style>
       .stMainBlockContainer {max-width:1250px; padding-top:4rem;}
       h1 {font-size:1.8rem !important;}

@@ -3,7 +3,7 @@
 本页是日常使用入口，不按历史实验版本挑脚本。所有命令从仓库根目录运行，
 使用已安装相应依赖的解释器；本页不启动服务、不安装环境，也不执行实验。
 
-## 一个入口，六类操作
+## 一个入口，七类操作
 
 `scripts/phyevo.py` 只调度已有实现，不再复制一套算法。原有 CLI 继续兼容。
 不带具体操作参数时显示帮助，不自动开始实验或审核服务。
@@ -12,10 +12,11 @@
 | --- | --- | --- |
 | 检测 | `python scripts/phyevo.py detect --help` | `tfree_detection.cli` 的 detect |
 | 专家审核 | `python scripts/phyevo.py review --help` | 原 Streamlit 应用及 SQLite 持久化 |
+| 私有项目网页平台 | `python scripts/phyevo.py platform --help` | 个人激活码、项目、分析队列与授权审核 |
 | 专家监督学生 | `python scripts/phyevo.py train --help` | prepare / train / worker |
 | 程序级 RSI | `python scripts/phyevo.py rsi --help` | 当前组合继承编排 |
 | 论文评测 | `python scripts/phyevo.py benchmark --help` | locked / fair / author，见下节 |
-| 源码验收 | `python scripts/phyevo.py check --help` | syntax / core / rsi / review |
+| 源码验收 | `python scripts/phyevo.py check --help` | syntax / core / rsi / review / platform |
 
 已准入界面模型另有 `python scripts/phyevo.py interface --help`，要求显式提供 binding。
 完整原物理工具（FAU、参考配准等）仍由 `tfree-detect --help` 查阅，不移除这些能力。
@@ -103,3 +104,10 @@ fair / author 实际运行必须显式给出 --output，不能默认追加旧轮
 其余历史脚本仍在：一部分用于关键论文复现，一部分仍被历史测试或其他历史编排调用。
 没有把“当前入口不导入”简单等同于“整库可直接删除”。后续按依赖组处理，不能删一半留下断链。
 outputs、数据、专家标注、权重和稿件完全不在这次清理范围。
+
+2026-10-22 经“确认清理删除”授权，已移除 10 个旧脚本及 8 个专属测试，共 18 个文件：
+[逐文件记录与提交范围](source_cleanup_20261022.json)。删除前逐项复核路径、哈希与 Git 原件，
+均可从提交 `199962c` 恢复。删除后按源码发布范围验证：核心 637 通过、RSI 200 通过，无失败；
+原专家审核另有 45 项通过。跳过与显式排除项见发布说明。当前入口没有调用这些旧模块。
+`frontier_report.py`、`bank_report.py`、`stable_report.py` 仍有历史测试或封存绑定引用，
+本次不单独拆除。私有平台和 FAU 审核分别由 `platform`、`review` 入口进入。

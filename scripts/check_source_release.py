@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import ast
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path
@@ -82,6 +83,11 @@ def read_source(name, staged):
 
 
 def verify(profile, staged=False):
+    if profile == "platform":
+        required = ("fastapi", "httpx", "streamlit")
+        missing = [name for name in required if importlib.util.find_spec(name) is None]
+        if missing:
+            raise RuntimeError("Platform checks require an existing interpreter with: " + ", ".join(missing))
     files = source_files(staged)
     syntax_count = 0
     hashes = {}
@@ -123,6 +129,8 @@ def verify(profile, staged=False):
     root_tests = [p for p in files if p.startswith("tests/test_") and p.endswith(".py")]
     if profile == "review":
         tests = [p for p in root_tests if Path(p).name.startswith(("test_review", "test_expert_review"))]
+    elif profile == "platform":
+        tests = ["tests/test_platform.py", "tests/test_fau_site_review.py"]
     elif profile == "rsi":
         tests = [f"{RSI}/test_{name}.py" for name in RSI_TESTS]
     else:
@@ -186,7 +194,7 @@ def verify(profile, staged=False):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--profile", choices=("syntax", "core", "rsi", "review"), default="syntax")
+    parser.add_argument("--profile", choices=("syntax", "core", "rsi", "review", "platform"), default="syntax")
     parser.add_argument("--staged", action="store_true", help="Verify exact Git index bytes, excluding unstaged edits")
     args = parser.parse_args()
     raise SystemExit(verify(args.profile, args.staged))

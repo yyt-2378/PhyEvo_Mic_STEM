@@ -61,6 +61,7 @@ assert composition_study.SCOPE is None and composition_study.SOURCE is None
     ('rsi', ['report', '--run-config', 'config.json'], ['-m', phyevo.RSI, 'report', '--run-config', 'config.json']),
     ('train', [], ['scripts/run_expert_learning_cycle.py', '--help']),
     ('review', [], ['-m', 'streamlit', 'run', 'apps/review_dataset_viewer.py', '--help']),
+    ('platform', [], ['scripts/serve_platform.py', '--help']),
     ('benchmark', ['locked', '--help'], ['scripts/run_locked_external_test.py', '--help']),
 ])
 def test_dispatch_preserves_arguments(workflow, args, expected):
@@ -73,6 +74,16 @@ def test_dry_run_never_launches_a_child(monkeypatch, capsys):
     monkeypatch.setattr(phyevo.subprocess, 'run', forbidden)
     assert phyevo.main(['--dry-run', 'review', '--server.address', '127.0.0.1']) == 0
     assert json.loads(capsys.readouterr().out)['executed'] is False
+
+
+def test_platform_help_does_not_create_private_storage(tmp_path):
+    storage = tmp_path / 'uninitialized-platform'
+    completed = subprocess.run(
+        [sys.executable, '-B', 'scripts/phyevo.py', 'platform', '--help', '--root', str(storage)],
+        cwd=ROOT, capture_output=True, text=True, timeout=30)
+    assert completed.returncode == 0, completed.stderr
+    assert 'supervise' in completed.stdout
+    assert not storage.exists()
 
 
 @pytest.mark.parametrize('kind', ['fair', 'author'])

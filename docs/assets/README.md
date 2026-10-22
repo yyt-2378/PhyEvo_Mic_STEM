@@ -2,7 +2,7 @@
 
 Tracked figures are deliberately limited to lightweight, publication-facing summaries:
 
-- `phyevo_mic_rsi_framework.svg`: current repository-native Chinese framework diagram (2026-10-19), including physics analysis, expert feedback, executable RSI, admission, and inherited system state; source architecture, not experimental evidence;
+- `phyevo_mic_rsi_framework.svg`: current repository-native Chinese framework diagram (2026-10-22), organized as analysis, executable RSI research, and inherited system state; a lightweight vector illustration with no embedded microscopy image or experimental result;
 - `architecture.svg`: historical physics / evidence architecture diagram, retained for earlier documentation;
 - `multitask_overview.png`: five-task visual overview source;
 - `class1_metric_comparison.png`: final v2 Class1 metric comparison;

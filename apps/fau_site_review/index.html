@@ -1,0 +1,53 @@
+<section class="fau" aria-label="FAU 人工复核工作台">
+  <div class="fau-top">
+    <div class="fau-tabs" role="group" aria-label="样品"><button data-sample="RA">RA · 第6层</button><button data-sample="H2">H2 · 第7层</button></div>
+    <div class="fau-legend"><span class="fau-dot red"></span>有 / 额外占位 <span class="fau-dot blue"></span>无 / 空位形态 <span class="fau-dot yellow"></span>不确定</div>
+    <label><input id="fau-model" type="checkbox" checked>显示未审核的模型颜色</label>
+  </div>
+  <p class="fau-workflow">直接修改已有标记：<b>点选圆圈 → 选择颜色 → 保存改色</b>。不需要重新画点；已保存的人工颜色优先显示，同一位置只画一个圈。</p>
+  <div id="fau-receipt" class="fau-receipt" role="status" aria-live="polite"></div>
+  <div class="fau-layout">
+    <aside class="fau-map-panel">
+      <div class="fau-head"><h2>01 · 选已有标记</h2><span id="fau-progress"></span></div>
+      <div class="fau-map-stage"><canvas id="fau-map" aria-label="全图选点" tabindex="0"></canvas></div>
+      <p id="fau-color-counts" class="fau-tip"></p>
+      <div class="fau-map-tools"><button id="fau-next-yellow">下一个待审黄色</button><button id="fau-next-pending">下一个未审核</button></div>
+      <p class="fau-tip" id="fau-map-tip">总图和放大图都可以点选已有圆圈。不重新定位，只修改这处的颜色。</p>
+      <label class="fau-picker">按编号找点<select id="fau-picker" aria-label="位点编号"></select></label>
+      <details><summary>模型漏标了位置？（可选）</summary><button id="fau-add">＋ 补标遗漏点</button></details>
+      <div class="fau-key"><b>快捷键</b><span>← / → 切换</span><span>1 / 2 / 3 判断</span><span>按住 B 暂隐标记</span><span>Ctrl + Enter 保存并下一点</span></div>
+    </aside>
+    <main class="fau-detail-panel">
+      <div class="fau-head"><h2 id="fau-site-title">02 · 核对原图</h2><span id="fau-coordinate"></span></div>
+      <div class="fau-image-toolbar">
+        <button id="fau-minus" aria-label="缩小局部">−</button><button id="fau-plus" aria-label="放大局部">＋</button>
+        <label>骨架<select id="fau-atoms"><option value="none">隐藏</option><option value="measured">本层实测中心</option><option value="ideal">旧理论投影</option></select></label>
+        <button id="fau-recenter">纠正中心位置</button>
+        <button id="fau-full">全屏</button>
+      </div>
+      <div class="fau-detail-stage"><canvas id="fau-detail" aria-label="当前位点原始局部图" tabindex="0"></canvas></div>
+      <div class="fau-bottom-tools"><label>显示亮度<input id="fau-brightness" type="range" min="55" max="120" value="90"></label><button id="fau-reset-center">恢复原中心</button></div>
+      <p id="fau-detail-tip" class="fau-tip">点圆圈选中，拖动平移，滚轮放大。加粗圆圈是当前选中位点；按住 B 可暂时隐藏标记。</p>
+      <details class="fau-comparison"><summary>对照 Y 模板与同构局部图（可选，不用于改坐标）</summary><div class="fau-pair"><figure><img id="fau-reference" alt="Y 同构参考"><figcaption>Y 无稀土参照</figcaption></figure><figure><img id="fau-aligned" alt="样品同构窗口"><figcaption>样品同构局部</figcaption></figure></div><p class="fau-tip">两图经过外围归一化与坐标变换；局部亮连接本身不等同于稀土元素。</p></details>
+      <details><summary>模型依据与局部应变（可选）</summary><p id="fau-evidence" class="fau-tip"></p></details>
+    </main>
+    <aside class="fau-form-panel">
+      <div class="fau-head"><h2>03 · 修改当前颜色</h2><span id="fau-save-state">未审核</span></div>
+      <div id="fau-current" class="fau-current" role="status" aria-live="polite"></div>
+      <p class="fau-tip">认为黄色其实很明确？直接选红色或蓝色，再保存。也可保持当前颜色并确认；未保存不算人工审核。</p>
+      <div class="fau-decisions" role="group" aria-label="占位判断">
+        <button data-decision="occupied"><span class="fau-dot red"></span><strong>红色 · 有稀土 / 额外占位</strong><small>1 · 我判断这里有占位</small></button>
+        <button data-decision="empty_like"><span class="fau-dot blue"></span><strong>蓝色 · 无稀土 / 空位形态</strong><small>2 · 我判断这里是空的</small></button>
+        <button data-decision="uncertain"><span class="fau-dot yellow"></span><strong>黄色 · 仍不确定</strong><small>3 · 暂不能判断有没有</small></button>
+      </div>
+      <button id="fau-save-stay" class="fau-primary">保存改色 · 留在此处</button><button id="fau-save">保存并下一处</button>
+      <details class="fau-optional"><summary>补充说明 / 骨架对齐（选填）</summary>
+        <label class="fau-field">骨架中心是否对齐？<select id="fau-alignment"><option value="not_reviewed">本次只审核颜色，不评价对齐</option><option value="good">大致吻合</option><option value="bad">明显错位，需要修正</option><option value="uncertain">分辨不清 / 不确定</option></select></label>
+        <label class="fau-field">备注（选填）<textarea id="fau-note" maxlength="2000" rows="4" placeholder="例如：这个黄色位置很明显有占位，应改为红色。"></textarea></label>
+      </details>
+      <div class="fau-navigation"><button id="fau-prev">← 上一处</button><button id="fau-next">下一处 →</button></div>
+      <p class="fau-tip">看到顶部“已保存 · 第 N 版”才算成功。颜色代表你的图像判断，不是元素确证；原模型和每次改色历史均保留。</p>
+      <div id="fau-local-message" role="status" aria-live="polite"></div>
+    </aside>
+  </div>
+</section>
